@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Chapter Two — Building Strategy.ai from zero to enterprise GenAI SaaS." />
+  <title>Chapter Two — EC Group & Strategy.ai | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+          },
+          colors: {
+            ink: { DEFAULT: '#0c1222', light: '#151d32', muted: '#8b95a8' },
+            cream: { DEFAULT: '#f4f0e8', dim: '#d4cfc4' },
+            accent: { DEFAULT: '#c9a227', soft: '#e8d48a' },
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="bg-ink text-cream font-sans antialiased">
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header fixed top-0 inset-x-0 z-50">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="index.html" class="font-serif text-2xl tracking-tight text-cream hover:text-accent transition-colors">Prem</a>
+      <button type="button" id="nav-toggle" class="nav-toggle lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="nav-bar"></span>
+        <span class="nav-bar"></span>
+        <span class="nav-bar"></span>
+      </button>
+      <ul id="nav-menu" class="nav-menu hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-cream/80">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="ascent.html" class="nav-link active">The Ascent</a></li>
+        <li><a href="blogs.html" class="nav-link">Blogs</a></li>
+        <li><a href="learn.html" class="nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="mobile-menu hidden lg:hidden" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 text-lg">
+        <li><a href="index.html" class="mobile-link">Home</a></li>
+        <li><a href="ascent.html" class="mobile-link active">The Ascent</a></li>
+        <li><a href="blogs.html" class="mobile-link">Blogs</a></li>
+        <li><a href="learn.html" class="mobile-link">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 story-hero">
+    <article class="mx-auto max-w-6xl px-6 lg:px-8">
+      <header class="reveal pb-8">
+        <nav class="story-breadcrumb" aria-label="Breadcrumb">
+          <a href="ascent.html">The Ascent</a>
+          <span aria-hidden="true">/</span>
+          <span>Chapter Two</span>
+        </nav>
+        <p class="text-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4">Chapter Two</p>
+        <h1 class="font-serif text-5xl sm:text-6xl text-cream leading-tight mb-4">EC Group & Strategy.ai</h1>
+        <p class="text-lg text-cream/55 max-w-2xl">Senior Director of Technology · Apr 2021 – Present · Generative AI & SaaS</p>
+      </header>
+
+      <nav class="story-chapter-nav reveal" aria-label="Story chapters">
+        <a href="#prologue">Prologue</a>
+        <a href="#section-1">From Zero</a>
+        <a href="#section-2">GenAI</a>
+        <a href="#section-3">Technology</a>
+        <a href="#section-4">Leadership</a>
+        <a href="#epilogue">Epilogue</a>
+      </nav>
+
+      <!-- Prologue -->
+      <section id="prologue" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Prologue</span>
+            <h2>A New Kind of Ascent</h2>
+            <p class="story-chapter-meta">April 2021</p>
+            <p>If Cognizant taught me to navigate enterprise oceans, EC Group Datasoft taught me to build the vessel itself — then fill its sails with intelligence.</p>
+            <p>In April 2021, I made a deliberate choice: leave the comfort of a global delivery machine and step into the volatility of product creation.</p>
+            <p>EC Group assigned me to Strategy.ai — then known as metaphor.com, a startup with ambition, a blank architecture slate, and the need for someone who could be Solution Architect, product development lead, and culture setter in the same breath.</p>
+            <p>I did not join to oversee from a distance. I joined to build — team, pipeline, platform, and philosophy.</p>
+            <p>But before any of that vocabulary existed in our pitch decks, there was an empty repository and a question: <em>What does world-class product engineering look like when you are starting from zero?</em></p>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/ecgroup/prologue.webp" alt="A New Kind of Ascent" width="1080" height="1920" loading="eager" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">A New Kind of Ascent</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 1 -->
+      <section id="section-1" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Section 1</span>
+            <h2>From Zero to SaaS</h2>
+            <p class="story-chapter-meta">metaphor.com → Strategy.ai · 2021–2023</p>
+            <p><strong>The mandate.</strong> Stand up a team from scratch. Deliver an enterprise SaaS product for vision and strategy management — secure, scalable, and built to earn the trust of large organizations.</p>
+            <p><strong>The philosophy.</strong> Extreme Programming. Test-Driven Development. Every engineer exposed to the full lifecycle — from inception through deployment — so ownership was a daily habit, not a poster on the wall.</p>
+            <p><strong>The platform.</strong> Cloud architecture from the ground up. Clean, secure CI/CD pipelines. Scalable multi-tenant SaaS. API-first design with REST and WebSocket surfaces. Python · Django · JavaScript · Vue.js · PostgreSQL · MongoDB · AWS.</p>
+            <p>This was the period that proved I could compress what Cognizant taught across decades into a startup clock — without sacrificing quality.</p>
+            <div class="story-client-tag">Strategy.ai (metaphor.com) · Solution Architect / Product Dev Lead · 2021–2023</div>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/ecgroup/section-1.webp" alt="From Zero to SaaS" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">From Zero to SaaS</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section id="section-2" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Section 2</span>
+            <h2>The GenAI Horizon</h2>
+            <p class="story-chapter-meta">Strategy.ai · 2023–2026</p>
+            <p>Then the world changed — again — and so did we.</p>
+            <p>As large language models moved from novelty to infrastructure, Strategy.ai expanded into a GenAI-powered suite. We rebranded with conviction: the metaphor had become the method.</p>
+            <p><strong>What we built:</strong></p>
+            <ul>
+              <li>Enterprise AI copilots and agents for strategy execution</li>
+              <li>Governed knowledge workflows with retrieval you can trust</li>
+              <li>Proprietary-content chatbots grounded in your data</li>
+              <li>Advanced RAG pipelines, vector databases, knowledge graphs</li>
+              <li>Workflow builders for domain-specific AI mentors and coaches</li>
+            </ul>
+            <p><strong>The trust layer:</strong> HIPAA · GDPR · secure SaaS · compliance-by-design onboarding.</p>
+            <div class="story-stats">
+              <div class="story-stat"><strong>40%</strong><span>Faster task turnaround</span></div>
+              <div class="story-stat"><strong>30%</strong><span>Better collaboration</span></div>
+              <div class="story-stat"><strong>50%</strong><span>Faster deploy cycles</span></div>
+            </div>
+            <div class="story-client-tag">Strategy.ai · Senior Director of Technology · Apr 2021–Present</div>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/ecgroup/section-2.webp" alt="The GenAI Horizon" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">The GenAI Horizon</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 3 -->
+      <section id="section-3" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Section 3</span>
+            <h2>The Technology Tapestry</h2>
+            <p class="story-chapter-meta">What the platform is made of</p>
+            <p><strong>Enterprise AI & GenAI.</strong> LLMs · OpenAI · Anthropic · Gemini · Llama · AWS Bedrock · RAG · vector databases · LangChain · agentic workflows · AI governance · Knowledge Graph.</p>
+            <p><strong>Cloud & SaaS.</strong> AWS · Azure · cloud-native SaaS · serverless · API architecture · DevOps · CI/CD · observability · cost optimization.</p>
+            <p><strong>Product engineering.</strong> Python · Django · Vue.js · React · PostgreSQL · MongoDB · REST & WebSocket APIs.</p>
+            <p>The Cognizant years inform how Strategy.ai earns enterprise trust — healthcare rigor, life sciences discipline, and transformation at scale.</p>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/ecgroup/section-3.webp" alt="The Technology Tapestry" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">The Technology Tapestry</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 4 -->
+      <section id="section-4" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Section 4</span>
+            <h2>How We Work · How I Lead</h2>
+            <p class="story-chapter-meta">Leadership philosophy</p>
+            <p><strong>On people.</strong> I lead from the front — not manage from the top. Transparency is how we run sprint reviews, incident calls, and roadmap debates.</p>
+            <p><strong>On craft.</strong> I am still a coder. TDD and XP are how we keep velocity without trading away tomorrow's maintainability.</p>
+            <p><strong>On learning.</strong> The same curiosity that pulled me from COBOL to LLMs pulls me into the next framework, the next model, the next failure that teaches more than the last success.</p>
+            <p><strong>On the mission.</strong> Strategy.ai exists so organizations can execute strategy with clarity — and now, with intelligence that respects their data, their compliance boundaries, and their ambition.</p>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/ecgroup/section-4.webp" alt="How We Work · How I Lead" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">How We Work · How I Lead</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Epilogue -->
+      <section id="epilogue" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Epilogue</span>
+            <h2>Still Climbing</h2>
+            <p class="story-chapter-meta">2021 – present & beyond</p>
+            <p>After twenty-three winters ascending the tech hierarchy to steer multi-million-dollar ships, I remain a developer at heart.</p>
+            <p>EC Group and Strategy.ai are where that heart meets the future.</p>
+            <p>I came to build a SaaS platform from zero. I stayed to reinvent it in the age of AI — RAG pipelines, knowledge graphs, governed agents, compliance-first design, and the relentless joy of making something that works in production.</p>
+            <p>Cognizant taught me enterprise gravity. Strategy.ai lets me defy it — move fast, think big, ship with discipline.</p>
+            <p><strong>The ascent continues. The canvas is larger than ever.</strong></p>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/ecgroup/epilogue.webp" alt="Chapter Two — Still Building" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">Chapter Two — Still Building</span>
+            </div>
+          </figure>
+        </div>
+        <nav class="story-footer-nav">
+          <a href="story-cognizant.html" class="btn-ghost">← Chapter One</a>
+          <a href="ascent.html" class="btn-primary">Back to The Ascent</a>
+        </nav>
+      </section>
+    </article>
+  </main>
+
+  <footer class="border-t border-cream/5 py-12">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-cream/40">
+      <p>© <span id="year"></span> Prem. Professional profile.</p>
+      <a href="ascent.html" class="text-cream/50 hover:text-accent transition-colors">← Back to The Ascent</a>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/story-images.js"></script>
+</body>
+</html>

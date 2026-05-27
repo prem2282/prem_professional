@@ -1,0 +1,564 @@
+HOW TO USE THIS FILE
+--------------------
+• Copy ONE full prompt block (from "PROMPT START" to "PROMPT END") into Gemini image generation.
+• Generate at vertical aspect ratio: 9:16 (preferred) or 2:3 portrait.
+• Suggested output: 1080 × 1920 px minimum for web; 1440 × 2560 px for retina.
+• Save files using the "OUTPUT FILENAME" path listed under each prompt.
+• Keep the same GLOBAL STYLE GUIDE across all images so the story feels like one book.
+
+
+================================================================================
+GEMINI IMAGE CREATION — VERTICAL INFOGRAPHIC / COMIC STORY PANELS
+Professional Career Story · "The Ascent" · Prem
+================================================================================
+
+
+IMPORTANT FOR GEMINI
+--------------------
+• Do NOT include real company logos (UnitedHealth, Cognizant, Sanofi, Abbott, OpenAI, etc.).
+  Use generic labels: "Health Plan," "Enterprise Client," "Global IT Firm," "Pharma Partner."
+• Do NOT use copyrighted comic characters or celebrity likenesses.
+• Protagonist should be a consistent fictional professional with a mustache in every panel — see CHARACTER BIBLE below.
+• Text on image: keep minimal — use caption PLATES only (see Typography section).
+
+================================================================================
+GLOBAL STYLE GUIDE (apply to every image)
+================================================================================
+
+GENRE & FORMAT
+  Vertical infographic comic page — one self-contained story moment per image.
+  Reads top-to-bottom like a graphic novel page or editorial infographic strip.
+  Professional business biography aesthetic — NOT childish cartoon, NOT anime,
+  NOT Marvel/superhero, NOT 3D Pixar.
+
+ART STYLE
+  • Clean vector-infographic meets editorial comic line art
+  • Consistent medium-weight ink outlines (1–2 px feel), flat color fills with subtle gradients only
+  • Limited shading: soft cel-shading or none — clarity over realism
+  • Geometric simplification of architecture, devices, and icons
+  • Optional: very subtle paper texture overlay (5% opacity) for storybook warmth
+  • Panels may be separated by thin gold rules or cream gutters
+
+COLOR PALETTE (strict — match website brand)
+  • Background / dominant dark: Deep navy #0C1222
+  • Secondary panels / cards: Slate blue #151D32
+  • Primary text & highlights: Warm cream #F4F0E8
+  • Accent / emphasis / borders: Antique gold #C9A227
+  • Soft accent highlights: Pale gold #E8D48A
+  • Muted secondary text: Cool gray #8B95A8
+  • Healthcare accent (sparingly): Soft teal #4A9B9B at 40% opacity
+  • Life sciences accent (sparingly): Soft violet #7B6BA8 at 40% opacity
+  • Avoid: neon colors, pure white backgrounds, rainbow gradients, red-heavy palettes
+
+TYPOGRAPHY & TEXT ON IMAGE
+  • Maximum 1 title plate + 1 subtitle + optional 3–5 keyword chips per image
+  • Title plate: serif feel (Instrument Serif style) — cream text on navy or gold bar
+  • Subtitle / dates: small caps sans-serif (DM Sans style) — muted cream or gold
+  • Keyword chips: rounded pills, navy fill, gold border, cream micro-text
+  • NO speech bubbles unless specified; prefer caption plates at top or bottom
+  • All text must be spelled correctly, high contrast, readable at mobile width
+
+COMPOSITION (vertical 9:16)
+  • Top 15%: chapter label + title plate (reserved band)
+  • Middle 55%: main illustration / infographic storytelling
+  • Bottom 20%: 3–5 icon chips OR stat callouts OR scene caption
+  • Safe margins: 5% padding on all sides — no critical detail at edges
+  • Visual flow: guide eye top → center → bottom (Z or single focal path)
+
+MOOD & TONE
+  • Calm authority, craftsmanship, optimism without hype
+  • Enterprise credibility suitable for hiring executives reviewing a resume site
+  • Human warmth — real workplaces, not sterile stock-photo poses
+
+NEGATIVE PROMPT (append to every generation if Gemini supports it)
+  blurry, low resolution, photorealistic faces, uncanny valley, 3D render, anime,
+  chibi, clipart, watermark, logo soup, trademark logos, messy text, misspelled words,
+  speech bubble overload, violent imagery, dark horror tone, neon cyberpunk,
+  crowded composition, horizontal landscape layout, white background,
+  clean-shaven face, no mustache, beard without mustache, inconsistent facial hair
+
+
+================================================================================
+CHARACTER BIBLE — PROTAGONIST (use consistently in all panels)
+================================================================================
+
+NAME IN PROMPTS: "The Protagonist" (representing Prem — technology leader)
+
+APPEARANCE
+  • South Asian professional male, age progresses slightly across chapters:
+    - Cognizant 2003–2005: mid-20s, eager focus
+    - Cognizant 2006–2017: late 20s to mid-30s, confident, professional
+    - Cognizant 2018–2021: late 30s to early 40s, seasoned leader
+    - EC Group 2021–present: early-to-mid 40s, approachable executive-builder
+  • Mustache: REQUIRED in every panel — consistent defining feature across all ages.
+    - Well-groomed, medium thickness, dark brown/black matching hair
+    - 2003–2005: slightly thinner/neat chevron or pencil mustache (younger but still visible)
+    - 2006 onward: fuller, mature mustache — same style throughout for recognition
+    - Never clean-shaven; never exaggerated handlebar unless specified
+  • Hair: short, neat, dark brown/black
+  • Attire evolves:
+    - Early mainframe era: business casual shirt, ID lanyard, no tie
+    - Hartford / leadership: button-down or blazer, sometimes rolled sleeves
+    - Architect / PM era: smart casual blazer, open collar
+    - Startup / Strategy.ai: modern tech leader — dark navy or charcoal shirt, no tie, optional light jacket
+  • Expression: thoughtful, focused, collaborative — never arrogant or exaggerated
+  • Body language: leads from front — standing beside team, pointing at boards, typing at desk — not towering over others
+
+CONSISTENCY RULES
+  • Same face structure across all images (simplified comic style — not photo portrait)
+  • Mustache must appear in every image where the protagonist's face is visible — even in profile or 3/4 view
+  • Same color palette on character clothing: navy, cream, subtle gold accents
+  • When shown in silhouette for scale scenes, maintain recognizable hair/profile outline with distinct mustache shape on profile
+
+
+================================================================================
+CHAPTER ONE — COGNIZANT (7 images)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+IMAGE C1-00 · PROLOGUE — WHERE THE JOURNEY BEGINS
+OUTPUT FILENAME: assets/images/story/cognizant/prologue.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Create a vertical portrait infographic comic page, aspect ratio 9:16, resolution 1080x1920.
+
+TITLE PLATE (top band): Small gold label "CHAPTER ONE · PROLOGUE" — large cream serif title "Where the Journey Begins" — subtitle sans-serif "Chennai · 2003 · Tidel Park"
+
+MAIN SCENE (center): A young South Asian male professional (mid-20s, Character Bible, neat mustache visible on face) sits at a classic enterprise mainframe terminal in a modern Chennai IT office. Green-phosphor screen glow illuminates his focused face. Behind him: subtle silhouette of a tall glass office tower (generic, not branded). Operations floor with 2–3 distant colleagues as small simplified figures. Desk holds coffee cup, notebook, keyboard.
+
+VISUAL METAPHORS: Faint heartbeat/EKG line and generic "Healthcare IT" icon on a wall poster — no real logos. Golden light ray from window suggesting "dawn of career."
+
+BOTTOM INFOGRAPHIC STRIP: Three icon chips with micro-labels:
+  • "COBOL · DB2 · CICS" (code bracket icon)
+  • "UnitedHealth Group — First Client" (generic hospital cross icon, NOT UHG logo)
+  • "Programmer Analyst" (badge icon)
+
+STYLE: Clean editorial comic, flat navy #0C1222 background with cream #F4F0E8 and gold #C9A227 accents. Professional, humble, precise mood. Storybook panel borders in gold.
+
+TEXT RULES: All text crisp and readable. No speech bubbles.
+
+NEGATIVE: logos, trademarks, photorealistic, horizontal layout, cluttered, anime, 3D.
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C1-01 · SECTION 1 — THE MAINFRAME CRADLE
+OUTPUT FILENAME: assets/images/story/cognizant/section-1.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 infographic comic page, 1080x1920. Chapter One, Section 1.
+
+TITLE PLATE: Gold label "SECTION 1" — serif title "The Mainframe Cradle" — subtitle "Chennai · 2003–2005 · Healthcare IT"
+
+MAIN ILLUSTRATION: Split-level vertical composition.
+TOP HALF: Close-up of protagonist (mid-20s, neat mustache visible in 3/4 face view) hands on keyboard, green terminal screen showing abstract lines of code (not readable gibberish blocks — stylized lines). Labels floating beside screen in cream chips: "COBOL" "JCL" "CICS" "DB2" "IMS" "VSAM" "z/OS"
+BOTTOM HALF: Wide view of mainframe operations floor — rack silhouettes, batch job timeline as simple horizontal pipeline graphic with nodes "Submit → Process → Complete"
+
+SIDE MARGIN ICONS (small): Endevor, debugger, file tool as generic wrench/gear icons — no brand names.
+
+METAPHOR: Thin gold thread connecting terminal to tiny icons of "Claims · Eligibility · Member Services" showing ripple effect — one code change affects many.
+
+BOTTOM STRIP: Caption in cream italic on navy: "Healthcare taught me precision." Three stat chips: "Expert · Mainframe Stack" "UHG · Developer" "Tidel Park · Chennai"
+
+COLORS: Navy #0C1222, cream #F4F0E8, gold #C9A227. Green screen glow only on monitor — not entire image.
+
+MOOD: Focused craftsmanship, serious healthcare gravity, classroom energy.
+
+STYLE: Clean professional comic infographic. No logos. No bubbles.
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C1-02 · SECTION 2 — ACROSS THE ATLANTIC
+OUTPUT FILENAME: assets/images/story/cognizant/section-2.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 portrait comic-infographic, 1080x1920. Three stacked panels within one vertical page (separated by thin gold lines).
+
+TITLE PLATE: "SECTION 2" — "Across the Atlantic" — "Hartford, CT · 2006–2012"
+
+PANEL A (top third): Protagonist (late 20s, well-groomed mustache) with rolling suitcase walks toward simplified autumn city skyline — church spires, trees with orange leaves, generic "Hartford" feel without landmarks. Small airplane contrail in sky. Chip: "Associate → Project Manager"
+
+PANEL B (middle third): Conference room — diverse group of 5 simplified professionals around table. Protagonist (mustache visible) stands presenting. Whiteboard shows abstract M&A integration diagram: boxes labeled "System A" "System B" merging into "Unified Platform" with arrows — NO real company names. Chips: ".NET · Java · Program Management"
+
+PANEL C (bottom third): Split screen — left: Chennai clock/timezone; right: Hartford clock — gold connection line between. Protagonist on video call — face visible on screen with mustache. Chip: "Trust built in stand-ups"
+
+COLOR PALETTE: Navy, cream, gold, subtle autumn orange accent (#C4843C at 30%) in Panel A only.
+
+MOOD: Growth, global career, leadership emerging, honest enterprise energy.
+
+TYPOGRAPHY: Minimal — panel labels A B C optional in small gold letters.
+
+NEGATIVE: US flag overload, real insurance logos, photorealistic faces, horizontal comic strip.
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C1-03 · SECTION 3 — HOME AGAIN, LARGER HORIZONS
+OUTPUT FILENAME: assets/images/story/cognizant/section-3.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 infographic storybook page, 1080x1920.
+
+TITLE: "SECTION 3" — "Home Again, Larger Horizons" — "Coimbatore · 2012–2017 · Offshore Delivery Lead"
+
+CENTER COMPOSITION: Protagonist (mid-30s, prominent mustache) in center-front, facilitating — arms open toward team, NOT standing on podium. Left vignette: Coimbatore delivery center — team huddle of 8 diverse simplified figures at agile board with columns "To Do · Doing · Done". Right vignette: Abstract globe with gold connection lines to "USA" and "Europe" text labels on continents (stylized, not political map detail).
+
+MARGIN SYMBOLS (tiny, gold line icons): heart-line (healthcare), molecule (life sciences), pill capsule — subtle, professional.
+
+INFOGRAPHIC CALLOUTS (floating cream boxes with gold borders):
+  • "100+ Team Members"
+  • "$6M+ Portfolio"
+  • "Project of the Year"
+  • Clients as generic chips: "Health Plan Partner" "Pharma Partner" "Life Sciences"
+
+BOTTOM: Keyword ribbon: "Program Management · Solution Architecture · Global Delivery"
+
+STYLE: Split-world illustration, calm authority, navy/cream/gold. Editorial comic cleanliness.
+
+MOOD: Scale without chaos. Leader beside team, not above.
+
+NEGATIVE: real logos, crowded Gantt chart illegible, superhero posing.
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C1-04 · SECTION 4 — THE ARCHITECT'S TURN
+OUTPUT FILENAME: assets/images/story/cognizant/section-4.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 single dramatic infographic panel, 1080x1920.
+
+TITLE: "SECTION 4" — "The Architect's Turn" — "Enterprise Transformation · 2018–2019"
+
+MAIN SCENE: Protagonist (late 30s, well-groomed mustache) stands before a large wall-sized architecture blueprint — layered stack diagram drawn in cream and gold lines on navy wall:
+  Layer 1 (bottom): "Data"
+  Layer 2: "Integration"
+  Layer 3: "Applications"
+  Layer 4 (top): "Security & Governance"
+Connected by vertical gold pipes/arrows.
+
+FOREGROUND: Three stakeholder silhouettes (executive with briefcase, architect with tablet, engineer with laptop) listening — faces not detailed.
+
+BACKGROUND: Generic modern "Health Plan HQ" building icon — geometric, NOT EmblemHealth logo.
+
+FLOATING ELEMENTS: AWS cloud icon (generic outline), reference model document icon, roadmap timeline with 4 milestone dots.
+
+BOTTOM CAPTION PLATE: "Architecture succeeds when it is a story everyone can retell."
+
+CHIPS: "Enterprise Architect" "Digital Transformation" "Healthcare Payer Complexity"
+
+MOOD: Strategic clarity, transformation, executive credibility.
+
+STYLE: Minimal line work, editorial comic, dramatic but not dark. Navy #0C1222 dominant.
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C1-05 · SECTION 5 — LIFE SCIENCES & THE INTELLIGENCE EDGE
+OUTPUT FILENAME: assets/images/story/cognizant/section-5.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 comic page with TWO stacked panels (gold divider), 1080x1920.
+
+TITLE: "SECTION 5" — "Life Sciences & the Intelligence Edge" — "2019–2021"
+
+PANEL A (top 45%): "Abbott era — Program Manager"
+Protagonist (mustache visible, side profile) oversees large vertical Gantt/board infographic — clean bars in gold and cream. Background: subtle lab glassware and checklist icons (traceability, audit). Chips: "Predictable Delivery" "Quality Engineering" "Life Sciences"
+
+PANEL B (bottom 45%): "Sanofi era — ML / NLP Solution Architect"
+Same protagonist (mustache visible, focused expression) at laptop. From left: documents (PDF icons) flow through simplified NLP pipeline: "Extract → Tokenize → Model → Insight". Neural network drawn as 6–8 connected gold nodes — friendly, not scary sci-fi. Python logo avoided — use generic snake-code bracket icon. Chips: "BERT · SpaCy · TensorFlow" as text only.
+
+BRIDGE ELEMENT between panels: Gold arrow labeled "Classical IT → Intelligent Systems"
+
+BOTTOM: "The coder was still alive."
+
+MOOD: Bridge to AI future, hopeful, rigorous, professional.
+
+COLORS: Navy, cream, gold + subtle violet life-sciences accent #7B6BA8 at 20% in Panel B.
+
+NEGATIVE: horror AI robot, real pharma logos, messy equations.
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C1-06 · EPILOGUE — WHAT COGNIZANT FORGED
+OUTPUT FILENAME: assets/images/story/cognizant/epilogue.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 closing storybook infographic, 1080x1920.
+
+TITLE: "EPILOGUE" — "What Cognizant Forged" — "2003–2021 · 18 Years"
+
+MAIN METAPHOR SCENE (center): Calm ocean at twilight — navy water, cream sky gradient to gold horizon. Left: large dignified enterprise ship silhouette labeled in small cream text "18 Years · Enterprise Scale" (generic ship, not branded). Right: smaller sleek modern vessel on horizon glowing with soft cloud icons and AI node constellation — labeled "Next Chapter". Protagonist (early 40s, mustache visible, calm smile) walks on gangplank between ships — looking forward, carrying slim laptop bag.
+
+STATS INFOGRAPHIC (floating gold-bordered boxes):
+  • "$6M+ Portfolio"
+  • "100+ Global Team"
+  • "25+ Projects"
+  • "Fortune 500 Clients" (generic building icons, no logos)
+
+BOTTOM CAPTION PLATE (serif): "End of Chapter One — The developer at heart boarded the next ship."
+
+MOOD: Gratitude, transition, calm confidence — NOT dramatic storm.
+
+STYLE: Storybook finale, minimal waves, editorial comic.
+
+NEGATIVE: pirate ships, Titanic, sinking ship, sad mood, Cognizant logo.
+
+PROMPT END
+
+
+================================================================================
+CHAPTER TWO — EC GROUP / STRATEGY.AI (6 images)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+IMAGE C2-00 · PROLOGUE — A NEW KIND OF ASCENT
+OUTPUT FILENAME: assets/images/story/ecgroup/prologue.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 infographic comic, 1080x1920. Chapter Two Prologue.
+
+TITLE: "CHAPTER TWO · PROLOGUE" — "A New Kind of Ascent" — "April 2021"
+
+SCENE: Split visual metaphor — LEFT: Fading silhouette of large corporate office towers (representing enterprise past) in muted gray-cream. RIGHT: Bright empty startup space — single desk, one monitor, empty whiteboard, cardboard box labeled "Day 0" — gold light pouring through window.
+
+Protagonist (early 40s, modern tech attire, well-groomed mustache) stands at threshold between both worlds, facing the startup side, rolling chair behind desk.
+
+FLOATING QUESTION in cream serif on gold plate at center: "What does world-class engineering look like — starting from zero?"
+
+BOTTOM CHIPS: "metaphor.com → Strategy.ai" "Solution Architect" "Build · Team · Pipeline · Culture"
+
+ICONS descending vertically: cloud outline, git branch, lightbulb — gold line art.
+
+MOOD: Deliberate choice, optimism, builder energy, clean slate.
+
+COLORS: Navy #0C1222, cream, gold — right side slightly warmer gold wash.
+
+NEGATIVE: chaotic startup clichés (ping pong), real Strategy.ai trademark, burned bridges imagery.
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C2-01 · SECTION 1 — FROM ZERO TO SAAS
+OUTPUT FILENAME: assets/images/story/ecgroup/section-1.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 storybook comic with THREE horizontal bands (top/middle/bottom), 1080x1920.
+
+TITLE: "SECTION 1" — "From Zero to SaaS" — "2021–2023 · Foundation Years"
+
+BAND A — "Day 1": Small founding team of 4 simplified figures around empty whiteboard — protagonist identifiable by mustache. Whiteboard text: "Vision · Strategy · Build". Optimistic postures. Chip: "Team from scratch"
+
+BAND B — "The Pipeline": Infographic conveyor metaphor left to right:
+  Code bracket icon → Test checkmark icon → Deploy rocket icon → Monitor heartbeat icon
+  Gold arrows connecting. Label: "CI/CD · TDD · Extreme Programming"
+  Protagonist (mustache visible) placing golden gear into pipeline — hands-on leader.
+
+BAND C — "Launch": SaaS dashboard UI silhouette (generic charts, strategy cards — no real product screenshot) rising upward on cloud platform shape. AWS-style cloud as simple outline only (no Amazon logo). Chips: "Python · Django · Vue · PostgreSQL · AWS"
+
+BOTTOM: "Enterprise SaaS for Strategy Management"
+
+MOOD: Craftsmanship, startup discipline, not chaos.
+
+STYLE: Navy/cream/gold infographic comic. Clean icons.
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C2-02 · SECTION 2 — THE GENAI HORIZON
+OUTPUT FILENAME: assets/images/story/ecgroup/section-2.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 splash infographic comic, 1080x1920.
+
+TITLE: "SECTION 2" — "The GenAI Horizon" — "Strategy.ai · 2023–2026"
+
+MAIN SCENE: Modern strategy war room — round table, protagonist (mid-40s, mustache clearly visible) seated with 2 colleague silhouettes. Above table: friendly holographic AI assistant — soft humanoid light-figure (NOT aggressive robot, NOT Terminator) — transparent gold-cream glow, offering connected document nodes.
+
+FLOATING ELEMENTS (orbiting, gold line icons):
+  • Knowledge graph (6 connected nodes)
+  • Shield with checkmark: "HIPAA · GDPR"
+  • RAG pipeline: "Retrieve → Augment → Generate"
+  • Chat bubble with lock icon: "Your Data Only"
+  • Generic LLM chips (NO logos): "Model A · Model B · Model C"
+
+IMPACT STATS (bottom, large cream numbers on navy boxes):
+  "40% faster tasks" | "30% better collaboration" | "50% faster deploys"
+
+INSET (small top-right corner panel): Abstract provider chips as neutral rectangles — "LLM Providers" label only.
+
+MOOD: Innovation with responsibility, enterprise-grade AI, trustworthy.
+
+COLORS: Navy, cream, gold + subtle teal glow on AI figure.
+
+NEGATIVE: sci-fi horror, OpenAI logo, glowing red eyes, matrix code rain.
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C2-03 · SECTION 3 — THE TECHNOLOGY TAPESTRY
+OUTPUT FILENAME: assets/images/story/ecgroup/section-3.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 educational infographic comic page, 1080x1920.
+
+TITLE: "SECTION 3" — "The Technology Tapestry" — "What the Platform Is Made Of"
+
+MAIN VISUAL: Layered vertical stack (like geological strata or layer cake) — 4 horizontal bands from bottom to top, each a distinct navy shade gradient:
+
+  LAYER 1 (bottom, widest): "Cloud & Security" — icons: lock, server, shield, AWS-style cloud outline. Color accent: gold border.
+  LAYER 2: "Data & RAG" — icons: database cylinder, vector dots, document magnifier.
+  LAYER 3: "AI Agents & Workflows" — icons: robot assistant (friendly), flowchart, branching paths.
+  LAYER 4 (top, narrow): "Strategy Execution UI" — dashboard rectangle, chart icons.
+
+Small protagonist figure on side (mustache visible even at small scale) — tuning each layer with wrench and laptop — engineer-builder scale.
+
+SIDE LEGEND (cream text):
+  "Python · Django · Vue · React"
+  "PostgreSQL · MongoDB"
+  "LangChain · Bedrock-class APIs"
+  "REST · WebSocket · GraphQL"
+
+MOOD: Technical depth made approachable, educational poster, professional not childish.
+
+STYLE: Friendly comic cross-section diagram. Gold connectors between layers.
+
+NEGATIVE: overwhelming tiny text, illegible labels, 3D isometric mess.
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C2-04 · SECTION 4 — HOW WE WORK · HOW I LEAD
+OUTPUT FILENAME: assets/images/story/ecgroup/section-4.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 warm single-panel team comic, 1080x1920.
+
+TITLE: "SECTION 4" — "How We Work · How I Lead"
+
+SCENE: Bright collaboration space — large whiteboard dominates center. Protagonist (mustache visible, warm expression) at whiteboard (marker in hand), drawing circular cycle in gold:
+  "Strategy → Build → Learn → Ship" with arrows.
+
+Around table: 5 diverse team members (simplified comic faces, varied gender/ethnicity silhouettes) — engaged, leaning in. NO speech bubbles — optional abstract gesture lines only (curved lines suggesting discussion).
+
+FOREGROUND ELEMENTS: Laptop open with code editor stylized lines. Sticky notes on board: "TDD" "XP" "Ownership"
+
+FOUR CORNER MINI-ICONS with labels:
+  • "Lead from front" (figure walking with team)
+  • "Still a coder" (keyboard icon)
+  • "Never stop learning" (book + gear)
+  • "Share knowledge" (mentoring two figures)
+
+MOOD: Collaborative, humble authority, teacher-builder, warm soft lighting (gold wash from window).
+
+BACKGROUND: Navy walls #151D32, cream floor reflection subtle.
+
+BOTTOM CAPTION: "Transparency is how we run."
+
+PROMPT END
+
+
+--------------------------------------------------------------------------------
+IMAGE C2-05 · EPILOGUE — STILL CLIMBING
+OUTPUT FILENAME: assets/images/story/ecgroup/epilogue.webp
+--------------------------------------------------------------------------------
+
+PROMPT START
+
+Vertical 9:16 closing storybook page, 1080x1920.
+
+TITLE: "EPILOGUE" — "Still Climbing" — "2021–Present & Beyond"
+
+MAIN SCENE: Protagonist walks upward on mountain path — BUT mountain is stylized digital landscape:
+  • Path made of glowing gold circuit traces
+  • "Cliffs" are stacked cloud platform layers
+  • Sky: constellation of AI nodes as stars (connected dots)
+  • Distant peaks labeled abstractly "Build" "Scale" "Intelligence" in tiny cream text
+
+Figure looks FORWARD and UP — never looking back. Posture: steady climb, laptop bag, calm smile, mustache visible in profile or 3/4 view.
+
+LEFT SKY (subtle): Faint large ship silhouette far below horizon — callback to Chapter One epilogue — very small, respectful nod.
+
+BOTTOM CAPTION PLATE (serif, gold border): "Chapter Two — Still Building"
+Sub-caption: "The ascent continues. The canvas is larger than ever."
+
+MOOD: Continuity, craft, wonder, hope — elegant minimal composition, generous negative space in upper sky.
+
+COLORS: Deep navy sky gradient to gold horizon. Cream figure highlight. No storm.
+
+NEGATIVE: Everest tragedy, falling, exhaustion, sunset sadness, religious imagery.
+
+PROMPT END
+
+
+================================================================================
+QUICK REFERENCE — ALL OUTPUT FILES
+================================================================================
+
+COGNIZANT (Chapter One):
+  assets/images/story/cognizant/prologue.webp
+  assets/images/story/cognizant/section-1.webp
+  assets/images/story/cognizant/section-2.webp
+  assets/images/story/cognizant/section-3.webp
+  assets/images/story/cognizant/section-4.webp
+  assets/images/story/cognizant/section-5.webp
+  assets/images/story/cognizant/epilogue.webp
+
+EC GROUP / STRATEGY.AI (Chapter Two):
+  assets/images/story/ecgroup/prologue.webp
+  assets/images/story/ecgroup/section-1.webp
+  assets/images/story/ecgroup/section-2.webp
+  assets/images/story/ecgroup/section-3.webp
+  assets/images/story/ecgroup/section-4.webp
+  assets/images/story/ecgroup/epilogue.webp
+
+TOTAL: 13 vertical infographic images
+
+
+================================================================================
+GEMINI ONE-LINE PREFIX (optional — paste before any prompt above)
+================================================================================
+
+"Generate a single vertical 9:16 portrait image for a professional career story website. Follow every detail in the prompt below exactly."
+
+================================================================================
+END OF FILE — gemini-infographic-prompts.txt
+================================================================================

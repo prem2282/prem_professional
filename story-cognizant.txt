@@ -1,0 +1,275 @@
+================================================================================
+THE ASCENT — CHAPTER ONE: COGNIZANT TECHNOLOGY SOLUTIONS
+Program Manager / Enterprise Architect | September 2003 – April 2021 | India & USA
+================================================================================
+
+A note to the reader:
+This is the first half of a twenty-three-year climb — the years when enterprise
+scale, healthcare gravity, and the discipline of delivery shaped a developer into
+an architect, a program manager, and a leader who never stopped writing code.
+
+
+--------------------------------------------------------------------------------
+PROLOGUE — WHERE THE JOURNEY BEGINS
+--------------------------------------------------------------------------------
+
+Every long ascent has a first foothold. Mine was not a boardroom or a product
+launch stage — it was a terminal glow at Tidel Park, Chennai, in 2003.
+
+I joined Cognizant Technology Solutions as a Programmer Analyst, stepping into
+the world of core mainframe engineering: COBOL, DB2, IMS DB, CICS — the
+bedrock languages of enterprise healthcare at scale. UnitedHealth Group was my
+first client. I was not yet steering multi-million-dollar portfolios; I was
+learning what it meant to make systems that could not afford to fail.
+
+Those early years taught me something I have never unlearned: respect the
+machine, respect the data, and respect the person on the other side of the
+screen whose care depends on both.
+
+[Client anchor: UnitedHealth Group · Chennai, India · 2003–2005 · Developer · Healthcare]
+
+
+--------------------------------------------------------------------------------
+SECTION 1 — THE MAINFRAME CRADLE (2003–2005)
+Chennai · UnitedHealth Group · Tidel Park
+--------------------------------------------------------------------------------
+
+Picture a young developer in a humming operations floor — green screens, batch
+jobs, the quiet seriousness of healthcare IT. This was my classroom.
+
+I lived inside the mainframe stack until it became second nature:
+
+  • Programming: COBOL, JCL, CICS, REXX
+  • Data & persistence: IMS DB/DC, DB2, VSAM
+  • Environment & tooling: z/OS, RACF, Endevor, Xpeditor, FileAid
+
+I was not observing enterprise systems from a distance — I was inside them,
+debugging production flows, understanding how a single miscoded paragraph could
+ripple across claims, eligibility, and member services.
+
+Healthcare taught me precision before it taught me politics. Cognizant gave me
+structure; UHG gave me purpose. Together they forged the craftsman I still am
+today — the one who believes technology should never be a constraint, only a
+canvas.
+
+By 2005, I had earned something more valuable than a title: the confidence to
+learn anything the next chapter demanded.
+
+
+—— COMIC IMAGE PROMPT (Section 1) ——
+Style: Clean professional comic panel, limited color palette (navy, cream, gold accent).
+Scene: A young professional at a classic mainframe terminal in a modern Chennai office tower (Tidel Park suggested subtly in background). Green-screen glow, organized desk, healthcare icons (subtle cross/heartbeat line art) on a wall poster. Mood: focused, humble beginnings, dawn of a career. No text bubbles required; optional small caption plate: "Chapter 1 — The Mainframe Cradle." Simple line art, storybook layout, single panel.
+
+
+--------------------------------------------------------------------------------
+SECTION 2 — ACROSS THE ATLANTIC (2006–2012)
+Hartford, Connecticut, USA · UnitedHealth Group
+--------------------------------------------------------------------------------
+
+In 2006, the journey crossed an ocean.
+
+Hartford, Connecticut became home — and UnitedHealth Group became a masterclass
+in growth. The healthcare industry was in motion: mergers, acquisitions,
+integration programs, and the constant pressure to unify systems that were never
+designed to speak the same language.
+
+I arrived as an associate and left this chapter as a Project Manager — but the
+real story is what happened in between.
+
+I worked shoulder-to-shoulder with business and technology leaders through UHG's
+M&A landscape, gradually expanding from hands-on development into system design,
+delivery ownership, and client-facing program leadership. Mainframe depth
+remained my foundation; .NET and Java entered the picture as the enterprise
+stack widened. Program management became bread and butter — transparent with
+the client, honest with leadership, simple with the team.
+
+Thousands of miles from Chennai, I learned that trust is built in stand-ups,
+status calls, and the moments you tell a stakeholder the truth before they ask
+for it.
+
+[Client anchor: UnitedHealth Group · Hartford, CT, USA · 2006–2012 · Lead Developer – Project Manager · Healthcare]
+
+Technical threads woven in this era:
+  Mainframe mastery (2003–2012, Expert) deepening into distributed enterprise
+  delivery — the bridge from COBOL consoles to multi-tier healthcare platforms.
+
+
+—— COMIC IMAGE PROMPT (Section 2) ——
+Style: Clean professional comic, two-panel horizontal strip.
+Panel A: Developer boarding / arriving — suitcase, airport-to-city transition, autumn Hartford skyline simplified.
+Panel B: Conference room with diverse stakeholders around a table, merger-acquisition flow diagram on whiteboard (abstract boxes/arrows, no real logos). Mood: growth, global career, leadership emerging. Limited colors, storybook framing, professional not cartoonish.
+
+
+--------------------------------------------------------------------------------
+SECTION 3 — HOME AGAIN, LARGER HORIZONS (2012–2017)
+Coimbatore, India · Offshore Delivery Leadership
+--------------------------------------------------------------------------------
+
+By 2012, the compass pointed home — Coimbatore — but the responsibility had
+grown far beyond a single desk.
+
+I returned to India as offshore delivery lead at senior management level,
+managing larger portfolios for UnitedHealth Group, Sanofi, and Abbott
+Laboratories. The role was no longer "write the code" alone; it was orchestrate
+the outcome across time zones, vendors, architects, and hundred-person rhythms.
+
+For UHG, I carried forward years of institutional knowledge — now from the other
+side of the partnership table: Solution Architect and Project Manager, ensuring
+that what we promised in Hartford and Chennai would land with quality and
+predictability.
+
+For Abbott Laboratories (2019–2020 footprint begins in leadership maturity built
+here) and Sanofi, life sciences brought new compliance rigor, new data models,
+and new stakes — where a release window can touch research, manufacturing, and
+patient-facing ecosystems.
+
+[Client anchors:
+  UnitedHealth Group · Coimbatore · 2012–2017 · Solution Architect / Project Manager · Healthcare
+  Abbott Laboratories · Coimbatore · 2019–2020 · Program Manager · Life Sciences (leadership arc rooted here)
+  Sanofi · Coimbatore · 2020–2021 · ML/NLP Solution Architect · Life Sciences (trajectory begins)]
+
+This chapter is where program management met architecture in the same person.
+Portfolios grew. Peak headcount crossed a hundred. Revenue responsibility
+touched $6M+ annually. RFPs were won. A Project of the Year award arrived — not
+as decoration, but as evidence that transparency and discipline scale.
+
+Keywords that define the era: Mainframe heritage · .NET · Java · Program
+management · Machine learning (early exploration) · Enterprise architecture
+(emerging).
+
+
+—— COMIC IMAGE PROMPT (Section 3) ——
+Style: Clean professional comic, storybook spread.
+Scene: Split-world illustration — left side Coimbatore delivery center with team huddle; right side abstract globe with connection lines to USA and Europe. Central figure facilitating, not towering — "lead from the front" body language. Healthcare + life sciences symbols (pill, molecule, heart-line) subtly in margins. Mood: scale, global teams, calm authority. Navy/cream/gold palette.
+
+
+--------------------------------------------------------------------------------
+SECTION 4 — THE ARCHITECT'S TURN (2018–2019)
+EmblemHealth · Enterprise / Solution Architect
+--------------------------------------------------------------------------------
+
+In 2018, I deliberately changed altitude.
+
+I moved into an Enterprise Architect role for a multi-year transformation program
+with EmblemHealth — one of the most formative architectural chapters of my
+Cognizant years.
+
+This was not a single application upgrade. It was enterprise application
+architecture at full span: roadmaps, reference models, integration patterns,
+governance forums, and the painstaking alignment of business capability maps
+with technical reality.
+
+I learned to speak fluently to executives who needed outcomes, architects who
+needed constraints, and engineers who needed clarity. Healthcare payer complexity
+— products, networks, claims, provider data — demanded architecture that could
+evolve without crumbling.
+
+[Client anchor: EmblemHealth · Coimbatore · 2018–2019 · Enterprise / Solution Architect · Healthcare]
+
+The technologist in me stayed hands-on: AWS Solution Architect certification,
+cloud and hybrid architecture, full-stack sensibility, test-driven discipline.
+The leader in me learned that architecture fails when it is slides without
+sponsors — and succeeds when it is a story everyone can retell.
+
+Keywords: Enterprise architecture · Digital transformation · Healthcare platforms
+· Modernization · Quality engineering.
+
+
+—— COMIC IMAGE PROMPT (Section 4) ——
+Style: Clean professional comic, single dramatic panel.
+Scene: Architect at a large architecture blueprint wall — layers labeled abstractly (Data, Integration, Apps, Security). Stakeholders silhouetted in foreground. EmblemHealth suggested as generic "Health Plan" building icon, not trademarked logo. Mood: strategic, transformation, clarity from complexity. Minimal line work, professional editorial comic tone.
+
+
+--------------------------------------------------------------------------------
+SECTION 5 — LIFE SCIENCES & THE INTELLIGENCE EDGE (2019–2021)
+Abbott Laboratories · Sanofi
+--------------------------------------------------------------------------------
+
+The final Cognizant chapters carried me deeper into life sciences — and closer
+to the intelligence systems that would define my next role.
+
+**Abbott Laboratories (2019–2020) — Program Manager**
+I led program management for large-scale delivery — modernization, integration,
+quality engineering, and the unglamorous excellence of predictable releases.
+Life sciences does not reward heroics; it rewards traceability, auditability, and
+teams that can repeat success.
+
+**Sanofi (2020–2021) — ML / NLP Solution Architect**
+Here the arc bent toward the future. I applied machine learning and natural
+language processing to real enterprise problems — Python ecosystems, NLP
+libraries, document intelligence, and the emerging toolchain that would soon
+explode into the GenAI era:
+
+  Practitioner strengths: Pandas, NumPy, Matplotlib, TensorFlow/Keras, Scikit-learn,
+  SpaCy, NLTK, expert.ai, Tika, PDFPlumber, Tesseract, scispacy, BERT, pyTest
+
+The coder was still alive. The architect was still curious. The program manager
+still kept the trains on time.
+
+[Client anchors:
+  Abbott Laboratories · Coimbatore · 2019–2020 · Program Manager · Life Sciences
+  Sanofi · Coimbatore · 2020–2021 · ML/NLP Solution Architect · Life Sciences]
+
+Keywords: Machine learning · NLP · Enterprise integration · Life sciences systems
+· Program management · Solution architecture.
+
+
+—— COMIC IMAGE PROMPT (Section 5) ——
+Style: Clean professional comic, two-panel vertical.
+Panel A: Program manager overlooking Gantt/board with life sciences lab imagery subtle in background.
+Panel B: Same professional at laptop with ML/NLP visual — neural network as simple nodes, documents flowing into insights. Mood: bridge from classical IT to intelligent systems. Clean, hopeful, forward-looking.
+
+
+--------------------------------------------------------------------------------
+EPILOGUE — WHAT COGNIZANT FORGED (2003–2021)
+--------------------------------------------------------------------------------
+
+Eighteen years at Cognizant Technology Solutions were not a single job — they
+were a curriculum written in production incidents, client trust, failed
+deployments that taught more than successes, and teams that grew because
+someone chose transparency over theatre.
+
+**By the numbers (selected):**
+  • 23+ years total career — Cognizant holds the first eighteen
+  • $6M+ annual portfolio management
+  • 100+ peak global team size
+  • 25+ projects · 20+ RFPs won · Project of the Year recognition
+  • Fortune 500 clients: UHG, EmblemHealth, Abbott, Sanofi
+
+**Competencies hardened:**
+  Technology Strategy & Roadmaps · Enterprise Architecture · Program & Portfolio
+  Management · Healthcare & Life Sciences Platforms · Cloud & Hybrid Architecture
+  · Machine Learning & NLP · Agile Delivery · Stakeholder Management · Team
+  Building · Quality Engineering · Legacy-to-Cloud Modernization
+
+**Technical compass at departure (Cognizant-era foundations + growth):**
+
+  MAINFRAME (2003–2012, Expert): COBOL · JCL · CICS · REXX · IMS · DB2 · VSAM · z/OS
+
+  ENTERPRISE & FULL STACK (2015–present, Expert/Practitioner):
+    Python · Flask · Django · JavaScript · React · Vue · HTML/CSS/SASS
+    SQL Server · MySQL · MongoDB · PostgreSQL · DynamoDB · RDS · Aurora · DocumentDB
+
+  INTEGRATION & APIs: REST · SOAP · Django REST · AWS API Gateway · GraphQL ·
+    Mulesoft · Informatica · Talend · Marklogic
+
+  AWS (Practitioner): IAM · Cognito · EC2 · S3 · SQS · Lambda · Route 53 ·
+    Lightsail · API Gateway · CloudWatch · CloudTrail · Comprehend · EFS
+
+  MOBILE (Explorer): React Native · PhoneGap · Ionic · NativeScript
+
+When I left in April 2021, I was not leaving the craft — I was carrying it to a
+smaller hull with a bigger horizon: a startup SaaS product where I would build
+the cloud from zero and, soon after, teach machines to think alongside strategists.
+
+The developer at heart boarded the next ship.
+
+
+—— COMIC IMAGE PROMPT (Epilogue) ——
+Style: Clean professional comic, full-width closing panel.
+Scene: Professional walking from a large enterprise ship (labeled subtly "18 Years") toward a sleek smaller vessel on the horizon glowing with cloud + AI motifs (nodes, spark). Ocean metaphor calm, not dramatic. Mood: gratitude, transition, next chapter. Caption plate space: "End of Chapter One — Cognizant." Storybook finale energy.
+
+
+================================================================================
+END OF FILE — story-cognizant.txt
+================================================================================

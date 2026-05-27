@@ -1,0 +1,260 @@
+This is going be a Profession Profile website of Myself.
+
+It will mostly be visited by hiring professionals who get access to my resume.
+I want it to look like a good and clean website 
+
+Main Page
+
+Column 1: A paragraph about myself (that will help present my profression career and stand)
+Column 2: A photo of myself. available in this folder as Prem_2026.webp
+
+
+
+Professional Expereince Page (name of the page should be some thing catchy)
+
+Blogs: A page where a list all my blogs can be showcased.
+As of now this is a placeholder - No content available yet
+
+Learn: A page where all my learning content (tutorials i create) can be posted
+As of now this is a placeholder - No content available yet
+
+--------------------
+
+
+Note About myself:
+
+Technology never fails to fascinate and I have never stopped admiring it.
+After 23 winters ascending the tech hierarchy to steer multi-million dollar ships, I am still just a developer at heart, forever chasing the pure joy of the craft. With AI turning the future into a canvas, I am more captivated than ever driven to explore, destined to build, and happily consumed by the craft.
+
+=================
+
+Professional Expereince:
+
+Executive summary:
+Technology executive with 23+ years of experience leading enterprise technology strategy, AI innovation, SaaS product development, cloud transformation, and large-scale delivery programs across healthcare, life sciences, and enterprise AI domains.
+
+Proven track record of building and scaling technology teams, delivering GenAI-enabled products, advising business stakeholders, and translating emerging technologies into practical enterprise platforms. Experienced in managing $6M+ annual portfolios, leading 100+ member global teams, and scaling product engineering teams while achieving improvement in development output.
+
+Strong blend of executive technology leadership and hands-on architecture depth across GenAI, LLMs, cloud-native platforms, enterprise architecture, DevOps, SaaS delivery, and digital transformation. Known for aligning technology strategy with measurable business outcomes, building high-performing teams, and driving innovation with execution discipline.
+
+---
+
+Core Competency:
+Technology Strategy & Roadmaps | CTO Advisory | VP Engineering Leadership | Enterprise AI Strategy | GenAI Product Development | SaaS Platform Architecture | Cloud Transformation | Digital Transformation | Enterprise Architecture | AI Governance & Guardrails | Product Engineering | DevOps & CI/CD | Agile Delivery | P&L / Portfolio Management | Stakeholder Management | Technology Consulting | Team Building & Leadership | Cost Optimization | Innovation Roadmaps
+
+---
+
+Technology leadership and Architecture Expereince:
+
+Enterprise AI & GenAI: LLMs, OpenAI, Anthropic, Gemini, Llama, AWS Bedrock, RAG, vector databases, LangChain, agentic workflows, AI assistants, enterprise chat, AI governance, context engineering.
+
+Cloud, SaaS & Platform Architecture: AWS, Azure, cloud-native SaaS platforms, serverless architecture, API architecture, secure deployment, scalability, observability, cost optimization, DevOps, CI/CD.
+
+Product Engineering: Python, JavaScript, Django, Vue.js, Quasar, ReactJS, PostgreSQL, MongoDB, REST APIs, WebSocket APIs.
+
+Enterprise Transformation: Healthcare platforms, life sciences systems, enterprise integration, modernization programs, quality engineering, legacy-to-cloud transformation.
+
+---
+
+
+EC Group Datasoft / Strategy.ai (SaaS product)
+Senior Director of Technology | Apr 2021 – Present | Remote (Coimbatore)
+Generative AI & SaaS Product Development | Technology Strategy
+
+Lead technology strategy, architecture, and engineering for Strategy.ai’s enterprise AI SaaS platform, enabling strategy execution, governed knowledge workflows, AI copilots, agents, and decision-support systems.
+Own platform roadmap and architecture across LLMs, RAG, vector databases, AWS, APIs, DevOps, and secure SaaS deployment.
+Delivered enterprise AI products / capabilities, driving 40% faster task turnaround, 30% improved collaboration, and 50% reduction in deployment cycles.
+Matured product engineering through agile delivery, CI/CD automation, reusable architecture, engineering governance, and strong ownership culture.
+Led AI R&D across OpenAI, Anthropic, Gemini, Llama, AWS Bedrock, LangChain, RAG, vector databases, and agentic workflows.
+Partnered with founders and product leaders to convert market opportunities into technology roadmap, product architecture, and delivery outcomes.
+
+
+Cognizant Technology Solutions
+Program Manager / Enterprise Architect | Sep 2003 – Apr 2021 | India & USA
+
+Led technology consulting, modernization, and large-scale delivery for Fortune 500 healthcare and life sciences clients including UHG, EmblemHealth, Abbott, and Sanofi.
+Managed $6M+ annual portfolios and led 100+ member global teams across India and the US.
+Delivered enterprise modernization, integration, quality engineering, and delivery transformation programs.
+Partnered with client executives, architects, vendors, and delivery teams to define roadmaps, solution approaches, governance, and execution plans.
+Built high-performing teams and ensured predictable delivery, quality governance, stakeholder alignment, and measurable business outcomes.
+
+
+----
+
+
+Detailed Professional Story:
+
+Conginzant Technology Solutions:
+
+2003 : Started career as Programmer Analyst working in Core Mainframe technologies like COBOL, DB2, IMS DB, CICS etc for UnitedHealth Group - Chennai - Tidel Park.
+2006 to 2012 : Moved to Hartford Connecticut, USA, Worked with UnitedHealth Group on various mergers and acquisitions for UHG and gratually grew from Associate to Project manager building strong customer relationship and developing wide technical skills and system design.
+2012 to 2017 : Moved back to Coimbatore India managing bigger portfolios for UHG, Sanofi and Abbott Laboratories as offshore delivery lead (Senior Management)
+2018 to 2021 : Switched Role to Enterprise Architect for a multi year transformation program with EmblemHealth and gained vast experience with enterprise application architecture.
+
+Key words to use: Mainframe, Dotnet, Java, Program management, Machine learning, Enterprise architecture.
+
+EC Group Datasoft:
+Client: Strategy.ai [Enterprise SaaS product development - Startup]
+ 
+2021-2023: Joined as a Solution Architect/Product dev lead to for the Startup metaphor.com (later rebranded to Strategy.ai). Built the team from the scratch, implementing extreme programming methodology with test driven development (TDD) making every member of the team exposed to the entire lifecycle of the product development through inception. Built the complete cloud architecture from the ground up implementing clean and secure cicd pipepline with scalable architecture for the SaaS product for Entriprise Vision and Strategy management.
+
+2023-2026: With the emergence of LLM models, expanded the product catelog with Gen AI solutions that will serve the business strategy alignment with even more accurate, precise and focused approach. Rebranded as Strategy.ai, developed chatBots with properitory content, RAG solution, AI workflows, AI mentors/coach for various domains and use cases keeping the Security and Compliance (HIPAA/GDPR) as the top most priority for the onboarding clients. 
+
+Key workds to use: advanced RAG pipelines, LLMs, Knowledge Graph, HIPAA/GDPR compliance, Security, Context aware systems, Workflow builders, Could infrastruture.
+
+
+
+---
+Client Details
+
+UnitedHealth Group
+Chennai, India
+2003 - 2005
+Developer
+Healthcare
+UnitedHealth Group
+Hartford, CT, USA
+2006 - 2012
+Lead Developer - Project Manager
+Healthcare
+UnitedHealth Group
+Coimbatore - India
+2012 - 2017
+Solution Architect/Project Manager
+Healthcare
+Emblem Health
+Coimbatore - India
+2018 - 2019
+Enterprise/Solution Architect
+Healthcare
+Abbott Laboratories
+Coimbatore - India
+2019 - 2020
+Program Manager
+Life Sciences
+Sanofi
+Coimbatore - India
+2020 - 2021
+ML/NLP Solution Architect
+Life Sciences
+
+
+----
+Technical Competency:
+
+Technical
+Programming Skills
+
+Mainframe Programming
+COBOL
+JCL
+CICS
+REXX
+2003 - 2012
+Expert
+Mainframe Datastore/Filesystem
+IMS DB/DC
+DB2
+VSAM
+2003 - 2012
+Expert
+Mainframe Env & tools
+z/OS
+RACF
+Endevor
+Xpeditor
+FileAid
+2003 - 2012
+Expert
+Backend
+Python
+Flask
+Djongo
+2015 to till date
+Expert
+Key Python Packages
+Pandas
+Numpy
+Matplotlib
+Tenserflow Keras
+Scikit learn
+Spacy
+NLTK
+expert.ai
+Tika
+PDFPlumber
+Tesseract
+scispacy
+Bert
+pyTest
+2018 to till date
+Practioner
+Frontend
+Javascript
+ReactJs
+ReactNative
+VueJs
+HTML
+CSS
+SASS
+2015 to till date
+Expert
+Mobile Platform
+ReactNative
+PhoneGap
+Ionic
+Native Scripts
+2018 to till date
+Explorer
+Databases
+SQL Server
+MySQL
+MongoDB
+PostgreSQL
+DynamoDB
+Amazon RDS
+Amazon Arora DB
+DocumentDB
+SQlite
+MS Access
+2015 to till date
+Practitioner
+API
+REST
+SOAP
+Djongo Rest Framework
+AWS API Gateway
+GraphQL
+2015 to till date
+Practitioner
+API testing tools
+PostMan
+SoapUI
+GraphiQl
+2015 to till date
+Practitioner
+Data Integration
+Mulesoft
+Informatica
+Talend
+Marklogic
+2015 to till date
+Explorer
+AWS Services
+IAM
+Conginito
+EC2
+S3
+SQS
+Lambda
+Route53
+Lightsail
+API Gateway
+CloudWatch
+CloudTrail
+Comprehend
+EFS
+2015 to till date
+Practitioner
+
+

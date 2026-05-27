@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn — tutorials and learning content by Prem on technology and engineering." />
+  <title>Learn | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+          },
+          colors: {
+            ink: { DEFAULT: '#0c1222', light: '#151d32', muted: '#8b95a8' },
+            cream: { DEFAULT: '#f4f0e8', dim: '#d4cfc4' },
+            accent: { DEFAULT: '#c9a227', soft: '#e8d48a' },
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="bg-ink text-cream font-sans antialiased">
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header fixed top-0 inset-x-0 z-50">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="index.html" class="font-serif text-2xl tracking-tight text-cream hover:text-accent transition-colors">Prem</a>
+      <button type="button" id="nav-toggle" class="nav-toggle lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="nav-bar"></span>
+        <span class="nav-bar"></span>
+        <span class="nav-bar"></span>
+      </button>
+      <ul id="nav-menu" class="nav-menu hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-cream/80">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="ascent.html" class="nav-link">The Ascent</a></li>
+        <li><a href="blogs.html" class="nav-link">Blogs</a></li>
+        <li><a href="learn.html" class="nav-link active">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="mobile-menu hidden lg:hidden" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 text-lg">
+        <li><a href="index.html" class="mobile-link">Home</a></li>
+        <li><a href="ascent.html" class="mobile-link">The Ascent</a></li>
+        <li><a href="blogs.html" class="mobile-link">Blogs</a></li>
+        <li><a href="learn.html" class="mobile-link active">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 min-h-[70vh] flex flex-col">
+    <section class="mx-auto max-w-6xl px-6 lg:px-8 flex-1 flex flex-col justify-center">
+      <div class="reveal text-center max-w-xl mx-auto">
+        <p class="text-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4">Teaching</p>
+        <h1 class="font-serif text-5xl sm:text-6xl text-cream mb-6">Learn</h1>
+        <p class="text-cream/60 text-lg leading-relaxed mb-12">
+          Tutorials and learning content I create—sharing knowledge that grows the more we give it away.
+        </p>
+        <div class="placeholder-card">
+          <div class="placeholder-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-12 h-12">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+            </svg>
+          </div>
+          <p class="font-serif text-2xl text-cream/80 mb-2">Coming soon</p>
+          <p class="text-cream/40 text-sm">Tutorials and courses will appear here. Stay tuned.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-cream/5 py-12">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-cream/40">
+      <p>© <span id="year"></span> Prem. Professional profile.</p>
+      <a href="index.html" class="text-cream/50 hover:text-accent transition-colors">← Back to home</a>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Chapter One — Eighteen years at Cognizant: from mainframe developer to enterprise architect." />
+  <title>Chapter One — Cognizant | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+          },
+          colors: {
+            ink: { DEFAULT: '#0c1222', light: '#151d32', muted: '#8b95a8' },
+            cream: { DEFAULT: '#f4f0e8', dim: '#d4cfc4' },
+            accent: { DEFAULT: '#c9a227', soft: '#e8d48a' },
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="bg-ink text-cream font-sans antialiased">
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header fixed top-0 inset-x-0 z-50">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="index.html" class="font-serif text-2xl tracking-tight text-cream hover:text-accent transition-colors">Prem</a>
+      <button type="button" id="nav-toggle" class="nav-toggle lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="nav-bar"></span>
+        <span class="nav-bar"></span>
+        <span class="nav-bar"></span>
+      </button>
+      <ul id="nav-menu" class="nav-menu hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-cream/80">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="ascent.html" class="nav-link active">The Ascent</a></li>
+        <li><a href="blogs.html" class="nav-link">Blogs</a></li>
+        <li><a href="learn.html" class="nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="mobile-menu hidden lg:hidden" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 text-lg">
+        <li><a href="index.html" class="mobile-link">Home</a></li>
+        <li><a href="ascent.html" class="mobile-link active">The Ascent</a></li>
+        <li><a href="blogs.html" class="mobile-link">Blogs</a></li>
+        <li><a href="learn.html" class="mobile-link">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 story-hero">
+    <article class="mx-auto max-w-6xl px-6 lg:px-8">
+      <header class="reveal pb-8">
+        <nav class="story-breadcrumb" aria-label="Breadcrumb">
+          <a href="ascent.html">The Ascent</a>
+          <span aria-hidden="true">/</span>
+          <span>Chapter One</span>
+        </nav>
+        <p class="text-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4">Chapter One</p>
+        <h1 class="font-serif text-5xl sm:text-6xl text-cream leading-tight mb-4">Cognizant Years</h1>
+        <p class="text-lg text-cream/55 max-w-2xl">Program Manager / Enterprise Architect · Sep 2003 – Apr 2021 · India & USA</p>
+      </header>
+
+      <nav class="story-chapter-nav reveal" aria-label="Story chapters">
+        <a href="#prologue">Prologue</a>
+        <a href="#section-1">Mainframe</a>
+        <a href="#section-2">Hartford</a>
+        <a href="#section-3">Coimbatore</a>
+        <a href="#section-4">EmblemHealth</a>
+        <a href="#section-5">Life Sciences</a>
+        <a href="#epilogue">Epilogue</a>
+      </nav>
+
+      <!-- Prologue -->
+      <section id="prologue" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Prologue</span>
+            <h2>Where the Journey Begins</h2>
+            <p class="story-chapter-meta">Tidel Park, Chennai · 2003</p>
+            <p>Every long ascent has a first foothold. Mine was not a boardroom or a product launch stage — it was a terminal glow at Tidel Park, Chennai, in 2003.</p>
+            <p>I joined Cognizant Technology Solutions as a Programmer Analyst, stepping into the world of core mainframe engineering: COBOL, DB2, IMS DB, CICS — the bedrock languages of enterprise healthcare at scale. UnitedHealth Group was my first client. I was not yet steering multi-million-dollar portfolios; I was learning what it meant to make systems that could not afford to fail.</p>
+            <p>Those early years taught me something I have never unlearned: respect the machine, respect the data, and respect the person on the other side of the screen whose care depends on both.</p>
+            <div class="story-client-tag">UnitedHealth Group · Chennai · 2003–2005 · Developer · Healthcare</div>
+          </div>
+          <figure class="comic-panel">
+            <img
+              class="comic-image"
+              src="assets/images/story/cognizant/prologue.webp"
+              alt="Prologue — Where the Journey Begins"
+              width="1080"
+              height="1920"
+              loading="eager"
+            />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">Prologue — Where the Journey Begins</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 1 -->
+      <section id="section-1" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Section 1</span>
+            <h2>The Mainframe Cradle</h2>
+            <p class="story-chapter-meta">Chennai · UnitedHealth Group · 2003–2005</p>
+            <p>Picture a young developer in a humming operations floor — green screens, batch jobs, the quiet seriousness of healthcare IT. This was my classroom.</p>
+            <p>I lived inside the mainframe stack until it became second nature:</p>
+            <ul>
+              <li>Programming: COBOL, JCL, CICS, REXX</li>
+              <li>Data & persistence: IMS DB/DC, DB2, VSAM</li>
+              <li>Environment & tooling: z/OS, RACF, Endevor, Xpeditor, FileAid</li>
+            </ul>
+            <p>I was not observing enterprise systems from a distance — I was inside them, debugging production flows, understanding how a single miscoded paragraph could ripple across claims, eligibility, and member services.</p>
+            <p>Healthcare taught me precision before it taught me politics. Cognizant gave me structure; UHG gave me purpose. Together they forged the craftsman I still am today — the one who believes technology should never be a constraint, only a canvas.</p>
+            <p>By 2005, I had earned something more valuable than a title: the confidence to learn anything the next chapter demanded.</p>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/cognizant/section-1.webp" alt="The Mainframe Cradle" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">The Mainframe Cradle</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section id="section-2" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Section 2</span>
+            <h2>Across the Atlantic</h2>
+            <p class="story-chapter-meta">Hartford, Connecticut · 2006–2012</p>
+            <p>In 2006, the journey crossed an ocean.</p>
+            <p>Hartford, Connecticut became home — and UnitedHealth Group became a masterclass in growth. The healthcare industry was in motion: mergers, acquisitions, integration programs, and the constant pressure to unify systems that were never designed to speak the same language.</p>
+            <p>I arrived as an associate and left this chapter as a Project Manager — but the real story is what happened in between.</p>
+            <p>I worked shoulder-to-shoulder with business and technology leaders through UHG's M&A landscape, gradually expanding from hands-on development into system design, delivery ownership, and client-facing program leadership. Mainframe depth remained my foundation; .NET and Java entered the picture as the enterprise stack widened.</p>
+            <p>Thousands of miles from Chennai, I learned that trust is built in stand-ups, status calls, and the moments you tell a stakeholder the truth before they ask for it.</p>
+            <div class="story-client-tag">UnitedHealth Group · Hartford, CT · 2006–2012 · Lead Developer – Project Manager</div>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/cognizant/section-2.webp" alt="Across the Atlantic" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">Across the Atlantic</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 3 -->
+      <section id="section-3" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Section 3</span>
+            <h2>Home Again, Larger Horizons</h2>
+            <p class="story-chapter-meta">Coimbatore · Offshore Delivery Leadership · 2012–2017</p>
+            <p>By 2012, the compass pointed home — Coimbatore — but the responsibility had grown far beyond a single desk.</p>
+            <p>I returned to India as offshore delivery lead at senior management level, managing larger portfolios for UnitedHealth Group, Sanofi, and Abbott Laboratories. The role was orchestrate the outcome across time zones, vendors, architects, and hundred-person rhythms.</p>
+            <p>Portfolios grew. Peak headcount crossed a hundred. Revenue responsibility touched $6M+ annually. RFPs were won. A Project of the Year award arrived — not as decoration, but as evidence that transparency and discipline scale.</p>
+            <div class="story-client-tag">UHG · Coimbatore 2012–2017 · Abbott · Sanofi · Solution Architect / Project Manager</div>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/cognizant/section-3.webp" alt="Home Again, Larger Horizons" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">Home Again, Larger Horizons</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 4 -->
+      <section id="section-4" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Section 4</span>
+            <h2>The Architect's Turn</h2>
+            <p class="story-chapter-meta">EmblemHealth · 2018–2019</p>
+            <p>In 2018, I deliberately changed altitude.</p>
+            <p>I moved into an Enterprise Architect role for a multi-year transformation program with EmblemHealth — one of the most formative architectural chapters of my Cognizant years.</p>
+            <p>This was enterprise application architecture at full span: roadmaps, reference models, integration patterns, governance forums, and the painstaking alignment of business capability maps with technical reality.</p>
+            <p>The technologist in me stayed hands-on: AWS Solution Architect certification, cloud and hybrid architecture, full-stack sensibility, test-driven discipline. The leader in me learned that architecture fails when it is slides without sponsors — and succeeds when it is a story everyone can retell.</p>
+            <div class="story-client-tag">EmblemHealth · Coimbatore · 2018–2019 · Enterprise / Solution Architect</div>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/cognizant/section-4.webp" alt="The Architect's Turn" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">The Architect's Turn</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 5 -->
+      <section id="section-5" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Section 5</span>
+            <h2>Life Sciences & the Intelligence Edge</h2>
+            <p class="story-chapter-meta">Abbott Laboratories · Sanofi · 2019–2021</p>
+            <p><strong>Abbott Laboratories (2019–2020) — Program Manager.</strong> I led program management for large-scale delivery — modernization, integration, quality engineering, and the unglamorous excellence of predictable releases. Life sciences rewards traceability, auditability, and teams that can repeat success.</p>
+            <p><strong>Sanofi (2020–2021) — ML / NLP Solution Architect.</strong> Here the arc bent toward the future. I applied machine learning and natural language processing to real enterprise problems — Python ecosystems, NLP libraries, document intelligence, and the toolchain that would soon explode into the GenAI era.</p>
+            <p>The coder was still alive. The architect was still curious. The program manager still kept the trains on time.</p>
+            <div class="story-client-tag">Abbott · Program Manager · Sanofi · ML/NLP Solution Architect · Life Sciences</div>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/cognizant/section-5.webp" alt="Life Sciences & the Intelligence Edge" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">Life Sciences & the Intelligence Edge</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Epilogue -->
+      <section id="epilogue" class="story-chapter reveal">
+        <div class="story-layout">
+          <div class="story-prose">
+            <span class="story-chapter-label">Epilogue</span>
+            <h2>What Cognizant Forged</h2>
+            <p class="story-chapter-meta">2003–2021</p>
+            <p>Eighteen years at Cognizant were not a single job — they were a curriculum written in production incidents, client trust, and teams that grew because someone chose transparency over theatre.</p>
+            <div class="story-stats">
+              <div class="story-stat"><strong>18</strong><span>Years at Cognizant</span></div>
+              <div class="story-stat"><strong>$6M+</strong><span>Portfolio managed</span></div>
+              <div class="story-stat"><strong>100+</strong><span>Peak team size</span></div>
+              <div class="story-stat"><strong>25+</strong><span>Projects delivered</span></div>
+            </div>
+            <p>When I left in April 2021, I was not leaving the craft — I was carrying it to a smaller hull with a bigger horizon: a startup SaaS product where I would build the cloud from zero and, soon after, teach machines to think alongside strategists.</p>
+            <p>The developer at heart boarded the next ship.</p>
+          </div>
+          <figure class="comic-panel">
+            <img class="comic-image" src="assets/images/story/cognizant/epilogue.webp" alt="End of Chapter One — What Cognizant Forged" width="1080" height="1920" loading="lazy" />
+            <div class="comic-placeholder comic-fallback" hidden>
+              <svg class="comic-placeholder-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
+              <span class="comic-placeholder-label">Illustration</span>
+              <span class="comic-placeholder-title">End of Chapter One</span>
+            </div>
+          </figure>
+        </div>
+        <nav class="story-footer-nav">
+          <a href="ascent.html" class="btn-ghost">← The Ascent</a>
+          <a href="story-ecgroup.html" class="btn-primary">Chapter Two — EC Group →</a>
+        </nav>
+      </section>
+    </article>
+  </main>
+
+  <footer class="border-t border-cream/5 py-12">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-cream/40">
+      <p>© <span id="year"></span> Prem. Professional profile.</p>
+      <a href="ascent.html" class="text-cream/50 hover:text-accent transition-colors">← Back to The Ascent</a>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/story-images.js"></script>
+</body>
+</html>

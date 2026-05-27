@@ -1,0 +1,212 @@
+Roles
+
+Delivery Lead
+Program Management has been my bread and butter for years. Being transparant and honest, with the client, top management and the team has been my simple mantra all along. I like to keep it simple, be it a program review or a casual team talk.
+10+ years25+ ProjectsRev +6M USD/year20+ RFPs wonProject of the year Award100+ Peak head count
+Technical Consultant
+I like to be on the ground with the team even if I am managing a large program. I believe Technology should never be a constraint for Program management and never miss a chance to get my hands dirty with the code. Right from Mainframes, to front end java script frameworks, to backend services in python, java, C# etc, to alexa skills and IOS/Android platforms, I have explored and had my hands dirty with the code. Being a certified AWS solutions architect & practicing Data Science specialist, I love performing as an Enterprise/Solution/Technical Architect.
+AWS - CSACloud and hybrid ArchitectureMachine LearningNLPData ScienceMobileFullstackModernizationTransformationMainframesTest Driven Development
+Coder
+I am proud to say I am still a coder! Its my passion and love. Starting my career as a mainframe developer, I have developed love for programming and spend my quality time to keep it alive even after 17 years!
+pythonjavascriptReactJsVueJsCOBOLCICSREXXC++C#DjongoSQL
+People Leader
+When it comes to people management, I like to lead from the front and avoid manage from the top. I believe in individuals and let them play to their strengths. Being extremely open and transparent has given me great results and I am blessed to have worked with great leaders with values and virtues!
+I trust my teamI grow with my teamI learn from the teamI guide from the front
+Learner
+I have failed a lot. Thanks to the failures, I have taken learning very seriously. I am sure I will never stop learning at any point of time. Youtube, Udemy, DataCamp, StackOverflow are my best friends.
+Evergrowing TechnologyBeing ReleventExplore for fun
+Trainer
+Knowledge is the only thing that grows the more we share! Teaching and trianing is part of day to day job and I take pride in doing the same. Mentoring fresher batches, Contributing to Academy & Rendering guest lectures to colleges keeps my engaged with Training.
+ProgrammingBlockchainCloud ComputingFull stack DevelopmentInterpersonal Skills
+Interviewer
+Every year, never will miss a chance to be part of recruitment drive for freshers and skilled professionals.
+200+ freshers interviewed10+ colleges60+ skilled professionals
+Outreach
+Regular contributor for outreach activities for Organization supporting rural schools. Also has been an outreach coordinator for a few years.
+teachingfacilitating talent programsskill developmentcareer guidance
+
+Client Details
+
+Client Details
+
+UnitedHealth Group
+Chennai, India
+2003 - 2005
+Developer
+Healthcare
+UnitedHealth Group
+Hartford, CT, USA
+2006 - 2012
+Lead Developer - Project Manager
+Healthcare
+UnitedHealth Group
+Coimbatore - India
+2012 - 2017
+Solution Architect/Project Manager
+Healthcare
+Emblem Health
+Coimbatore - India
+2018 - 2019
+Enterprise/Solution Architect
+Healthcare
+Abbott Laboratories
+Coimbatore - India
+2019 - 2020
+Program Manager
+Life Sciences
+Sanofi
+Coimbatore - India
+2020 - 2021
+ML/NLP Solution Architect
+Life Sciences
+
+
+Academics
+
+Academics
+
+Bachlor of Engineering
+2003
+Electrical & Electronics Engineering
+Vellore Institute of Technology (VIT)
+Madras University
+81%
+Higher Secondary (10+2)
+1999
+Computer Science Group
+Atomic Energy Higher Secondar School
+Kalpakkam, Tamil Nadu
+89%
+Secondary
+1997
+Tamil Nadu State Board
+Government High School, Pudupattinam
+Kalpakkam, Tamil Nadu
+84.5%
+Certification
+
+AWS Solution Architect Associate
+AWS
+View Cert
+Cloud Architecture
+Data Vitualization
+HarvardX
+View Cert
+Data Science
+
+Technical Competency
+
+Technical
+Programming Skills
+
+Mainframe Programming
+COBOL
+JCL
+CICS
+REXX
+2003 - 2012
+Expert
+Mainframe Datastore/Filesystem
+IMS DB/DC
+DB2
+VSAM
+2003 - 2012
+Expert
+Mainframe Env & tools
+z/OS
+RACF
+Endevor
+Xpeditor
+FileAid
+2003 - 2012
+Expert
+Backend
+Python
+Flask
+Djongo
+2015 to till date
+Expert
+Key Python Packages
+Pandas
+Numpy
+Matplotlib
+Tenserflow Keras
+Scikit learn
+Spacy
+NLTK
+expert.ai
+Tika
+PDFPlumber
+Tesseract
+scispacy
+Bert
+pyTest
+2018 to till date
+Practioner
+Frontend
+Javascript
+ReactJs
+ReactNative
+VueJs
+HTML
+CSS
+SASS
+2015 to till date
+Expert
+Mobile Platform
+ReactNative
+PhoneGap
+Ionic
+Native Scripts
+2018 to till date
+Explorer
+Databases
+SQL Server
+MySQL
+MongoDB
+PostgreSQL
+DynamoDB
+Amazon RDS
+Amazon Arora DB
+DocumentDB
+SQlite
+MS Access
+2015 to till date
+Practitioner
+API
+REST
+SOAP
+Djongo Rest Framework
+AWS API Gateway
+GraphQL
+2015 to till date
+Practitioner
+API testing tools
+PostMan
+SoapUI
+GraphiQl
+2015 to till date
+Practitioner
+Data Integration
+Mulesoft
+Informatica
+Talend
+Marklogic
+2015 to till date
+Explorer
+AWS Services
+IAM
+Conginito
+EC2
+S3
+SQS
+Lambda
+Route53
+Lightsail
+API Gateway
+CloudWatch
+CloudTrail
+Comprehend
+EFS
+2015 to till date
+Practitioner
