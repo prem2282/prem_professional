@@ -3,32 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Tokens explained through real-world AI architecture lessons: context windows, cost, latency, and production guardrails." />
+  <meta name="description" content="Tokens explained with real-world production problems and an interactive token lab to see how text becomes tokens, context usage, and cost." />
   <title>Tokens: The Unit That Shapes AI Systems | Prem</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
-            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
-          },
-          colors: {
-            ink: { DEFAULT: '#0c1222', light: '#151d32', muted: '#8b95a8' },
-            cream: { DEFAULT: '#f4f0e8', dim: '#d4cfc4' },
-            accent: { DEFAULT: '#c9a227', soft: '#e8d48a' },
-          },
-        },
-      },
-    };
-  </script>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
-<body class="font-sans antialiased" style="background:#f7f3ea;color:#1f2937;">
+<body class="font-sans antialiased blog-post-body">
   <style>
     .medium-shell { max-width: 760px; margin: 0 auto; }
     .medium-nav { background: rgba(247,243,234,0.92); border-bottom: 1px solid rgba(17,24,39,0.08); backdrop-filter: blur(8px); }
@@ -38,13 +23,69 @@
     .section-title { font-family: "Instrument Serif", Georgia, serif; font-size: clamp(1.6rem, 3.2vw, 2.1rem); color: #0f172a; margin-bottom: 0.9rem; }
     .prose p { color: #334155; line-height: 1.92; margin-bottom: 1rem; font-size: 1.05rem; }
     .prose blockquote { border-left: 3px solid #c9a227; padding-left: 1rem; margin: 1.1rem 0; color: #334155; }
-    .paper-card { background: #fffdf8; border: 1px solid rgba(15,23,42,0.08); border-radius: 14px; padding: 1.2rem; }
-    .code-wrap { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 1rem; border: 1px solid rgba(148,163,184,0.25); }
+    .paper-card { background: #fffdf8; border: 1px solid rgba(15,23,42,0.08); border-radius: 14px; padding: 1.2rem; margin-bottom: 1rem; }
+    .problem-card { background: #fffdf8; border: 1px solid rgba(15,23,42,0.1); border-radius: 14px; padding: 1.1rem 1.2rem; margin-bottom: 0.85rem; }
+    .problem-tag { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: #8a6f1f; }
+    .code-wrap { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 1rem; border: 1px solid rgba(148,163,184,0.25); font-size: 0.88rem; line-height: 1.6; overflow-x: auto; }
     .matrix { width: 100%; border-collapse: collapse; font-size: 0.95rem; color: #334155; }
     .matrix th, .matrix td { border-bottom: 1px solid rgba(15,23,42,0.1); text-align: left; padding: 0.75rem 0.5rem; vertical-align: top; }
     .matrix th { color: #0f172a; font-weight: 700; }
     .rule-list { padding-left: 1rem; color: #334155; line-height: 1.8; }
     .rule-list li { margin-bottom: 0.4rem; }
+
+    /* Token lab */
+    .token-lab { background: #fffefb; border: 2px solid rgba(201,162,39,0.35); border-radius: 16px; padding: 1.25rem; margin: 1.5rem 0 2rem; box-shadow: 0 8px 28px rgba(15,23,42,0.06); }
+    .token-lab h3 { font-family: "Instrument Serif", Georgia, serif; font-size: 1.45rem; color: #0f172a; margin: 0 0 0.35rem; }
+    .token-lab .lab-note { font-size: 0.88rem; color: #64748b; margin-bottom: 1rem; }
+    .token-lab textarea {
+      width: 100%; min-height: 140px; resize: vertical;
+      border: 1px solid rgba(15,23,42,0.15); border-radius: 10px;
+      padding: 0.85rem; font-size: 0.95rem; line-height: 1.55;
+      background: #fff; color: #1e293b; font-family: ui-monospace, monospace;
+    }
+    .token-lab textarea:focus { outline: 2px solid rgba(201,162,39,0.5); outline-offset: 1px; }
+    .sample-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.75rem 0; }
+    .sample-btn {
+      font-size: 0.78rem; padding: 0.35rem 0.65rem; border-radius: 999px;
+      border: 1px solid rgba(15,23,42,0.12); background: #f7f1db; color: #5c4a14;
+      cursor: pointer; transition: background 0.15s, border-color 0.15s;
+    }
+    .sample-btn:hover { background: #eadba9; border-color: #c9a227; }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.65rem; margin: 1rem 0;
+    }
+    .stat-box {
+      background: #f8f5ee; border: 1px solid rgba(15,23,42,0.08);
+      border-radius: 10px; padding: 0.65rem 0.75rem;
+    }
+    .stat-box .label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; font-weight: 600; }
+    .stat-box .value { font-size: 1.35rem; font-weight: 700; color: #0f172a; line-height: 1.2; margin-top: 0.15rem; }
+    .stat-box .hint { font-size: 0.72rem; color: #94a3b8; margin-top: 0.2rem; }
+    .context-meters { margin: 1rem 0; }
+    .meter-row { margin-bottom: 0.55rem; }
+    .meter-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: #475569; margin-bottom: 0.2rem; }
+    .meter-track { height: 8px; background: #e8e4d9; border-radius: 999px; overflow: hidden; }
+    .meter-fill { height: 100%; border-radius: 999px; transition: width 0.25s ease; max-width: 100%; }
+    .meter-fill.ok { background: #16a34a; }
+    .meter-fill.warn { background: #ca8a04; }
+    .meter-fill.danger { background: #dc2626; }
+    .viz-label { font-size: 0.8rem; font-weight: 600; color: #475569; margin: 0.75rem 0 0.4rem; }
+    .token-viz {
+      max-height: 200px; overflow: auto; padding: 0.75rem;
+      background: #f8f5ee; border: 1px solid rgba(15,23,42,0.08);
+      border-radius: 10px; line-height: 1.85; font-size: 0.88rem;
+      word-break: break-word;
+    }
+    .token-chip {
+      display: inline; padding: 0.1rem 0.15rem; margin: 0.05rem 0.02rem;
+      border-radius: 4px; border: 1px solid rgba(15,23,42,0.06);
+    }
+    .cost-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 0.75rem; font-size: 0.85rem; color: #475569; }
+    .cost-row label { display: flex; align-items: center; gap: 0.35rem; }
+    .cost-row input[type="number"] { width: 72px; padding: 0.25rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; }
+    .lab-status { font-size: 0.8rem; color: #64748b; margin-top: 0.5rem; }
+    .lab-status.error { color: #b45309; }
   </style>
 
   <header class="fixed top-0 inset-x-0 z-50 medium-nav">
@@ -76,14 +117,109 @@
   <main class="pt-28 pb-24 px-6">
     <article class="medium-shell prose">
       <div class="mb-12">
-        <p class="kicker mb-4">Long-form essay</p>
         <h1 class="post-title mb-6">
           Tokens: The Smallest Unit That Controls Your Entire AI Architecture
         </h1>
         <p class="post-subtitle">
-          A field guide from production trenches: how token design choices shape quality, speed, and cost.
+          A field guide from production trenches: what tokens really are, why they break systems at scale, and how to reason about context, cost, and quality before you ship.
         </p>
       </div>
+
+      <section class="mb-12">
+        <h2 class="section-title">What a token actually is (and what it is not)</h2>
+        <p>
+          A token is not a word. It is a chunk of text the model reads and writes through its tokenizer—often a subword piece.
+          <code class="text-sm bg-slate-100 px-1 rounded">hello</code> might be one token; <code class="text-sm bg-slate-100 px-1 rounded">ChatGPT</code> might split differently; code and JSON often consume more tokens than plain English for the same meaning.
+        </p>
+        <p>
+          Providers bill and cap usage in tokens. Your context window, latency, and monthly invoice all track this unit.
+          Character count is a rough guess; token count is the contract.
+        </p>
+        <p>
+          Rule of thumb for English prose: about <strong>4 characters per token</strong> on average—but averages lie.
+          Legal text, URLs, emojis, and non-Latin scripts can push that ratio hard in either direction.
+        </p>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="section-title">Try it: interactive token lab</h2>
+        <p>
+          Paste or type text below to see how it maps to tokens (using the <code class="text-sm bg-slate-100 px-1 rounded">cl100k_base</code> encoding used by many OpenAI models).
+          Watch how length, structure, and repetition change the count—and how fast you would fill common context windows.
+        </p>
+
+        <div class="token-lab" id="token-lab">
+          <h3>Token Lab</h3>
+          <p class="lab-note">Live encoding for learning. Estimates cost using simple per-million rates you can adjust.</p>
+
+          <textarea id="token-input" placeholder="Type or paste text here…" spellcheck="false"></textarea>
+
+          <div class="sample-row" aria-label="Sample texts">
+            <button type="button" class="sample-btn" data-sample="short">Short question</button>
+            <button type="button" class="sample-btn" data-sample="system">System prompt</button>
+            <button type="button" class="sample-btn" data-sample="rag">RAG chunk</button>
+            <button type="button" class="sample-btn" data-sample="json">JSON payload</button>
+            <button type="button" class="sample-btn" data-sample="code">Code snippet</button>
+            <button type="button" class="sample-btn" data-sample="unicode">Unicode / emoji</button>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="label">Tokens</div>
+              <div class="value" id="stat-tokens">0</div>
+              <div class="hint" id="stat-tokens-hint">—</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Characters</div>
+              <div class="value" id="stat-chars">0</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Words</div>
+              <div class="value" id="stat-words">0</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Chars / token</div>
+              <div class="value" id="stat-ratio">—</div>
+              <div class="hint">Higher = denser text</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Est. input cost</div>
+              <div class="value" id="stat-cost">$0</div>
+              <div class="hint">per single call</div>
+            </div>
+          </div>
+
+          <div class="context-meters">
+            <p class="viz-label">Share of common context windows (input only)</p>
+            <div class="meter-row">
+              <div class="meter-label"><span>8K window</span><span id="pct-8k">0%</span></div>
+              <div class="meter-track"><div class="meter-fill ok" id="bar-8k" style="width:0%"></div></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>32K window</span><span id="pct-32k">0%</span></div>
+              <div class="meter-track"><div class="meter-fill ok" id="bar-32k" style="width:0%"></div></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>128K window</span><span id="pct-128k">0%</span></div>
+              <div class="meter-track"><div class="meter-fill ok" id="bar-128k" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <div class="cost-row">
+            <label>Input $/1M tokens <input type="number" id="rate-input" value="0.15" min="0" step="0.01" /></label>
+            <label>Output $/1M tokens <input type="number" id="rate-output" value="0.60" min="0" step="0.01" /></label>
+            <span id="cost-compare">vs ~4 chars/token guess: —</span>
+          </div>
+
+          <p class="viz-label">Token visualization (each color = one token)</p>
+          <div class="token-viz" id="token-viz" aria-live="polite"></div>
+          <p class="lab-status" id="lab-status">Loading tokenizer…</p>
+        </div>
+
+        <blockquote>
+          💡 <strong>What to notice:</strong> Duplicate boilerplate, huge system prompts, and pasted stack traces dominate token spend long before the user’s actual question does.
+        </blockquote>
+      </section>
 
       <section class="mb-12">
         <h2 class="section-title">Why tokens become your real architecture boundary</h2>
@@ -101,45 +237,113 @@
       </section>
 
       <section class="mb-12">
+        <h2 class="section-title">Real-world problems teams hit with tokens</h2>
+        <p>These show up repeatedly across enterprise deployments—not as model bugs, but as token economics and context design failures.</p>
+
+        <div class="problem-card">
+          <p class="problem-tag">Problem 01 · Context creep</p>
+          <h3 class="font-semibold text-slate-900 mb-2">Chat history eats the window</h3>
+          <p class="mb-2" style="margin-bottom:0.5rem;color:#334155;line-height:1.75;">
+            Multi-turn apps append full history every call. After 15–20 turns, system instructions and fresh retrieval get truncated. Users report the bot "forgot" policies it followed on day one.
+          </p>
+          <p style="margin:0;color:#475569;font-size:0.95rem;"><strong>Fix direction:</strong> rolling summaries, sliding windows, or store state outside the prompt and inject only what matters.</p>
+        </div>
+
+        <div class="problem-card">
+          <p class="problem-tag">Problem 02 · RAG stuffing</p>
+          <h3 class="font-semibold text-slate-900 mb-2">Retrieval dumps too many chunks</h3>
+          <p class="mb-2" style="margin-bottom:0.5rem;color:#334155;line-height:1.75;">
+            Teams increase top-K after a bad answer. Token count spikes; latency rises; the model still misses the right paragraph because signal is buried in noise.
+          </p>
+          <p style="margin:0;color:#475569;font-size:0.95rem;"><strong>Fix direction:</strong> rerank, compress, and pack by token budget—not by chunk count alone.</p>
+        </div>
+
+        <div class="problem-card">
+          <p class="problem-tag">Problem 03 · Output blowups</p>
+          <h3 class="font-semibold text-slate-900 mb-2">Unbounded completion length</h3>
+          <p class="mb-2" style="margin-bottom:0.5rem;color:#334155;line-height:1.75;">
+            A user asks for a "full report" and the model returns 3,000+ output tokens. One request can cost more than thousands of short Q&amp;A calls. p99 latency ruins SLOs.
+          </p>
+          <p style="margin:0;color:#475569;font-size:0.95rem;"><strong>Fix direction:</strong> reserve output budget up front; use structured sections with max lengths.</p>
+        </div>
+
+        <div class="problem-card">
+          <p class="problem-tag">Problem 04 · Hidden prompt tax</p>
+          <h3 class="font-semibold text-slate-900 mb-2">Tool schemas and JSON in every request</h3>
+          <p class="mb-2" style="margin-bottom:0.5rem;color:#334155;line-height:1.75;">
+            Function definitions and verbose JSON examples sit in the system prompt on every call. You pay for them even when the user only says hello.
+          </p>
+          <p style="margin:0;color:#475569;font-size:0.95rem;"><strong>Fix direction:</strong> route to minimal tool sets per intent; lazy-load heavy schemas.</p>
+        </div>
+
+        <div class="problem-card">
+          <p class="problem-tag">Problem 05 · Multilingual inflation</p>
+          <h3 class="font-semibold text-slate-900 mb-2">Same message, very different token counts</h3>
+          <p class="mb-2" style="margin-bottom:0.5rem;color:#334155;line-height:1.75;">
+            Hindi, Japanese, or mixed-language tickets often tokenize less efficiently than English. Capacity planning based on English-only tests under-provisions non-English traffic.
+          </p>
+          <p style="margin:0;color:#475569;font-size:0.95rem;"><strong>Fix direction:</strong> benchmark per locale; adjust budgets and pricing models by language segment.</p>
+        </div>
+
+        <div class="problem-card">
+          <p class="problem-tag">Problem 06 · Summarization chains</p>
+          <h3 class="font-semibold text-slate-900 mb-2">Map-reduce that doubles spend</h3>
+          <p class="mb-2" style="margin-bottom:0.5rem;color:#334155;line-height:1.75;">
+            Long documents get chunked, summarized per chunk, then summarized again. Each stage re-reads tokens. Bills jump 3–5× versus a single well-packed pass with the right window.
+          </p>
+          <p style="margin:0;color:#475569;font-size:0.95rem;"><strong>Fix direction:</strong> measure end-to-end tokens per document, not per step.</p>
+        </div>
+      </section>
+
+      <section class="mb-12">
         <h2 class="section-title">A mental model that actually helps</h2>
         <p>
           Picture an AI model as an airline with strict baggage limits. Every word in your system prompt, user query, retrieved chunk, and output is luggage.
           Go over weight and the airline does not negotiate; something gets removed, delayed, or charged extra.
         </p>
         <p>
-          Visualize three belts in front of you: <strong>Instruction Belt</strong>, <strong>Context Belt</strong>, and <strong>Answer Belt</strong>.
-          Your job as architect is to actively allocate weight across these belts before every call.
+          Visualize three belts: <strong>Instruction Belt</strong> (system + policy), <strong>Context Belt</strong> (history + RAG), and <strong>Answer Belt</strong> (reserved output).
+          Your job as architect is to allocate weight across these belts before every call—and log which belt failed when quality drops.
         </p>
-        <blockquote>
-          💡 <strong>Pro-Tip:</strong> Teams that define explicit token budgets per request type ship faster because failures become visible and measurable.
-        </blockquote>
+        <pre class="mermaid blog-mermaid">
+flowchart TB
+  subgraph belts [Token belts per request]
+    I[Instruction: system + policy]
+    C[Context: history + RAG + tools]
+    O[Answer: reserved completion]
+  end
+  I --> API[Model API call]
+  C --> API
+  O --> API
+  API --> M[Observability: in / out / dropped chunks]
+        </pre>
       </section>
 
       <section class="mb-12">
-        <h2 class="section-title">How token-aware systems run in production</h2>
+        <h2 class="section-title">Token budgeting in production code</h2>
         <p>
-          Here is the production lifecycle I use for token-aware AI calls:
+          Before calling the model, decide how many tokens belong to instructions, retrieved context, and completion.
+          Pack context to fit; never assume the API will "figure it out."
         </p>
-        <pre class="code-wrap overflow-x-auto"><code>flowchart LR
-  A[User Query] --> B[Intent + Route]
-  B --> C[Retrieve Top-K Chunks]
-  C --> D[Token Budget Allocator]
-  D --> E[Prompt Builder]
-  E --> F[LLM Call]
-  F --> G[Response Guardrails]
-  G --> H[Usage Metrics + Cost Logs]
-  H --> I[Adaptive Tuning]</code></pre>
-        <pre class="code-wrap overflow-x-auto"><code>const MAX_INPUT_TOKENS = 8000;
-const RESERVED_OUTPUT_TOKENS = 900; // Keep headroom to prevent truncation.
+        <pre class="code-wrap"><code>const MAX_INPUT_TOKENS = 8000;
+const RESERVED_OUTPUT_TOKENS = 900; // Headroom prevents truncation mid-answer.
 const MAX_CONTEXT_TOKENS = MAX_INPUT_TOKENS - RESERVED_OUTPUT_TOKENS;
 
-const chunks = rerank(retrievedDocs).slice(0, 8);
-const packedContext = packWithinTokenBudget(chunks, MAX_CONTEXT_TOKENS);
+const systemTokens = countTokens(systemRules);
+const userTokens = countTokens(userQuery);
+const budgetForRag = MAX_CONTEXT_TOKENS - systemTokens - userTokens;
+
+const chunks = rerank(retrievedDocs);
+const packedContext = packWithinTokenBudget(chunks, budgetForRag);
+
+if (packedContext.dropped.length > 0) {
+  metrics.increment("rag_chunks_dropped", packedContext.dropped.length);
+}
 
 const response = await llm.responses.create({
   model: "gpt-4.1-mini",
   input: buildPrompt({ systemRules, userQuery, packedContext }),
-  max_output_tokens: RESERVED_OUTPUT_TOKENS, // Caps spend and latency spikes.
+  max_output_tokens: RESERVED_OUTPUT_TOKENS,
 });</code></pre>
         <blockquote>
           🛠️ <strong>Try This:</strong> Log input tokens, output tokens, and latency per endpoint. In two days, patterns will tell you exactly where to optimize.
@@ -180,12 +384,29 @@ const response = await llm.responses.create({
                 <td>Low to Medium</td>
                 <td>Production systems at scale</td>
               </tr>
+              <tr>
+                <td>External memory (DB / cache)</td>
+                <td>Higher infra complexity</td>
+                <td>Medium</td>
+                <td>Long-running agents and copilots</td>
+              </tr>
             </tbody>
           </table>
         </div>
         <blockquote>
           ⚡ <strong>Pop Quiz:</strong> If your hardest constraint is unpredictable monthly spend, which strategy from the matrix should you deploy first?
         </blockquote>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="section-title">What to measure in observability</h2>
+        <ul class="rule-list">
+          <li><strong>Input tokens</strong> by layer: system, tools, RAG, user message.</li>
+          <li><strong>Output tokens</strong> p50 / p95 / p99 per endpoint.</li>
+          <li><strong>Truncation events</strong> when context exceeds budget.</li>
+          <li><strong>Cost per successful task</strong>, not cost per API call alone.</li>
+          <li><strong>Token ratio by locale</strong> for global products.</li>
+        </ul>
       </section>
 
       <section class="mb-12">
@@ -214,12 +435,12 @@ const response = await llm.responses.create({
       <section class="mb-4">
         <h2 class="section-title">A practical challenge before you ship</h2>
         <p>
-          Side Quest: Build a mini "token governor" middleware for one endpoint.
+          Build a mini "token governor" middleware for one endpoint.
           It should estimate tokens before calling the model, trim or summarize context when needed, and emit a structured metrics event.
+          Use the Token Lab above to calibrate what "too big" feels like for your real prompts.
         </p>
         <p>
           If you can complete that in your own stack, you are no longer "using an LLM API"; you are engineering an AI system.
-          That is the level-up.
         </p>
         <details class="paper-card">
           <summary class="cursor-pointer font-semibold text-amber-700">Reveal the Pop Quiz veteran answer</summary>
@@ -239,5 +460,186 @@ const response = await llm.responses.create({
   </footer>
 
   <script src="../assets/js/main.js"></script>
+  <script type="module">
+    const SAMPLES = {
+      short: "What is our refund policy for annual plans cancelled after 90 days?",
+      system: `You are Acme Corp's internal support assistant.
+Rules:
+- Use only approved knowledge base articles.
+- Never promise refunds not listed in policy.
+- Cite article IDs for every factual claim.
+- If uncertain, ask one clarifying question.
+Tone: professional, concise, no legal advice.`,
+      rag: `[KB-4421] Enterprise SLA v3.2 — Uptime credit applies when monthly availability falls below 99.9% as measured at the regional edge. Credits are capped at 25% of monthly subscription fee. Excludes scheduled maintenance windows published 7+ days in advance. Customer must open ticket within 30 days of incident closure.`,
+      json: `{"ticket_id":"INC-92841","severity":"high","services":["billing-api","auth-gateway"],"timeline":[{"t":"2026-05-01T08:12:00Z","event":"error rate spike"},{"t":"2026-05-01T08:19:00Z","event":"rollback initiated"}]}`,
+      code: `async function packWithinTokenBudget(chunks, maxTokens) {
+  let used = 0;
+  const kept = [];
+  for (const c of chunks) {
+    const n = countTokens(c.text);
+    if (used + n > maxTokens) break;
+    used += n;
+    kept.push(c);
+  }
+  return { kept, dropped: chunks.slice(kept.length) };
+}`,
+      unicode: "用户报告登录失败 🔐 — erreur: « session expirée ». 料金プランを確認してください。 €49/mo",
+    };
+
+    const CHIP_COLORS = [
+      "#fde68a", "#bbf7d0", "#bfdbfe", "#fbcfe8", "#ddd6fe",
+      "#fed7aa", "#99f6e4", "#fecaca", "#e9d5ff", "#a5f3fc",
+    ];
+
+    let encode = null;
+    let decode = null;
+    let tokenizerReady = false;
+
+    const inputEl = document.getElementById("token-input");
+    const vizEl = document.getElementById("token-viz");
+    const statusEl = document.getElementById("lab-status");
+
+    async function loadTokenizer() {
+      try {
+        const mod = await import("https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.8.1/+esm");
+        encode = mod.encode;
+        decode = mod.decode;
+        tokenizerReady = true;
+        statusEl.textContent = "Tokenizer ready (cl100k_base). Edit text to explore.";
+        statusEl.classList.remove("error");
+        runAnalysis();
+      } catch (err) {
+        tokenizerReady = false;
+        statusEl.textContent = "Tokenizer unavailable — using ~4 chars/token estimate.";
+        statusEl.classList.add("error");
+        runAnalysisFallback();
+      }
+    }
+
+    function countWords(text) {
+      const t = text.trim();
+      if (!t) return 0;
+      return t.split(/\s+/).length;
+    }
+
+    function estimateTokens(chars) {
+      return Math.max(1, Math.ceil(chars / 4));
+    }
+
+    function getTokenIds(text) {
+      if (!text) return [];
+      if (tokenizerReady && encode) return encode(text);
+      return null;
+    }
+
+    function renderTokenViz(text, tokenIds) {
+      if (!text) {
+        vizEl.innerHTML = '<span style="color:#94a3b8">Enter text to see token boundaries.</span>';
+        return;
+      }
+      if (!tokenIds || tokenIds.length === 0) {
+        vizEl.textContent = text;
+        return;
+      }
+      const parts = [];
+      for (let i = 0; i < tokenIds.length; i++) {
+        const id = tokenIds[i];
+        let piece = "";
+        try {
+          piece = decode([id]);
+        } catch {
+          piece = "?";
+        }
+        const color = CHIP_COLORS[i % CHIP_COLORS.length];
+        const escaped = piece
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+        parts.push(`<span class="token-chip" style="background:${color}" title="token #${i + 1} (id ${id})">${escaped}</span>`);
+      }
+      vizEl.innerHTML = parts.join("");
+    }
+
+    function setMeter(barId, pctId, tokens, windowSize) {
+      const pct = Math.min(100, (tokens / windowSize) * 100);
+      const bar = document.getElementById(barId);
+      const label = document.getElementById(pctId);
+      bar.style.width = pct + "%";
+      label.textContent = pct.toFixed(1) + "%";
+      bar.classList.remove("ok", "warn", "danger");
+      if (pct < 60) bar.classList.add("ok");
+      else if (pct < 90) bar.classList.add("warn");
+      else bar.classList.add("danger");
+    }
+
+    function runAnalysis() {
+      const text = inputEl.value;
+      const chars = text.length;
+      const words = countWords(text);
+      let tokenIds = getTokenIds(text);
+      let tokens = tokenIds ? tokenIds.length : 0;
+      let usedFallback = false;
+
+      if (!tokenizerReady || tokenIds === null) {
+        usedFallback = true;
+        tokens = chars === 0 ? 0 : estimateTokens(chars);
+        tokenIds = null;
+      }
+
+      const ratio = tokens > 0 ? (chars / tokens).toFixed(1) : "—";
+      const guess = chars === 0 ? 0 : estimateTokens(chars);
+
+      document.getElementById("stat-tokens").textContent = tokens.toLocaleString();
+      document.getElementById("stat-tokens-hint").textContent = usedFallback ? "estimated" : "cl100k_base";
+      document.getElementById("stat-chars").textContent = chars.toLocaleString();
+      document.getElementById("stat-words").textContent = words.toLocaleString();
+      document.getElementById("stat-ratio").textContent = ratio;
+
+      const rateIn = parseFloat(document.getElementById("rate-input").value) || 0;
+      const cost = (tokens / 1_000_000) * rateIn;
+      document.getElementById("stat-cost").textContent =
+        cost < 0.0001 ? "$0.0000" : "$" + cost.toFixed(4);
+
+      document.getElementById("cost-compare").textContent =
+        `vs ~4 chars/token guess: ${guess.toLocaleString()} tokens (${tokens === guess ? "same" : (tokens - guess > 0 ? "+" : "") + (tokens - guess)})`;
+
+      setMeter("bar-8k", "pct-8k", tokens, 8192);
+      setMeter("bar-32k", "pct-32k", tokens, 32768);
+      setMeter("bar-128k", "pct-128k", tokens, 128000);
+
+      renderTokenViz(text, tokenIds);
+    }
+
+    function runAnalysisFallback() {
+      runAnalysis();
+    }
+
+    let debounceTimer;
+    function scheduleAnalysis() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(runAnalysis, 120);
+    }
+
+    inputEl.addEventListener("input", scheduleAnalysis);
+    document.getElementById("rate-input").addEventListener("input", scheduleAnalysis);
+    document.getElementById("rate-output").addEventListener("input", scheduleAnalysis);
+
+    document.querySelectorAll(".sample-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-sample");
+        if (SAMPLES[key]) {
+          inputEl.value = SAMPLES[key];
+          scheduleAnalysis();
+        }
+      });
+    });
+
+    inputEl.value = SAMPLES.short;
+    loadTokenizer();
+  </script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
 </body>
 </html>

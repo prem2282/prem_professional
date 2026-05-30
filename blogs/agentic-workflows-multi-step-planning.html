@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Agentic workflows and multi-step planning: trace replay, tool loops, and an interactive Agent Trace Player." />
+  <title>Agentic Workflows and Multi-step Planning | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .trace-timeline { position: relative; padding-left: 1.5rem; margin: 1rem 0; }
+    .trace-timeline::before {
+      content: ""; position: absolute; left: 0.4rem; top: 0; bottom: 0;
+      width: 2px; background: #e8e4d9;
+    }
+    .trace-step {
+      position: relative; margin-bottom: 0.65rem; padding: 0.7rem 0.85rem;
+      background: #f8f5ee; border-radius: 10px; border: 1px solid transparent;
+      opacity: 0.45; transition: all 0.35s;
+    }
+    .trace-step.done { opacity: 0.75; }
+    .trace-step.current {
+      opacity: 1; border-color: #c9a227; background: #fef9e7;
+      box-shadow: 0 4px 14px rgba(201,162,39,0.15);
+    }
+    .trace-step::before {
+      content: ""; position: absolute; left: -1.35rem; top: 0.85rem;
+      width: 10px; height: 10px; border-radius: 50%; background: #cbd5e1;
+      border: 2px solid #fff;
+    }
+    .trace-step.current::before { background: #c9a227; }
+    .trace-step.done::before { background: #22c55e; }
+    .step-type { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6f1f; }
+    .step-body { font-size: 0.85rem; color: #334155; margin-top: 0.25rem; font-family: ui-monospace, monospace; }
+    .trace-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .trace-btn {
+      padding: 0.45rem 0.85rem; border-radius: 10px; font-size: 0.82rem; font-weight: 700;
+      border: 1px solid rgba(15,23,42,0.12); background: #f7f1db; cursor: pointer;
+    }
+    .trace-btn.primary { background: linear-gradient(135deg, #b45309, #c9a227); color: #fffdf8; border: none; }
+    .scenario-select { width: 100%; padding: 0.5rem; border-radius: 8px; margin-bottom: 0.75rem; border: 1px solid rgba(15,23,42,0.15); }
+    .state-box {
+      padding: 0.85rem; border-radius: 12px; background: #fff;
+      border: 1px solid rgba(15,23,42,0.1); font-size: 0.88rem; margin-top: 0.75rem;
+    }
+    .anti-pattern {
+      padding: 0.85rem 1rem; margin: 0.65rem 0;
+      background: #fef2f2; border-left: 4px solid #ef4444;
+      border-radius: 0 10px 10px 0; font-size: 0.92rem;
+    }
+    .cost-strip {
+      display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;
+    }
+    .cost-pill {
+      padding: 0.4rem 0.7rem; border-radius: 8px; background: #f8f5ee;
+      font-size: 0.78rem; font-weight: 700; font-variant-numeric: tabular-nums;
+    }
+    .pattern-grid { display: grid; gap: 0.75rem; margin: 1.25rem 0; }
+    @media (min-width: 560px) { .pattern-grid { grid-template-columns: 1fr 1fr; } }
+    .pattern-card {
+      padding: 1rem; border-radius: 12px; background: #fffdf8;
+      border: 1px solid rgba(15,23,42,0.08);
+    }
+    .pattern-card h4 { margin: 0 0 0.35rem; font-size: 0.95rem; }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 1rem 0; }
+    .compare-table th, .compare-table td { border: 1px solid rgba(15,23,42,0.1); padding: 0.5rem 0.65rem; text-align: left; }
+    .compare-table th { background: #f8f5ee; }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="font-serif text-2xl tracking-tight text-slate-900 hover:text-amber-700 transition-colors">Prem</a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">Agentic Workflows and Multi-step Planning</h1>
+        <p class="blog-subtitle">
+          An agent is not magic autonomy—it is a loop: plan, act, observe, repeat until done or until you hit a guardrail.
+          Most production incidents are trace problems, not "reasoning" problems.
+        </p>
+      </header>
+
+      <p>
+        A finance bot issued a refund twice because step seven retried a succeeded tool call. The planner was fine; idempotency keys were missing.
+        That taught me to design agent UX for operators: every run should read like a flight recorder.
+      </p>
+
+      <p>
+        "Agentic" has become a catch-all for anything with more than one LLM call. In production I distinguish
+        <strong>orchestrated workflows</strong> (deterministic graph with LLM nodes) from <strong>autonomous agents</strong> (model picks tools until done).
+        The latter is powerful and harder to debug—default to orchestration unless ambiguity is the product requirement.
+      </p>
+
+      <pre class="mermaid blog-mermaid">
+stateDiagram-v2
+  [*] --> Plan
+  Plan --> Act: tool selected
+  Act --> Observe: tool result
+  Observe --> Plan: not done
+  Observe --> [*]: goal met
+  Observe --> Halt: guardrail
+      </pre>
+
+      <h2>Agent Trace Player</h2>
+      <p>Step through a recorded trace. Watch state accumulate—and where loops should have stopped.</p>
+
+      <div class="blog-widget" id="trace-player">
+        <h3>Agent Trace Player</h3>
+        <p class="widget-note">Simulated traces from real failure classes.</p>
+
+        <select class="scenario-select" id="trace-scenario" aria-label="Scenario">
+          <option value="refund">Refund workflow (happy path)</option>
+          <option value="loop">Search loop (runaway)</option>
+          <option value="partial">Partial failure + recovery</option>
+          <option value="parallel">Parallel tools + merge</option>
+        </select>
+
+        <div class="trace-controls">
+          <button type="button" class="trace-btn" id="btn-prev">← Prev</button>
+          <button type="button" class="trace-btn primary" id="btn-play">Play</button>
+          <button type="button" class="trace-btn" id="btn-next">Next →</button>
+          <button type="button" class="trace-btn" id="btn-reset">Reset</button>
+        </div>
+
+        <div class="trace-timeline" id="trace-timeline"></div>
+        <div class="state-box" id="trace-state"><strong>State:</strong> idle</div>
+        <div class="cost-strip" id="trace-cost">
+          <span class="cost-pill">Steps: 0</span>
+          <span class="cost-pill">Est. tokens: 0</span>
+          <span class="cost-pill">Tool $: $0.00</span>
+        </div>
+      </div>
+
+      <h2>Orchestration patterns</h2>
+      <div class="pattern-grid">
+        <div class="pattern-card">
+          <h4>ReAct loop</h4>
+          <p style="margin:0;font-size:0.88rem;color:#475569">Think → tool → observe. Flexible; needs step caps and strong observations.</p>
+        </div>
+        <div class="pattern-card">
+          <h4>Planner / worker</h4>
+          <p style="margin:0;font-size:0.88rem;color:#475569">Planner emits DAG; workers execute. Easier to test; less adaptive mid-flight.</p>
+        </div>
+        <div class="pattern-card">
+          <h4>Supervisor routing</h4>
+          <p style="margin:0;font-size:0.88rem;color:#475569">Router picks specialist agent per turn. Good for multi-domain copilots.</p>
+        </div>
+        <div class="pattern-card">
+          <h4>Deterministic + LLM nodes</h4>
+          <p style="margin:0;font-size:0.88rem;color:#475569">Code owns branching; LLM only for language tasks. Best for regulated flows.</p>
+        </div>
+      </div>
+
+      <table class="compare-table">
+        <thead><tr><th>Style</th><th>Debuggability</th><th>Adaptability</th><th>When to use</th></tr></thead>
+        <tbody>
+          <tr><td>Fixed workflow</td><td>High</td><td>Low</td><td>Compliance, refunds, onboarding</td></tr>
+          <tr><td>ReAct agent</td><td>Medium</td><td>High</td><td>Research, ops triage, evolving tools</td></tr>
+          <tr><td>Hybrid</td><td>High</td><td>Medium</td><td>Locked steps + LLM only where needed</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Planning patterns that ship</h2>
+      <ul>
+        <li><strong>Explicit goal object:</strong> JSON state the planner updates—not vibes in chat history.</li>
+        <li><strong>Max steps + max tool spend:</strong> Hard caps prevent runaway loops and invoice shock.</li>
+        <li><strong>Tool allowlists per intent:</strong> Router picks 3–8 tools, not eighty.</li>
+        <li><strong>Human checkpoint:</strong> Pause before irreversible writes (refunds, deletes, external email).</li>
+      </ul>
+
+      <h2>Anti-patterns from postmortems</h2>
+      <div class="anti-pattern"><strong>Unbounded ReAct.</strong> "Keep trying until it works" without step budget—loops burn tokens and duplicate side effects.</div>
+      <div class="anti-pattern"><strong>Planner without observation schema.</strong> Tool returns free text; next step hallucinates success.</div>
+      <div class="anti-pattern"><strong>Parallel tools without merge logic.</strong> Race conditions on shared entity state.</div>
+      <div class="anti-pattern"><strong>Re-feeding full tool JSON every turn.</strong> Context explodes—summarize observations into state object.</div>
+
+      <h2>Idempotency and side effects</h2>
+      <p>
+        Every write tool needs an idempotency key derived from <code>run_id + step + tool + canonical_args</code>.
+        Retries must not double-charge. Store tool receipts in state so replay skips succeeded writes.
+      </p>
+      <pre class="blog-code"><code>def execute_tool(tool, args, run_id, step):
+    key = hashlib.sha256(f"{run_id}:{step}:{tool}:{json.dumps(args,sort_keys=True)}".encode()).hexdigest()
+    if store.has_succeeded(key):
+        return store.get_receipt(key)
+    result = tool.invoke(args, idempotency_key=key)
+    store.save_receipt(key, result)
+    return result</code></pre>
+
+      <h2>Observation schema (non-negotiable)</h2>
+      <p>Tool results should land in structured JSON the planner consumes—not prose blobs.</p>
+      <pre class="blog-code"><code>{
+  "ok": true,
+  "tool": "get_policy",
+  "data": { "eligible": true, "max_refund": 240 },
+  "error": null,
+  "retriable": false,
+  "latency_ms": 142
+}</code></pre>
+
+      <pre class="blog-code"><code>for step in range(MAX_STEPS):
+    plan = llm.plan(goal=state.goal, observations=state.observations, tools=allowed_tools)
+    if plan.action == "finish":
+        return plan.answer
+    if plan.action == "escalate":
+        return human_queue(state)
+    result = execute_tool(plan.tool, plan.args, idempotency_key=state.run_id)
+    state.observations.append({"step": step, "tool": plan.tool, "result": result})
+    if result.error and not result.retriable:
+        break</code></pre>
+
+      <h2>Testing agents without chaos</h2>
+      <ul>
+        <li>Record traces from prod (redacted) and replay in CI with mocked tools.</li>
+        <li>Assert final state object, not exact natural language.</li>
+        <li>Inject fault tool responses (timeout, 409 conflict) and expect escalate/halt.</li>
+      </ul>
+
+      <h2>Your implementation challenge</h2>
+      <p>
+        Export one prod trace with &gt;4 steps. Mark which steps were redundant. Remove one tool call via routing or caching and measure token delta on replay.
+        That is your agent cost roadmap.
+      </p>
+
+      <p class="blog-footer-note">Related: <a href="function-calling-and-tool-use-patterns.html">Function Calling</a> · <a href="context-window-management.html">Context Window</a> · <a href="guardrails-safety-policy-enforcement.html">Guardrails</a></p>
+    </article>
+  </main>
+
+  <footer class="border-t border-slate-200/80 py-12 bg-[#f7f3ea]">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+      <p>© <span id="year"></span> Prem. Professional profile.</p>
+      <a href="../blogs.html" class="text-slate-600 hover:text-amber-700 transition-colors">← All blogs</a>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+
+    (function () {
+      const TRACES = {
+        refund: {
+          steps: [
+            { type: "plan", body: 'goal: refund ticket #8821 → check policy' },
+            { type: "tool", body: 'get_policy(ticket=8821) → eligible: true, max: $240' },
+            { type: "plan", body: 'policy ok → call payment API' },
+            { type: "tool", body: 'issue_refund(amount=240, idempotency=run-9f2a) → success' },
+            { type: "plan", body: 'finish → notify user + close ticket' },
+          ],
+          states: ["goal set", "policy loaded", "awaiting payment", "refund issued", "complete"],
+          costs: [350, 900, 250, 1100, 400],
+        },
+        loop: {
+          steps: [
+            { type: "plan", body: 'search_kb("refund policy EU")' },
+            { type: "tool", body: 'search → 12 chunks, low confidence 0.41' },
+            { type: "plan", body: 'retry search with broader query' },
+            { type: "tool", body: 'search → 18 chunks, confidence 0.39' },
+            { type: "plan", body: 'retry search again…' },
+            { type: "halt", body: 'GUARDRAIL: max_steps=5 exceeded → escalate' },
+          ],
+          states: ["searching", "low confidence", "retry 1", "retry 2", "loop detected", "escalated"],
+          costs: [300, 2000, 400, 2400, 500, 0],
+        },
+        partial: {
+          steps: [
+            { type: "plan", body: 'fetch_account(user=441)' },
+            { type: "tool", body: 'crm.get_account → 503 timeout' },
+            { type: "plan", body: 'retriable error → backoff retry' },
+            { type: "tool", body: 'crm.get_account → ok, tier=enterprise' },
+            { type: "tool", body: 'apply_credit(tier=enterprise) → success' },
+            { type: "plan", body: 'finish with partial latency note in answer' },
+          ],
+          states: ["fetching", "error", "retrying", "account ok", "credit applied", "complete"],
+          costs: [400, 800, 200, 900, 1100, 300],
+        },
+        parallel: {
+          steps: [
+            { type: "plan", body: 'fan-out: billing + usage + support history' },
+            { type: "tool", body: 'billing.summary → $120 overage' },
+            { type: "tool", body: 'usage.metrics → spike on 2024-03-12' },
+            { type: "tool", body: 'support.tickets → credit requested' },
+            { type: "plan", body: 'merge facts → recommend credit $120' },
+            { type: "halt", body: 'HITL: credit &gt; $100 requires manager approval' },
+          ],
+          states: ["planning", "billing ok", "usage ok", "tickets ok", "merged", "awaiting approval"],
+          costs: [500, 1200, 1200, 900, 400, 0],
+        },
+      };
+
+      let scenario = "refund";
+      let idx = -1;
+      let playTimer = null;
+
+      const sel = document.getElementById("trace-scenario");
+      const timeline = document.getElementById("trace-timeline");
+      const stateBox = document.getElementById("trace-state");
+
+      function render() {
+        const t = TRACES[scenario];
+        timeline.innerHTML = t.steps.map((s, i) =>
+          '<div class="trace-step' + (i < idx ? ' done' : '') + (i === idx ? ' current' : '') + '">' +
+          '<div class="step-type">' + s.type + '</div><div class="step-body">' + s.body + '</div></div>'
+        ).join("");
+        const st = idx >= 0 ? t.states[Math.min(idx, t.states.length - 1)] : "idle";
+        stateBox.innerHTML = "<strong>State:</strong> " + st + " · step " + Math.max(0, idx + 1) + "/" + t.steps.length;
+        const costs = t.costs || [];
+        const tok = idx >= 0 ? costs.slice(0, idx + 1).reduce((a, b) => a + b, 0) : 0;
+        const toolCost = (idx >= 0 ? idx : 0) * 0.002;
+        document.getElementById("trace-cost").innerHTML =
+          '<span class="cost-pill">Steps: ' + Math.max(0, idx + 1) + '</span>' +
+          '<span class="cost-pill">Est. tokens: ' + tok.toLocaleString() + '</span>' +
+          '<span class="cost-pill">Tool $: $' + toolCost.toFixed(2) + '</span>';
+      }
+
+      function go(n) {
+        const max = TRACES[scenario].steps.length - 1;
+        idx = Math.max(-1, Math.min(n, max));
+        render();
+      }
+
+      document.getElementById("btn-next").addEventListener("click", () => go(idx + 1));
+      document.getElementById("btn-prev").addEventListener("click", () => go(idx - 1));
+      document.getElementById("btn-reset").addEventListener("click", () => { clearInterval(playTimer); idx = -1; render(); });
+      document.getElementById("btn-play").addEventListener("click", () => {
+        clearInterval(playTimer);
+        idx = -1;
+        playTimer = setInterval(() => {
+          if (idx >= TRACES[scenario].steps.length - 1) { clearInterval(playTimer); return; }
+          go(idx + 1);
+        }, 900);
+      });
+      sel.addEventListener("change", () => { scenario = sel.value; clearInterval(playTimer); idx = -1; render(); });
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Evaluation frameworks for GenAI: offline golden sets, online drift monitors, and an interactive Eval Regression Board." />
+  <title>Evaluation Frameworks (Offline and Online) | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .split-tabs { display: flex; gap: 0.35rem; margin-bottom: 1rem; }
+    .split-tab {
+      flex: 1; padding: 0.55rem; border-radius: 10px; font-size: 0.82rem; font-weight: 700;
+      border: 1px solid rgba(15,23,42,0.1); background: #f8f5ee; cursor: pointer; text-align: center;
+    }
+    .split-tab.active { background: #c9a227; color: #fffdf8; }
+    .metric-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+    @media (min-width: 520px) { .metric-grid { grid-template-columns: repeat(4, 1fr); } }
+    .metric-card {
+      padding: 0.75rem; border-radius: 12px; background: #fff;
+      border: 1px solid rgba(15,23,42,0.08); text-align: center;
+    }
+    .metric-card .v { font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .metric-card .l { font-size: 0.62rem; color: #64748b; text-transform: uppercase; }
+    .metric-card.up .v { color: #15803d; }
+    .metric-card.down .v { color: #b91c1c; }
+    .chart-bars { display: flex; align-items: flex-end; gap: 0.35rem; height: 120px; margin: 1rem 0; padding: 0 0.25rem; }
+    .chart-bar {
+      flex: 1; border-radius: 6px 6px 0 0; background: #c9a227;
+      transition: height 0.4s ease; min-height: 4px; position: relative;
+    }
+    .chart-bar.baseline { background: #94a3b8; }
+    .chart-bar span {
+      position: absolute; bottom: -1.4rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.62rem; color: #64748b; white-space: nowrap;
+    }
+    .release-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+    .release-pill {
+      font-size: 0.76rem; padding: 0.35rem 0.65rem; border-radius: 999px;
+      border: 1px solid rgba(15,23,42,0.1); cursor: pointer; background: #f7f1db;
+    }
+    .release-pill.active { background: #0f172a; color: #f7f3ea; }
+    .gate-banner {
+      padding: 0.75rem 1rem; border-radius: 10px; font-weight: 600; font-size: 0.88rem;
+    }
+    .gate-pass { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+    .gate-fail { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
+    .playbook-step {
+      counter-increment: step; padding-left: 2.5rem; position: relative; margin-bottom: 1rem;
+    }
+    .playbook-step::before {
+      counter-increment: none; content: counter(step);
+      position: absolute; left: 0; top: 0;
+      width: 1.75rem; height: 1.75rem; border-radius: 50%;
+      background: #c9a227; color: #fffdf8; font-weight: 800; font-size: 0.85rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .playbook { counter-reset: step; }
+    .golden-builder { margin-top: 1rem; }
+    .golden-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+    .golden-chip {
+      padding: 0.35rem 0.6rem; border-radius: 8px; font-size: 0.78rem;
+      border: 1px solid rgba(15,23,42,0.12); cursor: pointer; background: #fff;
+    }
+    .golden-chip.on { background: #0f172a; color: #f8fafc; }
+    .coverage-bar {
+      height: 10px; border-radius: 6px; background: #e8e4d9; overflow: hidden; margin: 0.5rem 0 1rem;
+    }
+    .coverage-fill { height: 100%; background: #c9a227; transition: width 0.35s; }
+    .judge-grid { display: grid; gap: 0.65rem; margin: 1rem 0; }
+    .judge-cell { padding: 0.85rem; background: #fffdf8; border-radius: 12px; border: 1px solid rgba(15,23,42,0.08); font-size: 0.9rem; }
+    .blog-card { margin: 1rem 0; }
+    .blog-tag { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #8a6f1f; }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="font-serif text-2xl tracking-tight text-slate-900 hover:text-amber-700 transition-colors">Prem</a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">Evaluation Frameworks (Offline and Online)</h1>
+        <p class="blog-subtitle">
+          Offline eval tells you if a release is safe to ship. Online eval tells you if it was safe to ship to <em>today's</em> users.
+          You need both—and they must disagree sometimes, or one of them is lying.
+        </p>
+      </header>
+
+      <p>
+        We once green-lit a prompt change that gained 4 points on our golden-set accuracy. Thumbs-down rate in prod rose 12% within 48 hours.
+        The golden set was stale, English-only, and missing the "angry paraphrase" cluster our users actually typed.
+      </p>
+
+      <p>
+        Evaluation is how you turn "it feels better" into an engineering decision. Without it, every prompt tweak is a coin flip;
+        with it, you still can be wrong—but you will know <em>where</em> you are wrong before customers do.
+      </p>
+
+      <h2>Offline vs online: different jobs</h2>
+      <div class="split-tabs">
+        <button type="button" class="split-tab active" data-mode="offline">Offline (pre-ship)</button>
+        <button type="button" class="split-tab" data-mode="online">Online (post-ship)</button>
+      </div>
+      <p id="mode-desc">
+        <strong>Offline:</strong> Repeatable golden prompts, human or LLM-judge labels, CI gates on regressions. Optimized for comparability between commits.
+      </p>
+
+      <pre class="mermaid blog-mermaid">
+flowchart LR
+  G[Golden set] --> OFF[Offline CI gates]
+  OFF -->|pass| CAN[Canary traffic]
+  CAN --> ON[Online metrics]
+  ON --> HR[Human review sample]
+  HR --> G
+      </pre>
+
+      <div class="blog-card" id="online-detail" style="display:none">
+        <p class="blog-tag">Online signals</p>
+        <ul style="margin:0;padding-left:1.1rem;line-height:1.75">
+          <li>Thumbs up/down and explicit "wrong answer" reports</li>
+          <li>Escalation to human agent within 5 minutes of bot reply</li>
+          <li>Abstain rate drift vs 7-day baseline</li>
+          <li>Canary cohort A/B on task completion (not just click-through)</li>
+          <li>Tool error rate and retry storms on agent flows</li>
+        </ul>
+      </div>
+
+      <h2>Golden set coverage builder</h2>
+      <p>
+        A golden set is a product artifact, not a one-off CSV. Toggle dimensions below to see how coverage score changes—aim for breadth, not just row count.
+      </p>
+      <div class="blog-widget golden-builder" id="golden-builder">
+        <h3>Coverage checklist</h3>
+        <p class="widget-note">Select categories your eval set includes (illustrative scoring).</p>
+        <div class="golden-row" id="golden-dims"></div>
+        <div class="coverage-bar"><div class="coverage-fill" id="coverage-fill" style="width:0%"></div></div>
+        <p id="coverage-label" style="margin:0;font-size:0.88rem;color:#475569">Coverage: 0%</p>
+      </div>
+
+      <h2>Eval Regression Board</h2>
+      <p>Pick a simulated release. Compare metrics to baseline and see whether the deploy gate passes.</p>
+
+      <div class="blog-widget" id="eval-board">
+        <h3>Eval Regression Board</h3>
+        <p class="widget-note">Synthetic release data—wire your own harness to the same gates.</p>
+
+        <div class="release-pills" id="releases"></div>
+
+        <div class="metric-grid" id="metrics"></div>
+
+        <div class="chart-bars" id="chart"></div>
+
+        <div class="gate-banner gate-pass" id="gate">Deploy gate: PASS</div>
+      </div>
+
+      <h2>Playbook: minimum viable eval program</h2>
+      <div class="playbook">
+        <div class="playbook-step"><strong>Golden set hygiene.</strong> 150–400 tasks stratified by intent, language, and failure mode. Version it like code.</div>
+        <div class="playbook-step"><strong>Primary metric + guardrails.</strong> One north-star (e.g. task success); secondary caps on cost, latency, abstain rate.</div>
+        <div class="playbook-step"><strong>CI on every prompt/schema change.</strong> Block merge when primary drops &gt;2% absolute vs main.</div>
+        <div class="playbook-step"><strong>Online shadow &amp; canary.</strong> 5% traffic, compare thumbs and escalation rate before full rollout.</div>
+        <div class="playbook-step"><strong>Human review queue.</strong> Sample low-confidence and high-impact sessions weekly—feed back into golden set.</div>
+      </div>
+
+      <h2>Metrics that actually correlate with pain</h2>
+      <ul>
+        <li><strong>Task success</strong> (human rubric)—expensive, trustworthy.</li>
+        <li><strong>Faithfulness / groundedness</strong>—for RAG; judge with cite-check automation.</li>
+        <li><strong>Tool call success rate</strong>—for agents; parse JSON validity + backend HTTP outcome.</li>
+        <li><strong>Escalation &amp; override rate</strong>—proxy for silent failure in enterprise UX.</li>
+      </ul>
+
+      <h2>LLM-as-judge: useful, dangerous as default</h2>
+      <div class="judge-grid">
+        <div class="judge-cell"><strong>Good for:</strong> Offline batch scoring, regression triage, drafting rubrics, comparing two answers when human lag is too high.</div>
+        <div class="judge-cell"><strong>Bad for:</strong> Sole production gate on regulated decisions, scoring without golden references, judges with no inter-rater calibration vs humans.</div>
+        <div class="judge-cell"><strong>Practice:</strong> Freeze judge prompt version; measure disagreement rate with 30 human-labeled samples quarterly.</div>
+      </div>
+
+      <h2>Stratify your golden set</h2>
+      <table style="width:100%;border-collapse:collapse;font-size:0.88rem;margin:1rem 0">
+        <tr><th style="border:1px solid #ddd;padding:0.5rem;background:#f8f5ee">Dimension</th><th style="border:1px solid #ddd;padding:0.5rem;background:#f8f5ee">Why it matters</th></tr>
+        <tr><td style="border:1px solid #ddd;padding:0.5rem">Intent (lookup vs action)</td><td style="border:1px solid #ddd;padding:0.5rem">Different failure modes—RAG vs tools</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:0.5rem">Language / locale</td><td style="border:1px solid #ddd;padding:0.5rem">Retrieval and policy vary by region</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:0.5rem">Adversarial paraphrase</td><td style="border:1px solid #ddd;padding:0.5rem">Typos, anger, shorthand—prod realism</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:0.5rem">Empty retrieval</td><td style="border:1px solid #ddd;padding:0.5rem">Tests abstain behavior</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:0.5rem">Stale doc version</td><td style="border:1px solid #ddd;padding:0.5rem">Catches index freshness gaps</td></tr>
+      </table>
+
+      <pre class="blog-code"><code># ci_eval.yaml (conceptual)
+gates:
+  primary: task_success
+  thresholds:
+    task_success: { min_delta_vs_main: -0.02 }
+    faithfulness: { min_delta_vs_main: -0.03 }
+    p95_latency_ms: { max_delta_vs_main: 150 }
+on_fail: block_merge
+on_pass: allow_canary_5pct</code></pre>
+
+      <h2>Human review loop (closed circuit)</h2>
+      <ol>
+        <li>Sample 50 sessions/week: low confidence, thumbs-down, high-impact intents.</li>
+        <li>Label failure mode (retrieval, grounding, tool, UX).</li>
+        <li>Add mispredictions to golden set within 48 hours—version bump.</li>
+        <li>Re-run offline eval before next prompt deploy.</li>
+      </ol>
+
+      <h2>Your implementation challenge</h2>
+      <p>
+        Pick one production regression from last month. Reproduce it in a golden row. Wire CI so that row fails on main today and passes only with your fix branch.
+        That single test is worth more than fifty generic BLEU scores.
+      </p>
+
+      <p class="blog-footer-note">Related: <a href="reranking-and-retrieval-quality.html">Reranking</a> · <a href="hallucination-mitigation-enterprise-workflows.html">Hallucination</a> · <a href="agentic-workflows-multi-step-planning.html">Agents</a></p>
+    </article>
+  </main>
+
+  <footer class="border-t border-slate-200/80 py-12 bg-[#f7f3ea]">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+      <p>© <span id="year"></span> Prem. Professional profile.</p>
+      <a href="../blogs.html" class="text-slate-600 hover:text-amber-700 transition-colors">← All blogs</a>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
+  <script>
+    (function () {
+      const RELEASES = {
+        baseline: { label: "main (baseline)", task: 0.78, faith: 0.81, tool: 0.92, lat: 420, bars: [78,78,78] },
+        v201: { label: "PR #201 prompt", task: 0.80, faith: 0.79, tool: 0.91, lat: 445, bars: [78,80,79] },
+        v202: { label: "PR #202 RAG", task: 0.82, faith: 0.86, tool: 0.92, lat: 510, bars: [78,82,86] },
+        v203: { label: "PR #203 agent", task: 0.74, faith: 0.80, tool: 0.84, lat: 890, bars: [78,74,80] },
+      };
+      let current = "v202";
+
+      const MODE_TEXT = {
+        offline: "<strong>Offline:</strong> Repeatable golden prompts, human or LLM-judge labels, CI gates on regressions.",
+        online: "<strong>Online:</strong> Live thumbs, escalation rate, abstain drift, and canary cohort comparison—catches query distribution shift offline misses.",
+      };
+
+      const GOLDEN_DIMS = [
+        { id: "intent", label: "Multi-intent", weight: 12 },
+        { id: "lang", label: "Non-English", weight: 10 },
+        { id: "adv", label: "Adversarial phrasing", weight: 14 },
+        { id: "empty", label: "Empty retrieval", weight: 12 },
+        { id: "stale", label: "Stale doc cases", weight: 10 },
+        { id: "tools", label: "Tool-heavy flows", weight: 14 },
+        { id: "hitl", label: "HITL paths", weight: 10 },
+        { id: "pii", label: "PII edge cases", weight: 8 },
+      ];
+      const selected = new Set();
+      const dimsEl = document.getElementById("golden-dims");
+      GOLDEN_DIMS.forEach((d) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "golden-chip";
+        b.textContent = d.label;
+        b.addEventListener("click", () => {
+          if (selected.has(d.id)) selected.delete(d.id); else selected.add(d.id);
+          b.classList.toggle("on", selected.has(d.id));
+          const score = GOLDEN_DIMS.filter((x) => selected.has(x.id)).reduce((s, x) => s + x.weight, 0);
+          document.getElementById("coverage-fill").style.width = Math.min(100, score) + "%";
+          document.getElementById("coverage-label").textContent =
+            "Coverage: " + Math.min(100, score) + "% — " +
+            (score >= 70 ? "Solid breadth for v1." : score >= 40 ? "Gaps remain—add adversarial + empty retrieval." : "Too narrow—prod will surprise you.");
+        });
+        dimsEl.appendChild(b);
+      });
+
+      document.querySelectorAll(".split-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".split-tab").forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+          document.getElementById("mode-desc").innerHTML = MODE_TEXT[tab.dataset.mode];
+          document.getElementById("online-detail").style.display = tab.dataset.mode === "online" ? "block" : "none";
+        });
+      });
+
+      const pills = document.getElementById("releases");
+      Object.keys(RELEASES).forEach((k) => {
+        if (k === "baseline") return;
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "release-pill" + (k === current ? " active" : "");
+        b.textContent = RELEASES[k].label;
+        b.dataset.k = k;
+        b.addEventListener("click", () => {
+          current = k;
+          document.querySelectorAll(".release-pill").forEach((p) => p.classList.toggle("active", p.dataset.k === k));
+          render();
+        });
+        pills.appendChild(b);
+      });
+
+      function render() {
+        const base = RELEASES.baseline;
+        const r = RELEASES[current];
+        const metrics = [
+          { l: "Task success", v: r.task, d: r.task - base.task, hi: true },
+          { l: "Faithfulness", v: r.faith, d: r.faith - base.faith, hi: true },
+          { l: "Tool success", v: r.tool, d: r.tool - base.tool, hi: true },
+          { l: "p95 ms", v: r.lat, d: r.lat - base.lat, hi: false },
+        ];
+        document.getElementById("metrics").innerHTML = metrics.map((m) => {
+          const good = m.hi ? m.d >= 0 : m.d <= 0;
+          const cls = m.l === "p95 ms" ? (m.d <= 150 ? "up" : "down") : (m.d >= -0.02 ? "up" : "down");
+          const disp = m.l === "p95 ms" ? m.v : (m.v * 100).toFixed(0) + "%";
+          const delta = m.l === "p95 ms" ? (m.d > 0 ? "+" : "") + m.d + "ms" : (m.d >= 0 ? "+" : "") + (m.d * 100).toFixed(1) + "pt";
+          return '<div class="metric-card ' + cls + '"><div class="v">' + disp + '</div><div class="l">' + m.l + '</div><div style="font-size:0.7rem;color:#64748b">' + delta + '</div></div>';
+        }).join("");
+
+        const chart = document.getElementById("chart");
+        const labels = ["Baseline", "Task", "Faith"];
+        chart.innerHTML = r.bars.map((h, i) =>
+          '<div class="chart-bar' + (i === 0 ? " baseline" : "") + '" style="height:' + h + '%"><span>' + labels[i] + '</span></div>'
+        ).join("");
+
+        const pass = r.task >= base.task - 0.02 && r.faith >= base.faith - 0.03 && r.lat <= base.lat + 150;
+        const gate = document.getElementById("gate");
+        gate.className = "gate-banner " + (pass ? "gate-pass" : "gate-fail");
+        gate.textContent = pass ? "Deploy gate: PASS — safe for 5% canary" : "Deploy gate: FAIL — fix faithfulness or latency before merge";
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>

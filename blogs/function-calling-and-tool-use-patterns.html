@@ -10,8 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
-<body class="font-sans antialiased" style="background:#f7f3eb;color:#1f2937;">
+<body class="font-sans antialiased blog-post-body">
   <style>
     .guide-nav { background: rgba(247,243,235,0.96); border-bottom: 1px solid rgba(31,41,55,0.12); }
     .guide-wrap { max-width: 930px; margin: 0 auto; }
@@ -60,7 +62,6 @@
   <main class="pt-28 pb-24 px-6">
     <article class="guide-wrap content">
       <header class="mb-10">
-        <p class="eyebrow mb-4">Operator Guide</p>
         <h1 class="hero mb-6">Function Calling and Tool Use Patterns</h1>
         <p class="sub">
           Tool-enabled agents are where demos become systems. Once your model can call tools, you are coordinating side effects, retries, and safety boundaries.
@@ -103,6 +104,25 @@
         <h3>Summarize and verify</h3>
         <p>Return result plus assumptions and next action if uncertainty remains.</p>
       </div>
+
+      <pre class="mermaid blog-mermaid">
+sequenceDiagram
+  participant U as User
+  participant A as Agent
+  participant T as Tools
+  U->>A: Goal + context
+  A->>A: Classify intent
+  A->>T: Tool call with idempotency key
+  T-->>A: Structured result or error
+  A->>A: Update state
+  alt goal complete
+    A-->>U: Answer + audit trail
+  else needs another step
+    A->>T: Next tool
+  else guardrail
+    A-->>U: Escalate / refuse
+  end
+      </pre>
 
       <h2>Pattern matrix for function-calling systems</h2>
       <div class="run-card overflow-x-auto">
@@ -306,5 +326,8 @@ Output behavior:
   </footer>
 
   <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
 </body>
 </html>

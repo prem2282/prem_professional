@@ -10,8 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
-<body class="font-sans antialiased" style="background:#f8f5ee;color:#1f2937;">
+<body class="font-sans antialiased blog-post-body">
   <style>
     .library-nav { background: rgba(248,245,238,0.96); border-bottom: 1px solid rgba(31,41,55,0.12); }
     .library-wrap { max-width: 860px; margin: 0 auto; }
@@ -61,7 +63,6 @@
   <main class="pt-28 pb-24 px-6">
     <article class="library-wrap">
       <header class="mb-10">
-        <p class="text-[0.78rem] tracking-[0.16em] uppercase font-semibold text-amber-700 mb-4">Pattern Library</p>
         <h1 class="hero-title mb-6">Prompt Engineering Patterns: A Practical Pattern Library</h1>
         <p class="hero-sub">
           I keep this as a reference when teams ask why outputs are inconsistent, verbose, or off-target.
@@ -77,6 +78,19 @@
             Each pattern below includes why to use it, a weak prompt, and a stronger production variant.
             Mix patterns, but be intentional about ordering.
           </p>
+
+          <pre class="mermaid blog-mermaid">
+flowchart TD
+  I[User intent] --> P{Select patterns}
+  P --> R[Role + objective lock]
+  P --> C[Constraints + output format]
+  P --> E[Few-shot examples]
+  R --> A[Assembled prompt]
+  C --> A
+  E --> A
+  A --> V[Eval on golden tasks]
+  V -->|regression| P
+          </pre>
 
           <div class="pattern-card">
             <div class="pattern-head"><span class="pattern-id">Pattern 01</span><span class="pattern-name">Role + Objective Lock</span></div>
@@ -319,5 +333,8 @@ Final self-check: distinctness across variants</code></pre>
   </footer>
 
   <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
 </body>
 </html>

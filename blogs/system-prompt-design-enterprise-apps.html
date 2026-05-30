@@ -10,8 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
-<body class="font-sans antialiased" style="background:#f9f6ef;color:#1f2937;">
+<body class="font-sans antialiased blog-post-body">
   <style>
     .blueprint-nav { background: rgba(249,246,239,0.96); border-bottom: 1px solid rgba(31,41,55,0.12); }
     .blueprint-wrap { max-width: 900px; margin: 0 auto; }
@@ -59,7 +61,6 @@
   <main class="pt-28 pb-24 px-6">
     <article class="blueprint-wrap content">
       <header class="mb-10">
-        <p class="eyebrow mb-4">Enterprise Blueprint</p>
         <h1 class="title mb-6">System Prompt Design for Enterprise Apps</h1>
         <p class="subtitle">
           In enterprise AI systems, the system prompt is not just a hidden instruction. It is a policy boundary, behavior contract, and reliability instrument.
@@ -81,6 +82,17 @@
 
       <h2>The six-layer system prompt model</h2>
       <p>A stable enterprise prompt usually has layered sections with explicit priorities:</p>
+
+      <pre class="mermaid blog-mermaid">
+flowchart TB
+  L1[1 Identity: role and scope] --> L2[2 Objective: task definition]
+  L2 --> L3[3 Policy: must / must-not rules]
+  L3 --> L4[4 Tool boundaries: allowed actions]
+  L4 --> L5[5 Tenant context: org + user]
+  L5 --> L6[6 Output contract: format + citations]
+  L6 --> API[Composed system prompt → model]
+      </pre>
+
       <div class="card overflow-x-auto">
         <table class="matrix">
           <thead>
@@ -328,5 +340,8 @@ Do not delay with long root-cause speculation before containment steps."</code><
   </footer>
 
   <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
 </body>
 </html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Chunking and embedding strategies for production RAG: interactive split lab, embedding map, and workshop experiments." />
+  <title>Chunking and Embedding Strategies | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .read-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, #c9a227, #b45309);
+      z-index: 60; transition: width 0.1s linear;
+    }
+    .jump-rail {
+      display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.25rem 0 2rem;
+      padding: 0.75rem; background: #fffdf8; border-radius: 12px;
+      border: 1px solid rgba(15,23,42,0.08);
+    }
+    .jump-rail a {
+      font-size: 0.78rem; padding: 0.3rem 0.6rem; border-radius: 999px;
+      background: #f7f1db; color: #5c4a14; text-decoration: none;
+    }
+    .jump-rail a:hover { background: #eadba9; }
+    .experiment {
+      background: #fffdf8; border: 1px solid rgba(15,23,42,0.1);
+      border-radius: 14px; padding: 1rem 1.15rem; margin: 1.25rem 0;
+      border-left: 4px solid #c9a227;
+    }
+    .experiment-num {
+      font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em;
+      color: #8a6f1f; margin-bottom: 0.35rem;
+    }
+
+    /* Split Lab */
+    .split-lab textarea {
+      width: 100%; min-height: 120px; resize: vertical;
+      border: 1px solid rgba(15,23,42,0.15); border-radius: 10px;
+      padding: 0.85rem; font-size: 0.9rem; line-height: 1.55;
+      background: #fff; color: #1e293b; font-family: ui-monospace, monospace;
+    }
+    .lab-controls { display: grid; gap: 0.85rem; margin: 1rem 0; }
+    .lab-row label {
+      display: flex; justify-content: space-between; font-size: 0.82rem;
+      font-weight: 600; color: #334155; margin-bottom: 0.3rem;
+    }
+    .lab-row label span { color: #8a6f1f; font-variant-numeric: tabular-nums; }
+    .lab-row input[type="range"] { width: 100%; accent-color: #c9a227; }
+    .mode-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .mode-tab {
+      padding: 0.4rem 0.75rem; border-radius: 8px; font-size: 0.8rem;
+      border: 1px solid rgba(15,23,42,0.12); background: #f8f5ee;
+      cursor: pointer; color: #475569;
+    }
+    .mode-tab.active { background: #c9a227; color: #fffdf8; border-color: #b45309; }
+    .doc-tape {
+      display: flex; height: 36px; border-radius: 10px; overflow: hidden;
+      border: 1px solid rgba(15,23,42,0.12); margin: 1rem 0;
+      background: #e8e4d9;
+    }
+    .tape-seg {
+      min-width: 2px; transition: flex 0.35s ease;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.55rem; color: rgba(255,255,255,0.9); font-weight: 700;
+      overflow: hidden;
+    }
+    .chunk-grid { display: flex; flex-direction: column; gap: 0.5rem; max-height: 320px; overflow-y: auto; }
+    .chunk-block {
+      padding: 0.65rem 0.8rem; border-radius: 10px; font-size: 0.82rem;
+      line-height: 1.5; border: 2px solid transparent;
+      animation: chunkIn 0.4s ease backwards;
+    }
+    @keyframes chunkIn {
+      from { opacity: 0; transform: translateX(-8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .chunk-block.match { box-shadow: 0 0 0 2px #c9a227; }
+    .chunk-meta { font-size: 0.68rem; font-weight: 700; margin-bottom: 0.2rem; opacity: 0.85; }
+    .stats-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin: 0.75rem 0;
+    }
+    @media (max-width: 520px) { .stats-strip { grid-template-columns: repeat(2, 1fr); } }
+    .stat-mini {
+      text-align: center; padding: 0.5rem; background: #f8f5ee;
+      border-radius: 8px; border: 1px solid rgba(15,23,42,0.06);
+    }
+    .stat-mini .n { font-size: 1.2rem; font-weight: 800; color: #0f172a; }
+    .stat-mini .l { font-size: 0.65rem; color: #64748b; text-transform: uppercase; }
+    .sample-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+    .sample-pill {
+      font-size: 0.76rem; padding: 0.3rem 0.6rem; border-radius: 999px;
+      border: 1px solid rgba(15,23,42,0.1); background: #f7f1db; cursor: pointer;
+    }
+    .sample-pill:hover { background: #eadba9; }
+    .match-bar {
+      margin-top: 1rem; padding: 0.85rem; background: #f8f5ee;
+      border-radius: 12px; border: 1px solid rgba(15,23,42,0.08);
+    }
+    .match-bar input {
+      width: 100%; margin-top: 0.5rem; padding: 0.5rem 0.65rem;
+      border: 1px solid rgba(15,23,42,0.12); border-radius: 8px;
+    }
+
+    /* Embedding map */
+    .embed-lab { margin-top: 0.5rem; }
+    #embed-canvas {
+      width: 100%; height: 280px; background: #fff;
+      border: 1px solid rgba(15,23,42,0.12); border-radius: 12px;
+      display: block; cursor: crosshair;
+    }
+    .embed-legend { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.65rem; font-size: 0.78rem; color: #64748b; }
+    .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 0.25rem; vertical-align: middle; }
+    .query-pick { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.75rem 0; }
+    .query-pick button {
+      font-size: 0.78rem; padding: 0.35rem 0.65rem; border-radius: 8px;
+      border: 1px solid rgba(15,23,42,0.12); background: #fff; cursor: pointer; color: #334155;
+    }
+    .query-pick button.active { background: #0f172a; color: #f8fafc; }
+    .nearest-list { margin-top: 0.75rem; font-size: 0.85rem; color: #475569; }
+    .compare-duo {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;
+    }
+    @media (max-width: 640px) { .compare-duo { grid-template-columns: 1fr; } }
+    .compare-col {
+      padding: 0.85rem; border-radius: 12px; border: 1px solid rgba(15,23,42,0.1);
+      background: #fff;
+    }
+    .compare-col.bad { border-color: #fca5a5; background: #fef2f2; }
+    .compare-col.good { border-color: #86efac; background: #f0fdf4; }
+    .compare-col h4 { margin: 0 0 0.5rem; font-size: 0.9rem; }
+    .run-btn {
+      border: none; border-radius: 10px; cursor: pointer;
+      background: linear-gradient(135deg, #b45309, #c9a227); color: #fffdf8;
+      font-weight: 700; font-size: 0.88rem;
+    }
+    .run-btn:hover { box-shadow: 0 6px 16px rgba(180,83,9,0.25); }
+  </style>
+
+  <div class="read-progress" id="read-progress" aria-hidden="true"></div>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="font-serif text-2xl tracking-tight text-slate-900 hover:text-amber-700 transition-colors">Prem</a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-8">
+        <h1 class="blog-title mb-6">Chunking and Embedding Strategies</h1>
+        <p class="blog-subtitle">
+          Your vector database is only as smart as the pieces you feed it. Chunking decides what those pieces mean; embeddings decide how they are found.
+          This workshop walks through both—with labs you can touch.
+        </p>
+      </header>
+
+      <nav class="jump-rail" aria-label="Jump to section">
+        <a href="#split-lab">Split Lab</a>
+        <a href="#embed-map">Embedding Map</a>
+        <a href="#why-chunk">Why chunking</a>
+        <a href="#strategies">Strategies</a>
+        <a href="#failures">Failures</a>
+        <a href="#checklist">Checklist</a>
+      </nav>
+
+      <p>
+        I have debugged RAG systems that retrieved the right document but the wrong <em>paragraph</em>.
+        The embedding was doing its job; the chunk boundary had amputated the rule we needed.
+        That is why I treat chunking and embedding as one design conversation—not two checklist items.
+      </p>
+
+      <pre class="mermaid blog-mermaid">
+flowchart LR
+  D[Documents] --> SP[Split strategy]
+  SP --> CH[Chunks + metadata]
+  CH --> EM[Embedding model]
+  EM --> IDX[Vector index]
+  Q[User query] --> IDX
+  IDX --> M[Nearest chunks]
+      </pre>
+
+      <h2 id="split-lab">Workshop Lab 1: Split & Map Studio</h2>
+      <p>
+        Paste text or load a sample policy. Adjust chunk size, overlap, and splitting mode.
+        Watch the document tape segment in real time, then fire a test query to see which chunk would win retrieval.
+      </p>
+
+      <div class="blog-widget" id="split-lab-widget">
+        <h3>Split & Map Studio</h3>
+        <p class="widget-note">Educational simulator—boundaries and match scores are computed in-browser, not by your production embedder.</p>
+
+        <div class="sample-pills">
+          <button type="button" class="sample-pill" data-doc="policy">Refund policy</button>
+          <button type="button" class="sample-pill" data-doc="runbook">Incident runbook</button>
+          <button type="button" class="sample-pill" data-doc="api">API reference</button>
+        </div>
+
+        <textarea id="doc-input" spellcheck="false"></textarea>
+
+        <div class="lab-controls">
+          <div class="mode-tabs" role="tablist">
+            <button type="button" class="mode-tab active" data-mode="paragraph">Paragraph-aware</button>
+            <button type="button" class="mode-tab" data-mode="fixed">Fixed window</button>
+            <button type="button" class="mode-tab" data-mode="sentence">Sentence pack</button>
+          </div>
+          <div class="lab-row">
+            <label>Target chunk size (chars) <span id="val-size">480</span></label>
+            <input type="range" id="chunk-size" min="120" max="900" step="20" value="480" />
+          </div>
+          <div class="lab-row">
+            <label>Overlap <span id="val-overlap">15%</span></label>
+            <input type="range" id="chunk-overlap" min="0" max="40" step="5" value="15" />
+          </div>
+        </div>
+
+        <p style="font-size:0.8rem;font-weight:600;color:#475569;margin:0 0 0.35rem;">Document tape (each color = one chunk)</p>
+        <div class="doc-tape" id="doc-tape"></div>
+
+        <div class="stats-strip">
+          <div class="stat-mini"><div class="n" id="st-count">0</div><div class="l">Chunks</div></div>
+          <div class="stat-mini"><div class="n" id="st-avg">0</div><div class="l">Avg chars</div></div>
+          <div class="stat-mini"><div class="n" id="st-tok">0</div><div class="l">Est. tokens</div></div>
+          <div class="stat-mini"><div class="n" id="st-span">0</div><div class="l">Max / min</div></div>
+        </div>
+
+        <div class="chunk-grid" id="chunk-grid"></div>
+
+        <div class="match-bar">
+          <label style="font-size:0.85rem;font-weight:600;color:#334155;">Test retrieval query</label>
+          <input type="text" id="match-query" value="refund eligibility after 45 days" />
+          <button type="button" class="run-btn" id="btn-match" style="margin-top:0.65rem;width:auto;padding:0.5rem 1.2rem;">Find best matching chunk</button>
+          <p id="match-result" style="margin:0.65rem 0 0;font-size:0.85rem;color:#475569;"></p>
+        </div>
+      </div>
+
+      <div class="compare-duo">
+        <div class="compare-col bad">
+          <h4>Too small + no overlap</h4>
+          <p style="margin:0;font-size:0.85rem;color:#64748b;">Tables split mid-row; pronouns lose referents; retrieval returns fragments.</p>
+        </div>
+        <div class="compare-col good">
+          <h4>Section-aware + modest overlap</h4>
+          <p style="margin:0;font-size:0.85rem;color:#64748b;">Whole rules stay intact; neighboring context repeats slightly; search stabilizes.</p>
+        </div>
+      </div>
+
+      <h2 id="embed-map">Workshop Lab 2: Embedding Space Explorer</h2>
+      <p>
+        Embeddings map text into a high-dimensional space where semantic neighbors sit closer together.
+        The canvas below is a <strong>2D projection</strong> of a fictional knowledge base—click a query to see which chunks move nearest (illustrative, not live model output).
+      </p>
+
+      <div class="blog-widget embed-lab">
+        <h3>Embedding Space Explorer</h3>
+        <p class="widget-note">Distances are pre-authored for teaching. Real systems use  hundreds–thousands of dimensions.</p>
+
+        <div class="query-pick" id="query-pick">
+          <button type="button" class="active" data-q="refund">Query: refund after 45 days</button>
+          <button type="button" data-q="billing">Query: duplicate charge</button>
+          <button type="button" data-q="hr">Query: employee leave</button>
+          <button type="button" data-q="deploy">Query: rollback deploy</button>
+        </div>
+
+        <canvas id="embed-canvas" width="700" height="280"></canvas>
+
+        <div class="embed-legend">
+          <span><span class="legend-dot" style="background:#c9a227"></span>Policy</span>
+          <span><span class="legend-dot" style="background:#6366f1"></span>Billing</span>
+          <span><span class="legend-dot" style="background:#ec4899"></span>HR</span>
+          <span><span class="legend-dot" style="background:#14b8a6"></span>Engineering</span>
+          <span><span class="legend-dot" style="background:#ef4444"></span>★ Your query</span>
+        </div>
+
+        <div class="nearest-list" id="nearest-list"></div>
+      </div>
+
+      <h2 id="why-chunk">Why chunking is a product decision, not a utility setting</h2>
+      <div class="experiment">
+        <p class="experiment-num">Experiment A</p>
+        <p style="margin:0;color:#334155;line-height:1.75;">
+          Chunk size sets the <strong>granularity of meaning</strong>. Small chunks improve precision for pinpoint facts but lose surrounding qualifiers.
+          Large chunks preserve narrative but dilute embeddings with mixed topics—search gets "muddy."
+        </p>
+      </div>
+      <div class="experiment">
+        <p class="experiment-num">Experiment B</p>
+        <p style="margin:0;color:#334155;line-height:1.75;">
+          Overlap is insurance against boundary bad luck. Fifteen to twenty percent overlap is a common starting point for prose policies;
+          tables and code often need structure-aware chunking instead of blind sliding windows.
+        </p>
+      </div>
+
+      <h2 id="strategies">Chunking strategies I see in production</h2>
+      <div class="blog-card">
+        <p class="blog-tag">Fixed window</p>
+        <p style="margin:0;line-height:1.75;">Fast, predictable. Risk: cuts through tables and numbered lists. Best for homogeneous prose.</p>
+      </div>
+      <div class="blog-card">
+        <p class="blog-tag">Structure-aware</p>
+        <p style="margin:0;line-height:1.75;">Split on headings, markdown, HTML sections, or PDF layout blocks. Best for docs with clear outline.</p>
+      </div>
+      <div class="blog-card">
+        <p class="blog-tag">Semantic / recursive</p>
+        <p style="margin:0;line-height:1.75;">Merge/split until units are "about one idea." Higher compute at index time; often worth it for messy corpora.</p>
+      </div>
+      <div class="blog-card">
+        <p class="blog-tag">Parent–child chunks</p>
+        <p style="margin:0;line-height:1.75;">Retrieve small chunk, inject parent section for generation. Balances search precision with answer context.</p>
+      </div>
+
+      <h2>Embedding strategy: what matters beyond "pick a model"</h2>
+      <ul>
+        <li><strong>Same embedder at index and query time</strong>—non-negotiable.</li>
+        <li><strong>Normalize vectors</strong> when using cosine similarity in your store.</li>
+        <li><strong>Enrich with metadata</strong>: title, section, product, version, ACL—filter before vector math.</li>
+        <li><strong>Evaluate on your data</strong>: benchmark queries from real tickets, not generic sentence pairs.</li>
+        <li><strong>Hybrid search</strong> when exact tokens matter (SKUs, error codes, policy IDs).</li>
+      </ul>
+
+      <pre class="blog-code"><code>// Index-time: attach metadata you'll filter on at query time
+{
+  "chunk_id": "KB-881§4.2",
+  "text": "...",
+  "embedding": embed(model, text),
+  "metadata": {
+    "doc_version": "2026-01",
+    "section": "Refunds",
+    "product": "enterprise",
+    "acl": ["support", "billing"]
+  }
+}</code></pre>
+
+      <h2 id="failures">Failure gallery (from real postmortems)</h2>
+      <div class="blog-card">
+        <p class="blog-tag">Split table</p>
+        <p style="margin:0;">Row-level rules separated from headers. Model cites "30 days" without seeing it applies only to tier A.</p>
+      </div>
+      <div class="blog-card">
+        <p class="blog-tag">Boilerplate pollution</p>
+        <p style="margin:0;">Headers/footers embedded in every chunk. "Confidential" and copyright lines become top matches.</p>
+      </div>
+      <div class="blog-card">
+        <p class="blog-tag">Model swap without re-embed</p>
+        <p style="margin:0;">New embedder, old index. Recall collapses; team blames "RAG regression."</p>
+      </div>
+      <div class="blog-card">
+        <p class="blog-tag">Language mix</p>
+        <p style="margin:0;">Multilingual corpus, English-only embedder. Non-English queries retrieve random neighbors.</p>
+      </div>
+
+      <h2 id="checklist">Production checklist</h2>
+      <div class="blog-card">
+        <ul style="margin:0;padding-left:1.1rem;line-height:1.85;">
+          <li>Define target chunk size from median paragraph + token budget.</li>
+          <li>Log chunk_id with every retrieval and every answer.</li>
+          <li>Version embedder + index together; re-embed on change.</li>
+          <li>Run offline recall@K on 50–200 real queries before launch.</li>
+          <li>Inspect top failures manually—patterns beat aggregate metrics.</li>
+        </ul>
+      </div>
+
+      <h2>Your workshop homework</h2>
+      <p>
+        Take one production document that caused a wrong answer. Run it through Split Lab with three modes and two sizes.
+        Note which configuration would have kept the critical sentence intact.
+        Then write one sentence describing the metadata filter you should have applied before vector search.
+      </p>
+      <p style="color:#5c4a14;font-weight:600;">
+        Chunking shapes meaning. Embeddings find meaning. If the shape is wrong, search will look confident anyway.
+      </p>
+    </article>
+  </main>
+
+  <footer class="blog-footer border-t border-slate-300/70 py-12 mt-16">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+      <p>© <span id="year"></span> Prem. Professional profile.</p>
+      <a href="../blogs.html" class="hover:text-amber-700 transition-colors">← Back to blogs</a>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
+  <script>
+    (function () {
+      const DOCS = {
+        policy: `Refund Policy v3 — Effective January 2026
+
+§4.2 Standard refund window
+Customers may request a full refund within 30 days of purchase date. After 30 days, automatic refunds are not available. Manager approval is required for exceptions.
+
+§4.3 Enterprise tier
+Enterprise contracts may specify alternate terms in signed SOW. Do not infer enterprise terms from marketing pages.
+
+§4.4 Processing time
+Approved refunds post within 5–7 business days to original payment method.`,
+
+        runbook: `Incident Runbook — Auth Service
+
+Symptom: p95 latency above 800ms on /token endpoint.
+
+Step 1: Check error rate dashboard partition by region.
+Step 2: Correlate with last deploy within 60 minutes.
+Step 3: If correlated, initiate rollback per RB-AUTH-7.
+
+Do not restart databases without DBA approval.`,
+
+        api: `API Reference — Webhooks v2
+
+POST /v1/webhooks registers a callback URL.
+
+Required headers: Authorization Bearer token, Content-Type application/json.
+
+Rate limit: 120 requests per minute per API key.
+Idempotency-Key header recommended for POST.`,
+      };
+
+      const COLORS = [
+        "#c9a227", "#d97706", "#ca8a04", "#65a30d", "#0d9488",
+        "#0891b2", "#6366f1", "#8b5cf6", "#a855f7", "#ec4899",
+      ];
+
+      let mode = "paragraph";
+
+      const docInput = document.getElementById("doc-input");
+      const chunkSize = document.getElementById("chunk-size");
+      const chunkOverlap = document.getElementById("chunk-overlap");
+
+      function chunkFixed(text, size, overlapPct) {
+        const overlap = Math.floor(size * (overlapPct / 100));
+        const stride = Math.max(1, size - overlap);
+        const chunks = [];
+        for (let i = 0; i < text.length; i += stride) {
+          const piece = text.slice(i, i + size).trim();
+          if (piece) chunks.push(piece);
+          if (i + size >= text.length) break;
+        }
+        return chunks;
+      }
+
+      function chunkParagraph(text, size, overlapPct) {
+        const paras = text.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+        const chunks = [];
+        let buf = "";
+        for (const p of paras) {
+          if ((buf + "\n\n" + p).length <= size || !buf) {
+            buf = buf ? buf + "\n\n" + p : p;
+          } else {
+            if (buf) chunks.push(buf);
+            buf = p;
+          }
+        }
+        if (buf) chunks.push(buf);
+        if (overlapPct > 0 && chunks.length > 1) {
+          const merged = [];
+          for (let i = 0; i < chunks.length; i++) {
+            let c = chunks[i];
+            if (i > 0) {
+              const tail = chunks[i - 1].slice(-Math.floor(size * 0.12));
+              c = tail + " … " + c;
+            }
+            merged.push(c);
+          }
+          return merged;
+        }
+        return chunks;
+      }
+
+      function chunkSentence(text, size) {
+        const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean);
+        const chunks = [];
+        let buf = "";
+        for (const s of sentences) {
+          if ((buf + " " + s).length <= size) buf = buf ? buf + " " + s : s;
+          else {
+            if (buf) chunks.push(buf);
+            buf = s;
+          }
+        }
+        if (buf) chunks.push(buf);
+        return chunks;
+      }
+
+      function buildChunks() {
+        const text = docInput.value;
+        const size = parseInt(chunkSize.value, 10);
+        const ov = parseInt(chunkOverlap.value, 10);
+        if (mode === "fixed") return chunkFixed(text, size, ov);
+        if (mode === "sentence") return chunkSentence(text, size);
+        return chunkParagraph(text, size, ov);
+      }
+
+      function scoreMatch(query, chunk) {
+        const qw = query.toLowerCase().split(/\W+/).filter((w) => w.length > 2);
+        const ct = chunk.toLowerCase();
+        let hit = 0;
+        qw.forEach((w) => { if (ct.includes(w)) hit++; });
+        return qw.length ? hit / qw.length : 0;
+      }
+
+      function render() {
+        const chunks = buildChunks();
+        const text = docInput.value;
+        document.getElementById("val-size").textContent = chunkSize.value;
+        document.getElementById("val-overlap").textContent = chunkOverlap.value + "%";
+
+        const lengths = chunks.map((c) => c.length);
+        const totalChars = lengths.reduce((a, b) => a + b, 0);
+        document.getElementById("st-count").textContent = chunks.length;
+        document.getElementById("st-avg").textContent = chunks.length
+          ? Math.round(totalChars / chunks.length)
+          : 0;
+        document.getElementById("st-tok").textContent = Math.ceil(totalChars / 4);
+        document.getElementById("st-span").textContent = chunks.length
+          ? Math.max(...lengths) + "/" + Math.min(...lengths)
+          : "0/0";
+
+        const tape = document.getElementById("doc-tape");
+        tape.innerHTML = "";
+        chunks.forEach((c, i) => {
+          const seg = document.createElement("div");
+          seg.className = "tape-seg";
+          seg.style.flex = c.length;
+          seg.style.background = COLORS[i % COLORS.length];
+          seg.title = "Chunk " + (i + 1);
+          tape.appendChild(seg);
+        });
+
+        const grid = document.getElementById("chunk-grid");
+        grid.innerHTML = "";
+        chunks.forEach((c, i) => {
+          const div = document.createElement("div");
+          div.className = "chunk-block";
+          div.style.background = COLORS[i % COLORS.length] + "22";
+          div.style.borderColor = COLORS[i % COLORS.length] + "55";
+          div.style.animationDelay = i * 0.05 + "s";
+          div.dataset.index = i;
+          div.innerHTML =
+            '<div class="chunk-meta">Chunk ' + (i + 1) + " · " + c.length + " chars · ~" + Math.ceil(c.length / 4) + " tok</div>" +
+            (c.length > 220 ? c.slice(0, 220) + "…" : c);
+          grid.appendChild(div);
+        });
+      }
+
+      function runMatch() {
+        const chunks = buildChunks();
+        const q = document.getElementById("match-query").value;
+        let best = -1, bestScore = -1;
+        chunks.forEach((c, i) => {
+          const s = scoreMatch(q, c);
+          if (s > bestScore) { bestScore = s; best = i; }
+        });
+        document.querySelectorAll(".chunk-block").forEach((el) => el.classList.remove("match"));
+        const result = document.getElementById("match-result");
+        if (best >= 0) {
+          const el = document.querySelector('.chunk-block[data-index="' + best + '"]');
+          if (el) { el.classList.add("match"); el.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+          result.textContent =
+            "Best match: Chunk " + (best + 1) + " (keyword overlap score " + (bestScore * 100).toFixed(0) + "%). " +
+            (bestScore < 0.35 ? "Low score—this query would likely miss in production without better chunking or hybrid search." : "Reasonable overlap for a lexical probe.");
+        } else {
+          result.textContent = "No chunks to match.";
+        }
+      }
+
+      document.querySelectorAll(".mode-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".mode-tab").forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+          mode = tab.dataset.mode;
+          render();
+        });
+      });
+
+      document.querySelectorAll(".sample-pill").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          docInput.value = DOCS[btn.dataset.doc] || "";
+          render();
+        });
+      });
+
+      [docInput, chunkSize, chunkOverlap].forEach((el) => {
+        el.addEventListener("input", render);
+      });
+      document.getElementById("btn-match").addEventListener("click", runMatch);
+
+      docInput.value = DOCS.policy;
+      render();
+
+      /* Embedding map */
+      const POINTS = [
+        { id: 1, topic: "policy", label: "Refund 30d rule", x: 0.22, y: 0.28 },
+        { id: 2, topic: "policy", label: "Manager exception", x: 0.28, y: 0.38 },
+        { id: 3, topic: "policy", label: "Enterprise SOW", x: 0.18, y: 0.42 },
+        { id: 4, topic: "billing", label: "Duplicate charge SOP", x: 0.62, y: 0.25 },
+        { id: 5, topic: "billing", label: "Ledger reversal", x: 0.68, y: 0.35 },
+        { id: 6, topic: "billing", label: "Invoice API", x: 0.72, y: 0.22 },
+        { id: 7, topic: "hr", label: "Leave accrual", x: 0.35, y: 0.72 },
+        { id: 8, topic: "hr", label: "Termination checklist", x: 0.42, y: 0.78 },
+        { id: 9, topic: "eng", label: "Rollback RB-AUTH", x: 0.78, y: 0.68 },
+        { id: 10, topic: "eng", label: "Deploy correlate", x: 0.72, y: 0.58 },
+        { id: 11, topic: "policy", label: "Marketing FAQ fluff", x: 0.48, y: 0.48 },
+        { id: 12, topic: "eng", label: "DBA restart warn", x: 0.82, y: 0.75 },
+      ];
+
+      const TOPIC_COLOR = { policy: "#c9a227", billing: "#6366f1", hr: "#ec4899", eng: "#14b8a6" };
+
+      const QUERIES = {
+        refund: { x: 0.24, y: 0.32, neighbors: [1, 2, 3] },
+        billing: { x: 0.65, y: 0.28, neighbors: [4, 5, 6] },
+        hr: { x: 0.38, y: 0.74, neighbors: [7, 8] },
+        deploy: { x: 0.76, y: 0.62, neighbors: [9, 10, 12] },
+      };
+
+      const canvas = document.getElementById("embed-canvas");
+      const ctx = canvas.getContext("2d");
+      let activeQ = "refund";
+
+      function drawEmbedMap() {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.fillStyle = "#fafaf9";
+        ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = "#e7e5e4";
+        for (let i = 1; i < 4; i++) {
+          ctx.beginPath();
+          ctx.moveTo((w * i) / 4, 0);
+          ctx.lineTo((w * i) / 4, h);
+          ctx.stroke();
+        }
+        const q = QUERIES[activeQ];
+        POINTS.forEach((p) => {
+          const px = p.x * w;
+          const py = p.y * h;
+          const isNear = q.neighbors.includes(p.id);
+          ctx.beginPath();
+          ctx.arc(px, py, isNear ? 9 : 6, 0, Math.PI * 2);
+          ctx.fillStyle = TOPIC_COLOR[p.topic];
+          ctx.globalAlpha = isNear ? 1 : 0.45;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          if (isNear) {
+            ctx.beginPath();
+            ctx.moveTo(q.x * w, q.y * h);
+            ctx.lineTo(px, py);
+            ctx.strokeStyle = "rgba(201,162,39,0.5)";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          }
+        });
+        ctx.beginPath();
+        ctx.arc(q.x * w, q.y * h, 11, 0, Math.PI * 2);
+        ctx.fillStyle = "#ef4444";
+        ctx.fill();
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        const list = document.getElementById("nearest-list");
+        const names = q.neighbors.map((id) => POINTS.find((p) => p.id === id).label);
+        list.innerHTML = "<strong>Nearest chunks (illustrative):</strong> " + names.join(" → ");
+      }
+
+      function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = Math.min(700, Math.floor(rect.width));
+        canvas.height = 280;
+        drawEmbedMap();
+      }
+
+      document.querySelectorAll("#query-pick button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#query-pick button").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          activeQ = btn.dataset.q;
+          drawEmbedMap();
+        });
+      });
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      /* Read progress */
+      const bar = document.getElementById("read-progress");
+      window.addEventListener("scroll", () => {
+        const d = document.documentElement;
+        const p = d.scrollTop / (d.scrollHeight - d.clientHeight);
+        bar.style.width = (p * 100) + "%";
+      });
+    })();
+  </script>
+</body>
+</html>

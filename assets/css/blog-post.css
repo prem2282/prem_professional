@@ -1,0 +1,192 @@
+/**
+ * Shared layout for long-form blog posts (light paper theme).
+ * Link from blogs/*.html: ../assets/css/blog-post.css
+ */
+
+.blog-post-body {
+  background: #f7f3ea;
+  color: #1f2937;
+}
+
+.blog-post-nav {
+  background: rgba(247, 243, 234, 0.92);
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.blog-post-shell {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.blog-kicker {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #8a6f1f;
+}
+
+.blog-title {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(2.1rem, 5vw, 3.2rem);
+  line-height: 1.08;
+  color: #0f172a;
+}
+
+.blog-subtitle {
+  font-size: 1.15rem;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.blog-content h2 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(1.6rem, 3.2vw, 2.1rem);
+  color: #0f172a;
+  margin: 2rem 0 0.9rem;
+}
+
+.blog-content h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 1.25rem 0 0.45rem;
+}
+
+.blog-content h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.35rem;
+}
+
+.blog-content p {
+  color: #334155;
+  line-height: 1.92;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+.blog-content blockquote {
+  border-left: 3px solid #c9a227;
+  padding-left: 1rem;
+  margin: 1.1rem 0;
+  color: #334155;
+}
+
+.blog-content ul,
+.blog-content ol {
+  padding-left: 1.05rem;
+  line-height: 1.8;
+  color: #334155;
+}
+
+.blog-content li {
+  margin-bottom: 0.35rem;
+}
+
+.blog-pull-quote {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: 1.3rem;
+  color: #5c4a14;
+  border-left: 3px solid #c9a227;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  line-height: 1.5;
+}
+
+.blog-card {
+  background: #fffdf8;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 14px;
+  padding: 1.1rem 1.2rem;
+  margin-bottom: 0.85rem;
+}
+
+.blog-card .blog-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #8a6f1f;
+}
+
+.blog-code {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.blog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.blog-table th,
+.blog-table td {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+  text-align: left;
+  padding: 0.75rem 0.5rem;
+  vertical-align: top;
+}
+
+.blog-table th {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.blog-footer {
+  border-top: 1px solid rgba(15, 23, 42, 0.12);
+}
+
+.blog-footer a:hover {
+  color: #b45309;
+}
+
+.blog-nav-link:hover {
+  color: #b45309;
+}
+
+.blog-nav-active {
+  color: #b45309;
+}
+
+/* Interactive widget shell (token lab, cockpit, investigator, etc.) */
+.blog-widget {
+  background: #fffefb;
+  border: 2px solid rgba(201, 162, 39, 0.35);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin: 1.5rem 0 2rem;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+}
+
+.blog-widget h3 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: 1.45rem;
+  color: #0f172a;
+  margin: 0 0 0.35rem;
+}
+
+.blog-widget .widget-note {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+
+.blog-mermaid {
+  background: #fffdf8;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 12px;
+  padding: 1rem 0.5rem;
+  margin: 1.25rem 0 1.5rem;
+  overflow-x: auto;
+}

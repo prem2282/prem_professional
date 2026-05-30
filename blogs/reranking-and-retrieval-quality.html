@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Reranking and retrieval quality for production RAG: myths, cross-encoder trade-offs, and interactive Rerank Arena plus Quality vs Cost Composer." />
+  <title>Reranking and Retrieval Quality | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    /* Myth flip */
+    .myth-grid { display: grid; gap: 0.85rem; margin: 1.5rem 0 2rem; }
+    @media (min-width: 640px) { .myth-grid { grid-template-columns: 1fr 1fr; } }
+    .myth-card {
+      perspective: 900px; min-height: 140px; cursor: pointer;
+    }
+    .myth-inner {
+      position: relative; width: 100%; min-height: 140px;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .myth-card.flipped .myth-inner { transform: rotateY(180deg); }
+    .myth-face {
+      position: absolute; inset: 0; backface-visibility: hidden;
+      padding: 1rem 1.1rem; border-radius: 14px;
+      border: 1px solid rgba(15,23,42,0.1);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .myth-face.myth {
+      background: linear-gradient(145deg, #fffdf8, #f8f0d8);
+      border-left: 4px solid #94a3b8;
+    }
+    .myth-face.real {
+      background: linear-gradient(145deg, #f0fdf4, #ecfdf5);
+      border-left: 4px solid #22c55e;
+      transform: rotateY(180deg);
+    }
+    .myth-tag {
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em;
+      text-transform: uppercase; margin-bottom: 0.4rem;
+    }
+    .myth-face.myth .myth-tag { color: #64748b; }
+    .myth-face.real .myth-tag { color: #15803d; }
+    .myth-face p { margin: 0; font-size: 0.9rem; line-height: 1.55; color: #334155; }
+    .myth-hint { font-size: 0.72rem; color: #94a3b8; text-align: center; margin-top: 0.5rem; }
+
+    /* Arena */
+    .arena-layout {
+      display: grid; gap: 1rem; margin-top: 1rem;
+    }
+    @media (min-width: 720px) {
+      .arena-layout { grid-template-columns: 1fr 1fr; }
+    }
+    .ladder-col {
+      background: #fff; border: 1px solid rgba(15,23,42,0.1);
+      border-radius: 14px; padding: 0.85rem; min-height: 320px;
+    }
+    .ladder-col h4 {
+      font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #64748b; margin: 0 0 0.75rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .ladder-col.vector h4 { color: #6366f1; }
+    .ladder-col.rerank h4 { color: #b45309; }
+    .rank-row {
+      display: grid; grid-template-columns: 28px 1fr auto;
+      gap: 0.5rem; align-items: start;
+      padding: 0.55rem 0.5rem; margin-bottom: 0.4rem;
+      border-radius: 10px; border: 1px solid transparent;
+      background: #f8f5ee; transition: transform 0.45s cubic-bezier(0.34, 1.2, 0.64, 1),
+        background 0.3s, border-color 0.3s, opacity 0.3s;
+    }
+    .rank-row.gold {
+      background: #fef9e7; border-color: #c9a227;
+      box-shadow: 0 2px 10px rgba(201,162,39,0.2);
+    }
+    .rank-row.trap {
+      background: #fef2f2; border-color: #fca5a5;
+    }
+    .rank-num {
+      font-size: 0.75rem; font-weight: 800; color: #94a3b8;
+      text-align: center; padding-top: 0.15rem;
+    }
+    .rank-row.gold .rank-num { color: #b45309; }
+    .rank-text { font-size: 0.8rem; line-height: 1.45; color: #334155; }
+    .rank-meta { font-size: 0.65rem; color: #94a3b8; margin-top: 0.15rem; }
+    .score-chip {
+      font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.45rem;
+      border-radius: 6px; font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .score-chip.vec { background: #e0e7ff; color: #4338ca; }
+    .score-chip.cross { background: #ffedd5; color: #c2410c; }
+    .arena-controls {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .scenario-btn {
+      font-size: 0.78rem; padding: 0.35rem 0.7rem; border-radius: 999px;
+      border: 1px solid rgba(15,23,42,0.12); background: #f7f1db;
+      cursor: pointer; color: #5c4a14;
+    }
+    .scenario-btn.active { background: #c9a227; color: #fffdf8; border-color: #b45309; }
+    .toggle-rerank {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.45rem 0.85rem; border-radius: 10px;
+      background: #f8f5ee; border: 1px solid rgba(15,23,42,0.1);
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      user-select: none;
+    }
+    .toggle-rerank input { accent-color: #c9a227; width: 1.1rem; height: 1.1rem; }
+    .arena-verdict {
+      margin-top: 1rem; padding: 0.85rem 1rem; border-radius: 12px;
+      font-size: 0.88rem; line-height: 1.6; color: #334155;
+      background: #f8f5ee; border: 1px solid rgba(15,23,42,0.08);
+    }
+    .arena-verdict strong { color: #0f172a; }
+    .metric-trio {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
+      margin: 1rem 0 0.5rem;
+    }
+    .metric-box {
+      text-align: center; padding: 0.6rem; border-radius: 10px;
+      background: #fffdf8; border: 1px solid rgba(15,23,42,0.08);
+    }
+    .metric-box .val {
+      font-size: 1.35rem; font-weight: 800; color: #0f172a;
+      font-variant-numeric: tabular-ns;
+    }
+    .metric-box .lbl { font-size: 0.62rem; color: #64748b; text-transform: uppercase; }
+    .metric-box.good .val { color: #15803d; }
+    .metric-box.bad .val { color: #b91c1c; }
+
+    /* Composer */
+    .composer { margin-top: 0.5rem; }
+    .composer-row label {
+      display: flex; justify-content: space-between; font-size: 0.82rem;
+      font-weight: 600; color: #334155; margin-bottom: 0.3rem;
+    }
+    .composer-row label span { color: #8a6f1f; font-variant-numeric: tabular-nums; }
+    .composer-row input[type="range"] { width: 100%; accent-color: #c9a227; margin-bottom: 0.85rem; }
+    .budget-bars { display: flex; height: 28px; border-radius: 8px; overflow: hidden; margin: 1rem 0; }
+    .budget-seg { display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem; font-weight: 700; color: rgba(255,255,255,0.95);
+      transition: flex 0.4s ease;
+    }
+    .trade-grid {
+      display: grid; gap: 0.65rem; margin: 1rem 0;
+    }
+    @media (min-width: 520px) { .trade-grid { grid-template-columns: 1fr 1fr; } }
+    .trade-cell {
+      padding: 0.75rem; border-radius: 10px; background: #fffdf8;
+      border: 1px solid rgba(15,23,42,0.08); font-size: 0.85rem;
+    }
+    .trade-cell .t { font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; }
+    .decision-rubric {
+      width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 1rem 0;
+    }
+    .decision-rubric th, .decision-rubric td {
+      border: 1px solid rgba(15,23,42,0.1); padding: 0.55rem 0.65rem;
+      text-align: left;
+    }
+    .decision-rubric th { background: #f8f5ee; font-weight: 700; }
+    .run-btn {
+      width: 100%; padding: 0.7rem; margin-top: 0.5rem;
+      border: none; border-radius: 10px; cursor: pointer;
+      background: linear-gradient(135deg, #b45309, #c9a227); color: #fffdf8;
+      font-weight: 700; font-size: 0.88rem;
+    }
+    .run-btn:hover { box-shadow: 0 6px 16px rgba(180,83,9,0.25); }
+    .quiz-reveal {
+      margin-top: 0.75rem; padding: 0.75rem; border-radius: 10px;
+      background: #f0fdf4; border: 1px solid #86efac;
+      font-size: 0.9rem; display: none;
+    }
+    .quiz-reveal.show { display: block; }
+    .funnel-viz {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.35rem; margin: 1.25rem 0; padding: 1rem;
+      background: #fffdf8; border-radius: 14px;
+      border: 1px solid rgba(15,23,42,0.08);
+    }
+    .funnel-step {
+      text-align: center; padding: 0.5rem 1rem; border-radius: 8px;
+      font-size: 0.82rem; font-weight: 600; color: #fffdf8;
+      transition: width 0.3s;
+    }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="font-serif text-2xl tracking-tight text-slate-900 hover:text-amber-700 transition-colors">Prem</a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">Reranking and Retrieval Quality</h1>
+        <p class="blog-subtitle">
+          Vector search gave us speed. It did not give us truth at position one.
+          Reranking is the second opinion—the expensive, slower pass that decides what the LLM actually reads.
+        </p>
+      </header>
+
+      <p>
+        In a recent retrieval postmortem, the bi-encoder had ranked a cheerful marketing blurb above the binding refund clause.
+        The answer sounded authoritative because the model had context—just not the <em>right</em> context.
+        We did not need a bigger embedding model. We needed a cross-encoder (or equivalent) to re-order the top 50 before packing context.
+      </p>
+
+      <h2>Four myths teams learn the hard way</h2>
+      <p>Click any card to flip from the comfortable myth to what I see in production traces.</p>
+
+      <div class="myth-grid" id="myth-grid">
+        <div class="myth-card" role="button" tabindex="0" aria-pressed="false">
+          <div class="myth-inner">
+            <div class="myth-face myth">
+              <span class="myth-tag">Myth</span>
+              <p>Reranking fixes bad chunking and stale indexes.</p>
+            </div>
+            <div class="myth-face real">
+              <span class="myth-tag">Reality</span>
+              <p>It reorders what you already retrieved. Garbage in the candidate pool stays garbage—you just might rank it lower, not eliminate it.</p>
+            </div>
+          </div>
+        </div>
+        <div class="myth-card" role="button" tabindex="0">
+          <div class="myth-inner">
+            <div class="myth-face myth">
+              <span class="myth-tag">Myth</span>
+              <p>Higher top-K from vector search always helps reranking.</p>
+            </div>
+            <div class="myth-face real">
+              <span class="myth-tag">Reality</span>
+              <p>Very large K adds noise and latency. Most teams win with retrieve 30–80, rerank down to 5–12, then pack 3–6 for the LLM.</p>
+            </div>
+          </div>
+        </div>
+        <div class="myth-card" role="button" tabindex="0">
+          <div class="myth-inner">
+            <div class="myth-face myth">
+              <span class="myth-tag">Myth</span>
+              <p>One reranker model works for every domain and language.</p>
+            </div>
+            <div class="myth-face real">
+              <span class="myth-tag">Reality</span>
+              <p>Legal, code, and multilingual corpora need evaluation per domain. A general cross-encoder can underperform on jargon-heavy internal wikis.</p>
+            </div>
+          </div>
+        </div>
+        <div class="myth-card" role="button" tabindex="0">
+          <div class="myth-inner">
+            <div class="myth-face myth">
+              <span class="myth-tag">Myth</span>
+              <p>If MRR looks good offline, production answers will be fine.</p>
+            </div>
+            <div class="myth-face real">
+              <span class="myth-tag">Reality</span>
+              <p>Queries in prod drift. Measure nDCG@K, answer faithfulness, and "wrong doc at rank 1" rate on sampled live traffic.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="myth-hint">Tap a card to flip · keyboard Enter/Space when focused</p>
+
+      <h2>The funnel mental model</h2>
+      <p>
+        Think of retrieval as a funnel, not a single shot. Stage one (bi-encoder / hybrid search) optimizes <strong>recall</strong>—get plausible candidates fast.
+        Stage two (cross-encoder, LLM judge, or lightweight reranker) optimizes <strong>precision</strong>—put the one paragraph that answers the question at the top.
+      </p>
+
+      <div class="funnel-viz" aria-hidden="true">
+        <div class="funnel-step" style="width:92%;background:#6366f1;">Corpus → retrieve K (50–100)</div>
+        <div class="funnel-step" style="width:68%;background:#8b5cf6;">Rerank → top N (8–15)</div>
+        <div class="funnel-step" style="width:42%;background:#c9a227;">Pack → context slots (3–6)</div>
+        <div class="funnel-step" style="width:28%;background:#b45309;">Generate answer</div>
+      </div>
+
+      <pre class="mermaid blog-mermaid">
+flowchart LR
+  Q[User query] --> R[Hybrid retrieve top-K]
+  R --> RR[Cross-encoder rerank]
+  RR --> F[Filters: ACL, freshness]
+  F --> P[Context packer]
+  P --> L[LLM]
+      </pre>
+
+      <h2>Rerank Arena</h2>
+      <p>
+        Same query, same chunks—two orderings. The left column is pure vector similarity (fast, approximate).
+        The right column is after cross-encoder reranking. Toggle rerank off and watch the wrong chunk sit at #1.
+      </p>
+
+      <div class="blog-widget" id="rerank-arena">
+        <h3>Rerank Arena</h3>
+        <p class="widget-note">Pick a scenario, toggle reranking, and compare precision@1.</p>
+
+        <div class="arena-controls">
+          <button type="button" class="scenario-btn active" data-scenario="refund">Refund policy</button>
+          <button type="button" class="scenario-btn" data-scenario="api">API limits</button>
+          <button type="button" class="scenario-btn" data-scenario="audit">Audit logs</button>
+          <label class="toggle-rerank">
+            <input type="checkbox" id="rerank-on" checked aria-label="Enable reranking" />
+            Cross-encoder rerank ON
+          </label>
+        </div>
+
+        <div class="metric-trio" id="arena-metrics">
+          <div class="metric-box" id="m-p1"><div class="val">—</div><div class="lbl">Precision@1</div></div>
+          <div class="metric-box" id="m-ndcg"><div class="val">—</div><div class="lbl">nDCG@3 (sim)</div></div>
+          <div class="metric-box" id="m-lat"><div class="val">—</div><div class="lbl">Added latency</div></div>
+        </div>
+
+        <div class="arena-layout">
+          <div class="ladder-col vector">
+            <h4>Vector top-5</h4>
+            <div id="ladder-vector"></div>
+          </div>
+          <div class="ladder-col rerank">
+            <h4 id="ladder-right-title">After rerank</h4>
+            <div id="ladder-rerank"></div>
+          </div>
+        </div>
+
+        <div class="arena-verdict" id="arena-verdict"></div>
+      </div>
+
+      <h2>Reranker options in the wild</h2>
+      <table class="decision-rubric">
+        <thead>
+          <tr><th>Approach</th><th>Latency</th><th>Quality ceiling</th><th>When I reach for it</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Hosted rerank API (Cohere, Voyage, etc.)</td>
+            <td>Low–medium</td>
+            <td>High</td>
+            <td>Fast path to prod; strong baseline without GPU ops</td>
+          </tr>
+          <tr>
+            <td>Open cross-encoder (bge-reranker, ms-marco family)</td>
+            <td>Medium (GPU helps)</td>
+            <td>High</td>
+            <td>Data residency, cost at scale, custom fine-tune</td>
+          </tr>
+          <tr>
+            <td>LLM-as-judge on top-N</td>
+            <td>High</td>
+            <td>Very high (fragile)</td>
+            <td>Low-volume, high-stakes Q&A—not default for every query</td>
+          </tr>
+          <tr>
+            <td>Score fusion only (BM25 + dense, no cross-encoder)</td>
+            <td>Lowest</td>
+            <td>Medium</td>
+            <td>MVP or strict latency SLO; plan to add rerank when wrong@1 hurts</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Quality vs Cost Composer</h2>
+      <p>
+        Retrieval is a budget problem. Drag the sliders—watch how candidate pool size, rerank depth, and model tier shift latency, cost, and estimated quality.
+      </p>
+
+      <div class="blog-widget composer" id="composer">
+        <h3>Pipeline budget composer</h3>
+        <p class="widget-note">Illustrative model—calibrate with your own benchmarks.</p>
+
+        <div class="composer-row">
+          <label>Retrieve K <span id="v-retrieve">50</span></label>
+          <input type="range" id="sl-retrieve" min="10" max="120" value="50" step="5" />
+        </div>
+        <div class="composer-row">
+          <label>Rerank depth <span id="v-rerank-depth">12</span></label>
+          <input type="range" id="sl-rerank-depth" min="0" max="40" value="12" step="1" />
+        </div>
+        <div class="composer-row">
+          <label>Pack into context <span id="v-pack">4</span></label>
+          <input type="range" id="sl-pack" min="1" max="8" value="4" step="1" />
+        </div>
+        <div class="composer-row">
+          <label>Reranker tier <span id="v-tier">Standard API</span></label>
+          <input type="range" id="sl-tier" min="0" max="2" value="1" step="1" />
+        </div>
+
+        <div class="budget-bars" id="budget-bars" aria-hidden="true"></div>
+
+        <div class="trade-grid">
+          <div class="trade-cell"><div class="t">Est. p95 latency</div><span id="out-latency">~320 ms</span></div>
+          <div class="trade-cell"><div class="t">Est. cost / 1k queries</div><span id="out-cost">~$2.40</span></div>
+          <div class="trade-cell"><div class="t">Recall@K (sim)</div><span id="out-recall">0.82</span></div>
+          <div class="trade-cell"><div class="t">Precision@3 (sim)</div><span id="out-precision">0.71</span></div>
+        </div>
+        <p id="composer-tip" style="font-size:0.88rem;color:#64748b;margin:0;"></p>
+      </div>
+
+      <h2>Production wiring (sketch)</h2>
+      <p>Keep rerank behind a feature flag and log both orderings for sampled queries—your future self will thank you during regressions.</p>
+
+      <pre class="blog-code"><code>async def retrieve_and_rerank(query: str) -&gt; list[Chunk]:
+    candidates = await hybrid_search(query, k=50)  # dense + BM25
+    if not candidates:
+        return []
+
+    if feature_flags.rerank_enabled:
+        # Hosted or self-hosted cross-encoder
+        ranked = await rerank_client.rank(
+            query=query,
+            documents=[c.text for c in candidates[:40]],
+            top_n=12,
+        )
+        candidates = apply_scores(candidates, ranked)
+
+    return pack_context(
+        filter_acl_and_stale(candidates),
+        max_chunks=4,
+        max_tokens=6_000,
+    )</code></pre>
+
+      <h2>Failure patterns I flag in reviews</h2>
+      <ul>
+        <li><strong>Reranking the full index.</strong> Cross-encoders are pairwise-scoring machines, not search engines. Cap input to top-K from stage one.</li>
+        <li><strong>Skipping rerank on "simple" queries.</strong> Simple wording often maps to ambiguous embeddings; that's when rerank pays most.</li>
+        <li><strong>No score threshold.</strong> If nothing clears a minimum relevance score, return "I don't know" instead of stuffing weak chunks into the prompt.</li>
+        <li><strong>Evaluating only on clean dev sets.</strong> Adversarial paraphrases and typos are where vector-only retrieval breaks first.</li>
+        <li><strong>Ignoring freshness after rerank.</strong> Rerank by relevance, then apply recency or version filters before pack.</li>
+      </ul>
+
+      <h2>Operational thresholds that survive leadership reviews</h2>
+      <ol>
+        <li>Track <strong>wrong document at rank 1</strong> weekly on stratified live samples—not just average similarity.</li>
+        <li>Alert when rerank latency p95 exceeds 2× baseline (GPU saturation or batch size drift).</li>
+        <li>Re-run offline nDCG when you change chunking, embedding model, or ACL rules—rerank gains can vanish overnight.</li>
+        <li>Cap rerank input; document the K→N→pack pipeline in your runbook so on-call does not guess.</li>
+      </ol>
+
+      <h2>Your turn</h2>
+      <p>
+        Export 200 production queries with human-labeled relevant chunk IDs. Plot vector-only vs reranked nDCG@3.
+        If rerank moves fewer than 5% of queries materially, fix ingest and chunking before buying a heavier reranker.
+      </p>
+
+      <div class="blog-card">
+        <h3>Quick check</h3>
+        <p>You retrieve 100 chunks and rerank all 100 with a cross-encoder on every query. What is the primary risk?</p>
+        <button type="button" class="run-btn" id="quiz-btn" style="max-width:220px;">Reveal answer</button>
+        <div class="quiz-reveal" id="quiz-answer">
+          <strong>Latency and cost explosion</strong>—and little extra quality past ~30–40 candidates.
+          Cross-encoders scale with pairs scored; stage one should narrow the field. You're paying for redundant scoring on chunks that never had a chance to reach the context window.
+        </div>
+      </div>
+
+      <p class="blog-footer-note">
+        Related: <a href="rag-fundamentals-for-production.html">RAG Fundamentals</a> ·
+        <a href="chunking-and-embedding-strategies.html">Chunking and Embeddings</a>
+      </p>
+    </article>
+  </main>
+
+  <footer class="border-t border-slate-200/80 py-12 bg-[#f7f3ea]">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+      <p>© <span id="year"></span> Prem. Professional profile.</p>
+      <a href="../blogs.html" class="text-slate-600 hover:text-amber-700 transition-colors">← All blogs</a>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+
+    (function () {
+      const SCENARIOS = {
+        refund: {
+          query: "Is a full refund allowed after 45 days?",
+          verdictOn: "Reranking promotes the binding policy clause above the marketing FAQ—precision@1 flips from wrong to right.",
+          verdictOff: "Vector similarity favors upbeat FAQ language; the actual 30-day rule sits at rank 3. The LLM may cite the wrong paragraph.",
+          chunks: [
+            { id: "a", text: "Marketing: We love our customers—contact us anytime for help!", meta: "FAQ · 2024 campaign", vec: 0.91, cross: 0.22, relevant: false },
+            { id: "b", text: "Policy §4.2: Full refunds within 30 days of purchase; after 30 days, store credit only.", meta: "Policy v3.1 · authoritative", vec: 0.84, cross: 0.96, relevant: true },
+            { id: "c", text: "Blog: Five reasons our refund process is industry-leading.", meta: "Blog · promotional", vec: 0.82, cross: 0.18, relevant: false },
+            { id: "d", text: "Exception: Enterprise SOW may extend refund window—see account contract.", meta: "Policy appendix", vec: 0.71, cross: 0.62, relevant: false },
+            { id: "e", text: "Support macro: Apologize and offer partial credit for loyalty members.", meta: "Support template", vec: 0.68, cross: 0.35, relevant: false },
+          ],
+        },
+        api: {
+          query: "What is the enterprise API rate limit?",
+          verdictOn: "Reranking surfaces the enterprise rate-limit table, not the free-tier quickstart example.",
+          verdictOff: "Dense retrieval confuses 'API' with generic developer onboarding; enterprise limits rank #4.",
+          chunks: [
+            { id: "a", text: "Quickstart: Free tier allows 60 requests/minute per API key.", meta: "Docs · Getting started", vec: 0.89, cross: 0.31, relevant: false },
+            { id: "b", text: "Tutorial: Your first HTTP call in Python with requests library.", meta: "Docs · Tutorial", vec: 0.86, cross: 0.12, relevant: false },
+            { id: "c", text: "Changelog: Deprecated v1 endpoints removed last quarter.", meta: "Docs · Changelog", vec: 0.74, cross: 0.28, relevant: false },
+            { id: "d", text: "Enterprise limits: 10,000 req/min per tenant; burst to 15k with approval.", meta: "Enterprise SLA", vec: 0.79, cross: 0.94, relevant: true },
+            { id: "e", text: "Error codes: 429 means rate limited—retry with exponential backoff.", meta: "Docs · Errors", vec: 0.77, cross: 0.55, relevant: false },
+          ],
+        },
+        audit: {
+          query: "How long are SOC2 audit logs retained?",
+          verdictOn: "Compliance retention doc jumps to #1; rerank demotes the unrelated application debug logging page.",
+          verdictOff: "Embedding match on 'logs' pulls application logging docs above compliance policy.",
+          chunks: [
+            { id: "a", text: "Debug logging: Enable TRACE in staging for auth service troubleshooting.", meta: "Engineering wiki", vec: 0.88, cross: 0.25, relevant: false },
+            { id: "b", text: "SOC2 control A.8: Audit logs retained 400 days in WORM storage.", meta: "Compliance · SOC2", vec: 0.81, cross: 0.97, relevant: true },
+            { id: "c", text: "Splunk dashboard: Query failed login attempts by region.", meta: "Ops runbook", vec: 0.80, cross: 0.30, relevant: false },
+            { id: "d", text: "GDPR: User deletion requests purge PII within 30 days.", meta: "Privacy policy", vec: 0.72, cross: 0.40, relevant: false },
+            { id: "e", text: "Log rotation: App logs roll daily; 14-day hot retention in CloudWatch.", meta: "Infra defaults", vec: 0.76, cross: 0.22, relevant: false },
+          ],
+        },
+      };
+
+      let scenario = "refund";
+      let rerankOn = true;
+
+      function sortByVec(chunks) {
+        return [...chunks].sort((a, b) => b.vec - a.vec);
+      }
+      function sortByCross(chunks) {
+        return [...chunks].sort((a, b) => b.cross - a.cross);
+      }
+
+      function precisionAt1(order) {
+        return order[0] && order[0].relevant ? 1 : 0;
+      }
+
+      function ndcgAt3(order) {
+        const gains = order.slice(0, 3).map((c, i) => (c.relevant ? 1 / Math.log2(i + 2) : 0));
+        const ideal = [...order].sort((a, b) => (b.relevant ? 1 : 0) - (a.relevant ? 1 : 0));
+        const idealGains = ideal.slice(0, 3).map((c, i) => (c.relevant ? 1 / Math.log2(i + 2) : 0));
+        const dcg = gains.reduce((s, g) => s + g, 0);
+        const idcg = idealGains.reduce((s, g) => s + g, 0);
+        return idcg === 0 ? 0 : dcg / idcg;
+      }
+
+      function renderRow(c, rank, scoreType, showTrap) {
+        const isGold = c.relevant && rank === 1;
+        const isTrap = showTrap && !c.relevant && rank === 1;
+        const cls = ["rank-row", isGold ? "gold" : "", isTrap ? "trap" : ""].filter(Boolean).join(" ");
+        const score = scoreType === "vec" ? c.vec : c.cross;
+        const chipClass = scoreType === "vec" ? "vec" : "cross";
+        return (
+          '<div class="' + cls + '" data-id="' + c.id + '">' +
+          '<span class="rank-num">' + rank + '</span>' +
+          '<div><div class="rank-text">' + c.text + '</div><div class="rank-meta">' + c.meta + '</div></div>' +
+          '<span class="score-chip ' + chipClass + '">' + score.toFixed(2) + '</span></div>'
+        );
+      }
+
+      function renderArena() {
+        const s = SCENARIOS[scenario];
+        const vecOrder = sortByVec(s.chunks);
+        const rerankOrder = rerankOn ? sortByCross(s.chunks) : vecOrder;
+
+        document.getElementById("ladder-vector").innerHTML = vecOrder
+          .map((c, i) => renderRow(c, i + 1, "vec", true))
+          .join("");
+
+        const rightTitle = document.getElementById("ladder-right-title");
+        rightTitle.textContent = rerankOn ? "After rerank" : "Rerank OFF (same as vector)";
+
+        document.getElementById("ladder-rerank").innerHTML = rerankOrder
+          .map((c, i) => renderRow(c, i + 1, rerankOn ? "cross" : "vec", rerankOn))
+          .join("");
+
+        const displayOrder = rerankOn ? rerankOrder : vecOrder;
+        const p1 = precisionAt1(displayOrder);
+        const ndcg = ndcgAt3(displayOrder);
+
+        const mP1 = document.getElementById("m-p1");
+        mP1.querySelector(".val").textContent = String(p1);
+        mP1.className = "metric-box " + (p1 ? "good" : "bad");
+
+        const mN = document.getElementById("m-ndcg");
+        mN.querySelector(".val").textContent = ndcg.toFixed(2);
+        mN.className = "metric-box " + (ndcg >= 0.85 ? "good" : ndcg >= 0.5 ? "" : "bad");
+
+        document.getElementById("m-lat").querySelector(".val").textContent = rerankOn ? "+180ms" : "0ms";
+
+        document.getElementById("arena-verdict").innerHTML =
+          "<strong>Query:</strong> " + s.query + "<br><br>" + (rerankOn ? s.verdictOn : s.verdictOff);
+      }
+
+      document.querySelectorAll(".scenario-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".scenario-btn").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          scenario = btn.dataset.scenario;
+          renderArena();
+        });
+      });
+
+      document.getElementById("rerank-on").addEventListener("change", (e) => {
+        rerankOn = e.target.checked;
+        renderArena();
+      });
+
+      renderArena();
+
+      /* Myth flip */
+      document.querySelectorAll(".myth-card").forEach((card) => {
+        const flip = () => {
+          card.classList.toggle("flipped");
+          card.setAttribute("aria-pressed", card.classList.contains("flipped"));
+        };
+        card.addEventListener("click", flip);
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            flip();
+          }
+        });
+      });
+
+      /* Composer */
+      const TIER_LABELS = ["Lightweight local", "Standard API", "Large cross-encoder"];
+      const slRetrieve = document.getElementById("sl-retrieve");
+      const slRerank = document.getElementById("sl-rerank-depth");
+      const slPack = document.getElementById("sl-pack");
+      const slTier = document.getElementById("sl-tier");
+
+      function updateComposer() {
+        const retrieveK = +slRetrieve.value;
+        const rerankDepth = +slRerank.value;
+        const pack = +slPack.value;
+        const tier = +slTier.value;
+
+        document.getElementById("v-retrieve").textContent = retrieveK;
+        document.getElementById("v-rerank-depth").textContent = rerankDepth;
+        document.getElementById("v-pack").textContent = pack;
+        document.getElementById("v-tier").textContent = TIER_LABELS[tier];
+
+        const retrieveMs = 40 + retrieveK * 1.2;
+        const rerankMs = rerankDepth === 0 ? 0 : 60 + rerankDepth * (tier === 0 ? 8 : tier === 1 ? 14 : 22);
+        const packMs = pack * 5;
+        const total = Math.round(retrieveMs + rerankMs + packMs);
+
+        const costPer1k = (
+          (retrieveK * 0.002) +
+          (rerankDepth * (tier === 0 ? 0.008 : tier === 1 ? 0.018 : 0.035)) +
+          pack * 0.01
+        ).toFixed(2);
+
+        const recall = Math.min(0.95, 0.55 + Math.log10(retrieveK) * 0.18).toFixed(2);
+        let precision = 0.45 + (rerankDepth > 0 ? 0.22 : 0) + tier * 0.06 - Math.max(0, (pack - 5) * 0.04);
+        precision = Math.min(0.92, Math.max(0.35, precision)).toFixed(2);
+
+        document.getElementById("out-latency").textContent = "~" + total + " ms";
+        document.getElementById("out-cost").textContent = "~$" + costPer1k;
+        document.getElementById("out-recall").textContent = recall;
+        document.getElementById("out-precision").textContent = precision;
+
+        const bars = document.getElementById("budget-bars");
+        const rFlex = Math.max(15, 100 - rerankMs / 8);
+        const rrFlex = rerankDepth > 0 ? Math.max(10, rerankMs / 6) : 0;
+        const pFlex = 20;
+        bars.innerHTML =
+          '<div class="budget-seg" style="flex:' + rFlex + ';background:#6366f1">Retrieve</div>' +
+          (rrFlex ? '<div class="budget-seg" style="flex:' + rrFlex + ';background:#c9a227">Rerank</div>' : "") +
+          '<div class="budget-seg" style="flex:' + pFlex + ';background:#14b8a6">Pack</div>';
+
+        const tip = document.getElementById("composer-tip");
+        if (rerankDepth === 0) {
+          tip.textContent = "Rerank depth at 0: cheapest, but precision@3 usually suffers on ambiguous queries.";
+        } else if (rerankDepth > 35) {
+          tip.textContent = "Diminishing returns past ~30–40 reranked pairs—latency climbs faster than nDCG.";
+        } else if (retrieveK < 25) {
+          tip.textContent = "Low retrieve K risks missing the right chunk entirely—rerank cannot recover absent candidates.";
+        } else {
+          tip.textContent = "Balanced band for many enterprise copilots: retrieve 40–60, rerank 10–15, pack 3–5.";
+        }
+      }
+
+      [slRetrieve, slRerank, slPack, slTier].forEach((el) => el.addEventListener("input", updateComposer));
+      updateComposer();
+
+      document.getElementById("quiz-btn").addEventListener("click", () => {
+        document.getElementById("quiz-answer").classList.add("show");
+      });
+    })();
+  </script>
+</body>
+</html>

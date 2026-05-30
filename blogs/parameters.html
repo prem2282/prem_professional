@@ -3,21 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A field memo on LLM parameters: what to change, when to change it, and how to avoid costly production drift." />
-  <title>Parameters Playbook: A Field Memo for LLM Teams | Prem</title>
+  <meta name="description" content="LLM parameters explained with production lessons and an interactive Parameter Cockpit to explore temperature, top_p, and output behavior." />
+  <title>Parameters: Turning LLM Behavior into a Design Choice | Prem</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
-<body class="font-sans antialiased" style="background:#fbf8f2;color:#1e293b;">
+<body class="font-sans antialiased blog-post-body">
   <style>
     .memo-nav { background: rgba(251,248,242,0.95); border-bottom: 1px solid rgba(30,41,59,0.12); }
     .memo-wrap { max-width: 860px; margin: 0 auto; }
     .memo-label { font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: #8b6f24; }
     .memo-title { font-family: "Instrument Serif", Georgia, serif; font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.04; color: #0f172a; }
-    .memo-card { background: #fffefb; border: 1px solid rgba(15,23,42,0.1); border-radius: 14px; padding: 1rem; }
+    .memo-card { background: #fffefb; border: 1px solid rgba(15,23,42,0.1); border-radius: 14px; padding: 1rem; margin-bottom: 1rem; }
+    .problem-tag { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: #8a6f1f; }
     .content p { line-height: 1.9; color: #334155; margin-bottom: 1rem; font-size: 1.04rem; }
     .content h2 { font-family: "Instrument Serif", Georgia, serif; font-size: clamp(1.5rem, 3vw, 2rem); color: #0f172a; margin: 2rem 0 0.8rem; }
     .content h3 { font-size: 1.03rem; font-weight: 700; color: #0f172a; margin: 1.25rem 0 0.45rem; }
@@ -27,7 +30,91 @@
     .log-table { width: 100%; border-collapse: collapse; font-size: 0.94rem; color: #334155; }
     .log-table th, .log-table td { border-bottom: 1px solid rgba(15,23,42,0.1); text-align: left; padding: 0.65rem 0.45rem; vertical-align: top; }
     .log-table th { color: #0f172a; font-weight: 700; }
-    .code-box { background: #0f172a; color: #e2e8f0; border: 1px solid rgba(148,163,184,0.25); border-radius: 12px; padding: 1rem; overflow-x: auto; }
+    .code-box { background: #0f172a; color: #e2e8f0; border: 1px solid rgba(148,163,184,0.25); border-radius: 12px; padding: 1rem; overflow-x: auto; font-size: 0.88rem; line-height: 1.6; }
+
+    /* Parameter Cockpit */
+    .cockpit {
+      background: linear-gradient(165deg, #fffefb 0%, #f5f0e4 100%);
+      border: 2px solid rgba(99,102,241,0.25);
+      border-radius: 18px;
+      padding: 1.35rem;
+      margin: 1.5rem 0 2rem;
+      box-shadow: 0 12px 40px rgba(15,23,42,0.08);
+    }
+    .cockpit-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.75rem; margin-bottom: 1rem; }
+    .cockpit-head h3 { font-family: "Instrument Serif", Georgia, serif; font-size: 1.55rem; color: #0f172a; margin: 0; }
+    .cockpit-head p { font-size: 0.88rem; color: #64748b; margin: 0; max-width: 42ch; }
+    .scenario-select {
+      width: 100%; max-width: 320px; padding: 0.5rem 0.75rem;
+      border: 1px solid rgba(15,23,42,0.15); border-radius: 10px;
+      background: #fff; font-size: 0.92rem; color: #1e293b;
+    }
+    .deck { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    @media (max-width: 720px) { .deck { grid-template-columns: 1fr; } }
+    .sliders { display: flex; flex-direction: column; gap: 1rem; }
+    .slider-row label {
+      display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem;
+    }
+    .slider-row label span { color: #6366f1; font-variant-numeric: tabular-nums; }
+    .slider-row input[type="range"] { width: 100%; accent-color: #6366f1; }
+    .slider-hint { font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem; }
+    .preset-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.75rem 0; }
+    .preset-btn {
+      font-size: 0.76rem; padding: 0.32rem 0.6rem; border-radius: 8px;
+      border: 1px solid rgba(99,102,241,0.3); background: #eef2ff; color: #3730a3;
+      cursor: pointer; transition: transform 0.1s, background 0.15s;
+    }
+    .preset-btn:hover { background: #c7d2fe; transform: translateY(-1px); }
+    .preset-btn.active { background: #6366f1; color: #fff; border-color: #4f46e5; }
+    #sampling-canvas {
+      width: 100%; height: 160px; background: #0f172a; border-radius: 12px;
+      display: block;
+    }
+    .radar-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.75rem;
+    }
+    .radar-cell {
+      text-align: center; padding: 0.5rem; background: #fff; border-radius: 10px;
+      border: 1px solid rgba(15,23,42,0.08);
+    }
+    .radar-cell .r-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; }
+    .radar-cell .r-val { font-size: 1.1rem; font-weight: 700; color: #0f172a; }
+    .verdict {
+      margin-top: 1rem; padding: 0.85rem 1rem; border-radius: 12px;
+      font-size: 0.9rem; line-height: 1.55;
+    }
+    .verdict.ok { background: #ecfdf5; border: 1px solid #86efac; color: #166534; }
+    .verdict.warn { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
+    .verdict.danger { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+    .sim-panel { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px dashed rgba(15,23,42,0.15); }
+    .sim-panel h4 { font-size: 0.95rem; font-weight: 700; color: #0f172a; margin: 0 0 0.5rem; }
+    .sim-runs { display: flex; flex-direction: column; gap: 0.5rem; min-height: 120px; }
+    .sim-run {
+      padding: 0.65rem 0.8rem; background: #fff; border-radius: 10px;
+      border-left: 4px solid #6366f1; font-size: 0.88rem; color: #334155; line-height: 1.5;
+      animation: fadeIn 0.35s ease;
+    }
+    .sim-run:nth-child(2) { border-left-color: #8b5cf6; }
+    .sim-run:nth-child(3) { border-left-color: #a78bfa; }
+    .sim-run:nth-child(4) { border-left-color: #c4b5fd; }
+    .sim-run:nth-child(5) { border-left-color: #ddd6fe; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .sim-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+    .sim-btn {
+      padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; border: none; transition: opacity 0.15s;
+    }
+    .sim-btn.primary { background: #4f46e5; color: #fff; }
+    .sim-btn.primary:hover { background: #4338ca; }
+    .sim-btn.secondary { background: #e2e8f0; color: #334155; }
+    .sim-btn.secondary:hover { background: #cbd5e1; }
+    .config-out {
+      margin-top: 0.75rem; padding: 0.75rem; background: #0f172a; color: #a5b4fc;
+      border-radius: 10px; font-family: ui-monospace, monospace; font-size: 0.78rem;
+      overflow-x: auto; white-space: pre;
+    }
+    .diversity-bar { height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 0.35rem; }
+    .diversity-fill { height: 100%; border-radius: 999px; transition: width 0.3s, background 0.3s; }
   </style>
 
   <header class="fixed top-0 inset-x-0 z-50 memo-nav">
@@ -59,117 +146,258 @@
   <main class="pt-28 pb-24 px-6">
     <article class="memo-wrap">
       <header class="mb-10">
-        <p class="memo-label mb-4">Operator Memo</p>
-        <h1 class="memo-title mb-5">Parameters Playbook: A Field Memo for LLM Teams</h1>
+        <h1 class="memo-title mb-5">Parameters: Turning LLM Behavior into a Design Choice</h1>
         <p class="text-slate-600 text-lg leading-relaxed max-w-3xl">
-          This is not a "what is temperature" tutorial. It is the memo I give teams when outputs are unstable, costs are drifting, and everyone keeps asking whether the model got worse.
+          Temperature, top_p, and output limits are not "fine tuning" knobs you twist until the demo feels good.
+          They are behavioral contracts. This memo covers what each parameter actually does in production, when to change it, and how teams get burned when they tune blindly.
         </p>
       </header>
 
-      <div>
-        <section class="content">
-          <h2>Quick diagnosis before you touch any knob</h2>
-          <p>
-            Most bad tuning starts too early. Teams change temperature because answers "feel odd," but they have not checked retrieval quality, prompt collisions, or output truncation.
-            Parameters are multipliers, not magic. They amplify whatever input system you already built.
-          </p>
-          <blockquote>
-            If you cannot describe your failure pattern in one sentence, you are not ready to tune.
-          </blockquote>
+      <section class="content">
+        <h2>Parameters are multipliers, not fixes</h2>
+        <p>
+          If retrieval is returning wrong chunks or your system prompt is ambiguous, lowering temperature will not save you—it will give you the same wrong answer, more confidently.
+          Parameters shape <em>how</em> the model expresses an answer, not <em>whether</em> it has the right facts.
+        </p>
+        <blockquote>
+          If you cannot describe your failure pattern in one sentence, you are not ready to tune parameters yet.
+        </blockquote>
 
-          <h2>Parameter cards I actually use</h2>
-          <h3>Temperature</h3>
-          <p>Controls variation. High values help ideation; low values stabilize policy-heavy outputs and structured tasks.</p>
-          <h3>Top_p</h3>
-          <p>Controls token candidate breadth. Use it with intention; avoid random combinations with high temperature unless creativity is the explicit goal.</p>
-          <h3>Max output tokens</h3>
-          <p>Primary latency and cost lever. Too low truncates thought, too high invites rambling and spend spikes.</p>
-          <h3>Penalties and stop conditions</h3>
-          <p>Useful for repetition management and workflow boundaries, especially in tool-calling and multi-step responses.</p>
+        <h2>Parameter Cockpit — explore the knobs</h2>
+        <p>
+          Use the cockpit below to feel how settings change <strong>consistency</strong>, <strong>creativity spread</strong>, and <strong>cost/latency risk</strong>.
+          The sampling chart illustrates how higher temperature flattens the model's preference (more token paths become likely).
+          Hit <strong>Simulate 5 runs</strong> to see how the same prompt might diverge—educational simulation, not a live API call.
+        </p>
 
-          <h2>Incident log: five failures and what fixed them</h2>
-          <div class="memo-card overflow-x-auto">
-            <table class="log-table">
-              <thead>
-                <tr>
-                  <th>Incident</th>
-                  <th>Observed symptom</th>
-                  <th>Adjustment</th>
-                  <th>Result</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Compliance assistant drift</td>
-                  <td>Different tone and policy emphasis per run</td>
-                  <td>Lower temperature + strict output schema</td>
-                  <td>Consistent answers across repeated prompts</td>
-                </tr>
-                <tr>
-                  <td>Sales copilot verbosity</td>
-                  <td>Long, fluffy answers, high latency</td>
-                  <td>Reduce max output tokens</td>
-                  <td>Faster outputs, clearer takeaways</td>
-                </tr>
-                <tr>
-                  <td>Creative drafts too similar</td>
-                  <td>Repetitive phrasing across variants</td>
-                  <td>Increase temperature and top_p modestly</td>
-                  <td>Wider idea spread with acceptable quality</td>
-                </tr>
-                <tr>
-                  <td>Agent loop unpredictability</td>
-                  <td>Tool call sequencing became erratic</td>
-                  <td>Move to constrained profile for planning step</td>
-                  <td>More stable multi-step execution</td>
-                </tr>
-                <tr>
-                  <td>Support bot cost surge</td>
-                  <td>Daily token cost climbed 40%</td>
-                  <td>Profile caps + shorter fallback responses</td>
-                  <td>Cost normalized without major CSAT drop</td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="cockpit" id="cockpit">
+          <div class="cockpit-head">
+            <div>
+              <h3>Parameter Cockpit</h3>
+              <p>Pick a workload, move the sliders, watch behavior signals change.</p>
+            </div>
+            <select class="scenario-select" id="scenario" aria-label="Workload scenario">
+              <option value="compliance">Compliance / policy QA</option>
+              <option value="support">Customer support copilot</option>
+              <option value="creative">Marketing & ideation</option>
+              <option value="code">Code review assistant</option>
+              <option value="agent">Agent planner (tool routing)</option>
+            </select>
           </div>
 
-          <h2>Tuning runbook (the sequence matters)</h2>
-          <ul>
-            <li>Start with one task category and define pass/fail examples.</li>
-            <li>Freeze prompt and retrieval settings before parameter experiments.</li>
-            <li>Change one parameter at a time and log a version tag.</li>
-            <li>Review quality, latency, and cost together, never in isolation.</li>
-            <li>Promote only configurations that improve at least two metrics without harming the third.</li>
-          </ul>
+          <div class="preset-row" id="preset-row">
+            <button type="button" class="preset-btn" data-preset="deterministic">Deterministic</button>
+            <button type="button" class="preset-btn" data-preset="balanced">Balanced</button>
+            <button type="button" class="preset-btn" data-preset="creative">Creative</button>
+            <button type="button" class="preset-btn" data-preset="scenario">Scenario default</button>
+          </div>
 
-          <pre class="code-box"><code>const POLICY = {
+          <div class="deck">
+            <div class="sliders">
+              <div class="slider-row">
+                <label>Temperature <span id="val-temp">0.20</span></label>
+                <input type="range" id="temp" min="0" max="2" step="0.05" value="0.2" />
+                <p class="slider-hint">Higher = more randomness between runs</p>
+              </div>
+              <div class="slider-row">
+                <label>Top_p <span id="val-topp">0.90</span></label>
+                <input type="range" id="topp" min="0.1" max="1" step="0.05" value="0.9" />
+                <p class="slider-hint">Nucleus sampling breadth (candidate token pool)</p>
+              </div>
+              <div class="slider-row">
+                <label>Max output tokens <span id="val-max">500</span></label>
+                <input type="range" id="maxtok" min="100" max="4000" step="50" value="500" />
+                <p class="slider-hint">Caps cost, latency, and rambling risk</p>
+              </div>
+              <div class="slider-row">
+                <label>Frequency penalty <span id="val-freq">0.00</span></label>
+                <input type="range" id="freq" min="0" max="2" step="0.1" value="0" />
+                <p class="slider-hint">Reduces repetitive phrasing loops</p>
+              </div>
+              <div>
+                <p style="font-size:0.8rem;font-weight:600;color:#475569;margin:0 0 0.25rem;">Output diversity index</p>
+                <div class="diversity-bar"><div class="diversity-fill" id="diversity-fill" style="width:18%;background:#22c55e"></div></div>
+              </div>
+            </div>
+
+            <div>
+              <p style="font-size:0.8rem;font-weight:600;color:#475569;margin:0 0 0.35rem;">Sampling landscape (illustrative)</p>
+              <canvas id="sampling-canvas" width="400" height="160" aria-label="Token probability distribution visualization"></canvas>
+              <div class="radar-grid">
+                <div class="radar-cell"><div class="r-label">Consistency</div><div class="r-val" id="radar-consistency">82</div></div>
+                <div class="radar-cell"><div class="r-label">Cost risk</div><div class="r-val" id="radar-cost">12</div></div>
+                <div class="radar-cell"><div class="r-label">Latency</div><div class="r-val" id="radar-latency">18</div></div>
+              </div>
+              <div id="verdict" class="verdict ok">Settings align reasonably with this scenario.</div>
+            </div>
+          </div>
+
+          <div class="sim-panel">
+            <h4>Same prompt, five simulated completions</h4>
+            <p style="font-size:0.85rem;color:#64748b;margin:0 0 0.6rem;">Prompt: <em id="sim-prompt">"Is this customer eligible for a refund after 45 days?"</em></p>
+            <div class="sim-runs" id="sim-runs">
+              <div class="sim-run" style="color:#94a3b8">Press "Simulate 5 runs" to compare variation.</div>
+            </div>
+            <div class="sim-actions">
+              <button type="button" class="sim-btn primary" id="btn-simulate">Simulate 5 runs</button>
+              <button type="button" class="sim-btn secondary" id="btn-copy">Copy API config</button>
+            </div>
+            <pre class="config-out" id="config-out">{}</pre>
+          </div>
+        </div>
+
+        <pre class="mermaid blog-mermaid">
+flowchart LR
+  T[Task profile] --> PR[Preset: compliance / creative / extract]
+  PR --> S[Sampling: temperature + top_p]
+  S --> G[Generate completion]
+  G --> E[Evaluate: consistency vs variety]
+  E --> T
+        </pre>
+
+        <h2>What each parameter actually controls</h2>
+        <h3>Temperature</h3>
+        <p>
+          Scales randomness in token selection. At 0, the model picks the highest-probability token almost every time (deterministic for a fixed prompt).
+          At 1+, outputs can diverge sharply between runs—useful for brainstorming, dangerous for policy answers.
+        </p>
+        <h3>Top_p (nucleus sampling)</h3>
+        <p>
+          Limits sampling to the smallest set of tokens whose cumulative probability exceeds p.
+          Low top_p narrows the field; high top_p widens it. Tuning both temperature and top_p high is a common source of chaos.
+        </p>
+        <h3>Max output tokens</h3>
+        <p>
+          Hard cap on completion length. This is your primary lever for cost and latency, and for preventing runaway answers.
+          Too low truncates reasoning; too high invites filler.
+        </p>
+        <h3>Frequency / presence penalties</h3>
+        <p>
+          Discourage repetition. Helpful in long-form generation and agent loops where the model re-phrases the same idea.
+          Less useful when you need strict JSON or fixed templates.
+        </p>
+
+        <h2>Temperature vs top_p — don't tune both blindly</h2>
+        <div class="memo-card">
+          <ul style="margin:0;padding-left:1.1rem;line-height:1.85;color:#334155;">
+            <li><strong>Need repeatability?</strong> Lower temperature first (0–0.3), keep top_p moderate (0.85–0.95).</li>
+            <li><strong>Need phrasing variety?</strong> Raise temperature slightly before widening top_p.</li>
+            <li><strong>Outputs feel "drunk"?</strong> You probably have both high—pull one down.</li>
+            <li><strong>JSON / extraction tasks?</strong> Low temperature, fixed schema, modest max tokens.</li>
+          </ul>
+        </div>
+
+        <h2>Real-world problems from bad parameter policy</h2>
+
+        <div class="memo-card">
+          <p class="problem-tag">Production issue</p>
+          <h3 class="font-semibold text-slate-900">Demo settings shipped to prod</h3>
+          <p style="margin:0;color:#334155;line-height:1.75;">Temperature 0.9 stayed in the API wrapper "because marketing liked the energy." Compliance answers varied week to week until legal escalated.</p>
+        </div>
+        <div class="memo-card">
+          <p class="problem-tag">Production issue</p>
+          <h3 class="font-semibold text-slate-900">One global default for twelve endpoints</h3>
+          <p style="margin:0;color:#334155;line-height:1.75;">Support, summarization, and SQL generation shared the same profile. Summaries were starved; SQL was overly creative.</p>
+        </div>
+        <div class="memo-card">
+          <p class="problem-tag">Production issue</p>
+          <h3 class="font-semibold text-slate-900">Agent planner on creative settings</h3>
+          <p style="margin:0;color:#334155;line-height:1.75;">Tool selection step used ideation parameters. Wrong tools fired intermittently—hard to reproduce, expensive to debug.</p>
+        </div>
+        <div class="memo-card">
+          <p class="problem-tag">Production issue</p>
+          <h3 class="font-semibold text-slate-900">No max_output_tokens on public endpoints</h3>
+          <p style="margin:0;color:#334155;line-height:1.75;">A single power user triggered 4k-token completions; p99 latency breached SLO and monthly budget alerts fired.</p>
+        </div>
+
+        <h2>Incident log: five failures and what fixed them</h2>
+        <div class="memo-card overflow-x-auto">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>Incident</th>
+                <th>Symptom</th>
+                <th>Adjustment</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Compliance assistant drift</td>
+                <td>Different policy emphasis per run</td>
+                <td>temperature 0.15, top_p 0.9, strict schema</td>
+                <td>Stable answers across repeated prompts</td>
+              </tr>
+              <tr>
+                <td>Sales copilot verbosity</td>
+                <td>Long fluffy answers</td>
+                <td>max_output_tokens 450</td>
+                <td>Faster, clearer takeaways</td>
+              </tr>
+              <tr>
+                <td>Creative drafts too similar</td>
+                <td>Repetitive variants</td>
+                <td>temperature 0.75, top_p 0.98</td>
+                <td>Wider idea spread</td>
+              </tr>
+              <tr>
+                <td>Agent loop unpredictability</td>
+                <td>Erratic tool sequencing</td>
+                <td>Constrained profile on planner step only</td>
+                <td>Stable multi-step execution</td>
+              </tr>
+              <tr>
+                <td>Support bot cost surge</td>
+                <td>+40% daily token spend</td>
+                <td>Output caps + shorter fallbacks</td>
+                <td>Cost normalized, CSAT held</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Tuning runbook (order matters)</h2>
+        <ul>
+          <li>Define pass/fail examples for one task category.</li>
+          <li>Freeze prompt and retrieval before parameter experiments.</li>
+          <li>Change one knob at a time; tag versions in config.</li>
+          <li>Measure quality, latency, and cost together.</li>
+          <li>Ship profile routing by intent, not one-size-fits-all.</li>
+        </ul>
+
+        <pre class="code-box"><code>const POLICY = {
   qa_strict: { temperature: 0.15, top_p: 0.9, max_output_tokens: 500 },
   assistant_balanced: { temperature: 0.35, top_p: 0.95, max_output_tokens: 750 },
   ideation: { temperature: 0.8, top_p: 1.0, max_output_tokens: 1100 },
 };
 
-const selected = POLICY[routeIntent(intent)];
+const profile = routeIntent(intent);
 const response = await llm.responses.create({
   model: "gpt-4.1-mini",
   input: prompt,
-  ...selected, // Use policy by workload, not by team preference.
+  ...POLICY[profile],
 });</code></pre>
 
-          <h2>FAQ I hear from engineering leaders</h2>
-          <details class="memo-card mb-3">
-            <summary class="cursor-pointer font-semibold text-slate-800">Should we set one company-wide default?</summary>
-            <p class="mt-2 mb-0 text-slate-600">No. Keep one baseline profile, but branch by endpoint intent. Shared defaults are fine; shared behavior is usually not.</p>
-          </details>
-          <details class="memo-card mb-3">
-            <summary class="cursor-pointer font-semibold text-slate-800">What gives the quickest cost win?</summary>
-            <p class="mt-2 mb-0 text-slate-600">Audit max output token caps and retry behavior first. Those two usually produce immediate savings.</p>
-          </details>
-          <details class="memo-card">
-            <summary class="cursor-pointer font-semibold text-slate-800">When do we revisit parameter policy?</summary>
-            <p class="mt-2 mb-0 text-slate-600">Whenever prompt strategy, retrieval corpus, or user task mix changes significantly. Parameter policy should evolve with the product.</p>
-          </details>
-        </section>
-      </div>
+        <h2>FAQ from engineering leaders</h2>
+        <details class="memo-card">
+          <summary class="cursor-pointer font-semibold text-slate-800">One company-wide default?</summary>
+          <p class="mt-2 mb-0 text-slate-600">Baseline defaults are fine; behavior profiles per endpoint are required.</p>
+        </details>
+        <details class="memo-card">
+          <summary class="cursor-pointer font-semibold text-slate-800">Fastest cost win?</summary>
+          <p class="mt-2 mb-0 text-slate-600">Audit max_output_tokens and retry loops first.</p>
+        </details>
+        <details class="memo-card">
+          <summary class="cursor-pointer font-semibold text-slate-800">When to revisit policy?</summary>
+          <p class="mt-2 mb-0 text-slate-600">When prompts, tools, or task mix change materially.</p>
+        </details>
+
+        <h2>Your challenge</h2>
+        <p>
+          Export a config from the Cockpit for your worst-performing endpoint. Run 20 fixed test prompts at your old settings vs the new profile.
+          If variance drops and quality holds, you have evidence—not vibes—for the change.
+        </p>
+      </section>
     </article>
   </main>
 
@@ -181,5 +409,321 @@ const response = await llm.responses.create({
   </footer>
 
   <script src="../assets/js/main.js"></script>
+  <script>
+    (function () {
+      const SCENARIOS = {
+        compliance: {
+          prompt: '"Is this customer eligible for a refund after 45 days?"',
+          ideal: { temp: 0.15, topp: 0.9, max: 500, freq: 0 },
+          anchor: "Per Policy §4.2 (KB-881), refunds after 30 days require manager approval; 45 days is outside standard eligibility.",
+          tight: [
+            "Per Policy §4.2 (KB-881), refunds after 30 days require manager approval; 45 days is outside standard eligibility.",
+            "Policy §4.2 / KB-881: standard refund window is 30 days. At 45 days, escalate to billing ops for exception review.",
+            "Not eligible under standard policy (30-day window, KB-881). At 45 days, route to manager approval workflow.",
+          ],
+          loose: [
+            "You might consider a goodwill credit—worth checking with retention team.",
+            "Perhaps offer partial refund plus extension? Creative options could help NPS.",
+            "Policy is strict, but we could phrase the denial empathetically and offer alternatives.",
+          ],
+        },
+        support: {
+          prompt: '"Customer says they were double-charged on the May invoice."',
+          ideal: { temp: 0.3, topp: 0.92, max: 600, freq: 0.2 },
+          anchor: "Verify billing ledger for duplicate charge events in May. If confirmed, initiate reversal per billing SOP-B12.",
+          tight: [
+            "Verify billing ledger for duplicate charge events in May. If confirmed, initiate reversal per SOP-B12.",
+            "Check May invoice line items and payment gateway logs. Duplicate confirmed → start reversal under SOP-B12.",
+            "Pull account billing history for May. If double charge verified, file reversal ticket referencing SOP-B12.",
+          ],
+          loose: [
+            "Sorry for the hassle! Let's make it right—maybe a credit and a thank-you note?",
+            "I'd apologize profusely and explore loyalty perks while fixing the charge.",
+            "Double charges happen—walk them through calm steps and consider a small courtesy credit.",
+          ],
+        },
+        creative: {
+          prompt: '"Write three taglines for our new AI observability feature."',
+          ideal: { temp: 0.85, topp: 0.98, max: 900, freq: 0.5 },
+          anchor: "See your LLM spend before finance does.",
+          tight: [
+            "See your LLM spend before finance does.",
+            "Token truth, from prompt to production.",
+            "Observability that speaks token fluently.",
+          ],
+          loose: [
+            "Your models dream in tokens—we keep score.",
+            "Stop flying blind through context windows.",
+            "Metrics for the age of generative everything.",
+            "When the copilot drifts, you'll know first.",
+            "From hallucination to hard numbers.",
+          ],
+        },
+        code: {
+          prompt: '"Review this diff: async handler missing await on DB write."',
+          ideal: { temp: 0.2, topp: 0.88, max: 700, freq: 0.1 },
+          anchor: "Critical: missing await on DB write can return before persist—race and data loss risk. Add await and test rollback path.",
+          tight: [
+            "Critical: missing await on DB write—race/data loss risk. Add await; add integration test for failure rollback.",
+            "Severity High: unawaited async DB call. Fix await; verify transaction boundary in handler.",
+            "Blocking: persistence may not complete before response. Await DB write; log correlation id on failure.",
+          ],
+          loose: [
+            "Consider broader refactor to repository pattern while you're in there.",
+            "Maybe add retries and circuit breaker for fun resilience?",
+            "Also worth debating whether this microservice should exist at all.",
+          ],
+        },
+        agent: {
+          prompt: '"Plan steps to resolve incident INC-4421 (auth latency spike)."',
+          ideal: { temp: 0.1, topp: 0.85, max: 550, freq: 0 },
+          anchor: "Step 1: check auth p95 and error rate. Step 2: compare deploy timeline. Step 3: rollback candidate if spike correlates.",
+          tight: [
+            "Step 1: check auth p95 and error rate. Step 2: compare deploy timeline. Step 3: rollback if correlated.",
+            "1) Auth metrics dashboard 2) Recent deploy diff 3) Rollback or scale decision with owner assignment.",
+            "1) Confirm blast radius 2) Isolate auth service 3) Rollback/scale per runbook RB-AUTH-7.",
+          ],
+          loose: [
+            "Maybe also redesign auth from scratch over the weekend?",
+            "Could try brainstorming five unrelated tools first.",
+            "Step 1: vibe check. Step 2: post in Slack. Step 3: hope.",
+          ],
+        },
+      };
+
+      const PRESETS = {
+        deterministic: { temp: 0.1, topp: 0.85, max: 450, freq: 0 },
+        balanced: { temp: 0.35, topp: 0.95, max: 750, freq: 0.2 },
+        creative: { temp: 0.85, topp: 0.98, max: 1200, freq: 0.6 },
+      };
+
+      const el = (id) => document.getElementById(id);
+      const temp = el("temp");
+      const topp = el("topp");
+      const maxtok = el("maxtok");
+      const freq = el("freq");
+      const scenario = el("scenario");
+      const canvas = el("sampling-canvas");
+      const ctx = canvas.getContext("2d");
+
+      function getValues() {
+        return {
+          temp: parseFloat(temp.value),
+          topp: parseFloat(topp.value),
+          max: parseInt(maxtok.value, 10),
+          freq: parseFloat(freq.value),
+        };
+      }
+
+      function setValues(v) {
+        temp.value = v.temp;
+        topp.value = v.topp;
+        maxtok.value = v.max;
+        freq.value = v.freq;
+        updateAll();
+      }
+
+      function diversityIndex(v) {
+        const t = Math.min(1, v.temp / 1.2);
+        const p = Math.max(0, (v.topp - 0.5) / 0.5);
+        const f = Math.min(1, v.freq / 1.5);
+        return Math.round((t * 55 + p * 30 + f * 15));
+      }
+
+      function drawSampling(v) {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.fillStyle = "#0f172a";
+        ctx.fillRect(0, 0, w, h);
+        const n = 24;
+        const temperature = Math.max(0.15, v.temp + 0.2);
+        const raw = [];
+        let sum = 0;
+        for (let i = 0; i < n; i++) {
+          const score = Math.exp(-i / (3.5 * temperature)) * (0.4 + 0.6 * v.topp);
+          raw.push(score);
+          sum += score;
+        }
+        const barW = (w - 40) / n;
+        for (let i = 0; i < n; i++) {
+          const prob = raw[i] / sum;
+          const barH = prob * (h - 50) * 4.5;
+          const x = 20 + i * barW;
+          const y = h - 24 - barH;
+          const hue = 250 - i * 4;
+          ctx.fillStyle = `hsla(${hue}, 70%, 65%, 0.85)`;
+          ctx.fillRect(x, y, barW - 3, barH);
+        }
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "11px system-ui";
+        ctx.fillText("Likely tokens ←", 20, 16);
+        ctx.fillText("→ More possible paths at higher temp / top_p", 20, h - 6);
+      }
+
+      function pickSimulatedRuns(v, sc) {
+        const runs = [];
+        const spread = diversityIndex(v) / 100;
+        const poolTight = sc.tight;
+        const poolLoose = sc.loose;
+        for (let i = 0; i < 5; i++) {
+          let text;
+          if (spread < 0.2) {
+            text = poolTight[0];
+          } else if (spread < 0.45) {
+            text = poolTight[i % poolTight.length];
+          } else if (spread < 0.7) {
+            text = i < 3 ? poolTight[i % poolTight.length] : poolLoose[i % poolLoose.length];
+          } else {
+            const mix = [...poolTight, ...poolLoose];
+            text = mix[Math.floor(Math.random() * mix.length)];
+          }
+          if (v.freq > 0.8 && i > 0 && runs.includes(text)) {
+            text = text.replace(/\.$/, "") + " (rephrase avoided).";
+          }
+          runs.push(text);
+        }
+        return runs;
+      }
+
+      function verdict(v, scKey) {
+        const ideal = SCENARIOS[scKey].ideal;
+        const msgs = [];
+        let level = "ok";
+        if (scKey === "compliance" || scKey === "code" || scKey === "agent") {
+          if (v.temp > 0.45) {
+            msgs.push("Temperature is high for a task that needs consistency.");
+            level = "danger";
+          }
+        }
+        if (scKey === "creative" && v.temp < 0.5) {
+          msgs.push("Temperature may be too low for ideation—variants could feel samey.");
+          level = level === "danger" ? "danger" : "warn";
+        }
+        if (v.temp > 0.7 && v.topp > 0.95) {
+          msgs.push("High temperature + high top_p often produces unstable outputs.");
+          level = "danger";
+        }
+        if (v.max > ideal.max * 2) {
+          msgs.push("Max output tokens well above typical for this scenario—watch cost and latency.");
+          level = level === "ok" ? "warn" : level;
+        }
+        if (v.max < ideal.max * 0.4) {
+          msgs.push("Max output tokens may truncate useful answers.");
+          level = level === "ok" ? "warn" : level;
+        }
+        const text =
+          msgs.length === 0
+            ? "Settings align reasonably with this scenario."
+            : msgs.join(" ");
+        return { level, text };
+      }
+
+      function updateConfigOut(v) {
+        el("config-out").textContent = JSON.stringify(
+          {
+            temperature: v.temp,
+            top_p: v.topp,
+            max_output_tokens: v.max,
+            frequency_penalty: v.freq,
+          },
+          null,
+          2
+        );
+      }
+
+      function updateAll() {
+        const v = getValues();
+        const scKey = scenario.value;
+        const sc = SCENARIOS[scKey];
+
+        el("val-temp").textContent = v.temp.toFixed(2);
+        el("val-topp").textContent = v.topp.toFixed(2);
+        el("val-max").textContent = v.max;
+        el("val-freq").textContent = v.freq.toFixed(1);
+        el("sim-prompt").textContent = sc.prompt;
+
+        const div = diversityIndex(v);
+        const fill = el("diversity-fill");
+        fill.style.width = div + "%";
+        fill.style.background = div < 35 ? "#22c55e" : div < 65 ? "#eab308" : "#ef4444";
+
+        el("radar-consistency").textContent = 100 - div;
+        el("radar-cost").textContent = Math.min(99, Math.round((v.max / 4000) * 100));
+        el("radar-latency").textContent = Math.min(99, Math.round((v.max / 4000) * 85 + v.temp * 8));
+
+        drawSampling(v);
+        const vrd = verdict(v, scKey);
+        const box = el("verdict");
+        box.className = "verdict " + vrd.level;
+        box.textContent = vrd.text;
+        updateConfigOut(v);
+
+        document.querySelectorAll(".preset-btn").forEach((b) => {
+          b.classList.toggle("active", b.dataset.preset === "scenario" && false);
+        });
+      }
+
+      function runSimulation() {
+        const v = getValues();
+        const sc = SCENARIOS[scenario.value];
+        const runs = pickSimulatedRuns(v, sc);
+        const container = el("sim-runs");
+        container.innerHTML = "";
+        runs.forEach((text, i) => {
+          setTimeout(() => {
+            const div = document.createElement("div");
+            div.className = "sim-run";
+            div.innerHTML = "<strong>Run " + (i + 1) + ":</strong> " + text;
+            container.appendChild(div);
+          }, i * 180);
+        });
+      }
+
+      [temp, topp, maxtok, freq].forEach((input) => {
+        input.addEventListener("input", updateAll);
+      });
+
+      scenario.addEventListener("change", () => {
+        const ideal = SCENARIOS[scenario.value].ideal;
+        setValues(ideal);
+      });
+
+      document.querySelectorAll(".preset-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".preset-btn").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          if (btn.dataset.preset === "scenario") {
+            setValues(SCENARIOS[scenario.value].ideal);
+          } else {
+            setValues(PRESETS[btn.dataset.preset]);
+          }
+        });
+      });
+
+      el("btn-simulate").addEventListener("click", runSimulation);
+      el("btn-copy").addEventListener("click", () => {
+        const text = el("config-out").textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          el("btn-copy").textContent = "Copied!";
+          setTimeout(() => { el("btn-copy").textContent = "Copy API config"; }, 1500);
+        });
+      });
+
+      function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = Math.min(400, Math.floor(rect.width));
+        canvas.height = 160;
+        drawSampling(getValues());
+      }
+      window.addEventListener("resize", resizeCanvas);
+
+      setValues(SCENARIOS.compliance.ideal);
+      resizeCanvas();
+      runSimulation();
+    })();
+  </script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
 </body>
 </html>

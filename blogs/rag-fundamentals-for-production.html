@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="RAG fundamentals for production: retrieval pipelines, failure modes, and an interactive investigator to see how chunking, ranking, and context packing shape answers." />
+  <title>RAG Fundamentals for Production | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    /* RAG investigator — page-specific, light theme */
+    .query-in {
+      width: 100%; padding: 0.85rem 1rem; border-radius: 10px;
+      border: 1px solid rgba(15,23,42,0.15); background: #fff; color: #1e293b;
+      font-size: 0.95rem;
+    }
+    .query-in:focus { outline: 2px solid rgba(201,162,39,0.5); outline-offset: 1px; }
+    .pipeline {
+      display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 1rem 0;
+      align-items: center; justify-content: center;
+    }
+    .pipe-step {
+      font-size: 0.7rem; padding: 0.35rem 0.55rem; border-radius: 6px;
+      background: #e8e4d9; color: #64748b; transition: all 0.3s;
+    }
+    .pipe-step.active { background: #c9a227; color: #fffdf8; box-shadow: 0 2px 8px rgba(201,162,39,0.35); }
+    .pipe-arrow { color: #94a3b8; font-size: 0.75rem; }
+    .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin: 1rem 0; }
+    @media (max-width: 560px) { .controls { grid-template-columns: 1fr; } }
+    .ctrl {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+      padding: 0.55rem 0.75rem; background: #f8f5ee; border-radius: 10px;
+      border: 1px solid rgba(15,23,42,0.1); font-size: 0.82rem; color: #334155;
+    }
+    .ctrl input { accent-color: #c9a227; }
+    .run-btn {
+      width: 100%; padding: 0.75rem; border: none; border-radius: 12px;
+      background: linear-gradient(135deg, #b45309, #c9a227); color: #fffdf8;
+      font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .run-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(180,83,9,0.25); }
+    .results { margin-top: 1.25rem; }
+    .score-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+    .score-pill {
+      flex: 1; min-width: 100px; text-align: center; padding: 0.65rem;
+      background: #f8f5ee; border-radius: 12px; border: 1px solid rgba(15,23,42,0.08);
+    }
+    .score-pill .num { font-size: 1.6rem; font-weight: 800; color: #8a6f1f; }
+    .score-pill .lbl { font-size: 0.68rem; text-transform: uppercase; color: #64748b; }
+    .chunks { display: flex; flex-direction: column; gap: 0.5rem; max-height: 280px; overflow-y: auto; }
+    .chunk {
+      padding: 0.7rem 0.85rem; border-radius: 10px; font-size: 0.82rem; line-height: 1.5;
+      border: 1px solid rgba(15,23,42,0.1); background: #fff; color: #64748b;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .chunk.retrieved { border-color: #c9a227; background: #fef9e7; color: #334155; }
+    .chunk .meta { font-size: 0.68rem; color: #94a3b8; margin-bottom: 0.25rem; }
+    .chunk.retrieved .meta { color: #8a6f1f; font-weight: 600; }
+    .answer-box {
+      margin-top: 1rem; padding: 1rem; border-radius: 12px;
+      background: #fff; border: 1px solid rgba(15,23,42,0.12);
+      font-size: 0.92rem; line-height: 1.65; color: #334155;
+    }
+    .answer-box.bad { border-color: #fca5a5; background: #fef2f2; }
+    .answer-box.good { border-color: #86efac; background: #f0fdf4; }
+    .verdict-line { font-size: 0.88rem; color: #64748b; margin-top: 0.75rem; font-style: italic; }
+    .stage-list { display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+    .stage {
+      padding: 1rem; border-radius: 12px; background: #fffdf8;
+      border: 1px solid rgba(15,23,42,0.08); border-left: 4px solid #c9a227;
+    }
+    .stage p { margin: 0; font-size: 0.95rem; color: #475569; line-height: 1.65; }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="font-serif text-2xl tracking-tight text-slate-900 hover:text-amber-700 transition-colors">Prem</a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">RAG Fundamentals for Production</h1>
+        <p class="blog-subtitle">
+          The model did not hallucinate. It faithfully summarized the wrong paragraph.
+          That is the story of most "RAG failures" I investigate—and why retrieval design matters more than model upgrades.
+        </p>
+      </header>
+
+      <p class="blog-pull-quote">
+        Retrieval-Augmented Generation is not "plug in a vector DB and hope." It is a pipeline with failure points you can measure.
+      </p>
+
+      <h2>Case open: the confident wrong answer</h2>
+      <p>
+        A enterprise copilot told a customer they were eligible for a full refund at day 45. Policy said the opposite.
+        Leadership asked if we should switch to a "smarter model." We pulled the trace: retrieval had returned a <strong>marketing FAQ</strong> and an <strong>old policy draft</strong> from 2022. The LLM did exactly what we trained it to do—answer from context.
+      </p>
+      <p>
+        The bug lived in chunk boundaries, stale indexing, and top-K set too high without reranking. No amount of temperature tuning would fix that.
+      </p>
+
+      <h2>RAG Pipeline Investigator</h2>
+      <p>
+        You are the engineer on call. Tune the pipeline below, run a query, and watch which document chunks surface—and how answer quality shifts.
+        This is a simulation built on realistic failure patterns, not a live vector database.
+      </p>
+
+      <div class="blog-widget" id="investigator">
+        <h3>RAG Pipeline Investigator</h3>
+        <p class="widget-note">Toggle settings, press Investigate, and compare signal vs noise in retrieved context.</p>
+
+        <input type="text" class="query-in" id="rag-query" value="Is a customer eligible for a full refund after 45 days?" aria-label="User query" />
+
+        <div class="pipeline" id="pipeline" aria-hidden="true">
+          <span class="pipe-step" data-step="0">Ingest</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step" data-step="1">Chunk</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step" data-step="2">Embed</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step" data-step="3">Index</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step" data-step="4">Retrieve</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step" data-step="5">Rerank</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step" data-step="6">Pack</span><span class="pipe-arrow">→</span>
+          <span class="pipe-step" data-step="7">Generate</span>
+        </div>
+
+        <div class="controls">
+          <label class="ctrl"><span>Semantic chunking (boundaries)</span><input type="checkbox" id="c-chunk" checked /></label>
+          <label class="ctrl"><span>Reranker enabled</span><input type="checkbox" id="c-rerank" checked /></label>
+          <label class="ctrl"><span>Fresh index (no stale docs)</span><input type="checkbox" id="c-fresh" checked /></label>
+          <label class="ctrl"><span>Token-aware packing</span><input type="checkbox" id="c-pack" checked /></label>
+          <label class="ctrl"><span>Top-K = 3 (focused)</span><input type="checkbox" id="c-topk" checked /></label>
+          <label class="ctrl"><span>Grounding check (citations)</span><input type="checkbox" id="c-ground" checked /></label>
+        </div>
+
+        <button type="button" class="run-btn" id="btn-investigate">Investigate retrieval</button>
+
+        <div class="results" id="results" hidden>
+          <div class="score-row">
+            <div class="score-pill"><div class="num" id="score-relevance">—</div><div class="lbl">Relevance</div></div>
+            <div class="score-pill"><div class="num" id="score-signal">—</div><div class="lbl">Signal / noise</div></div>
+            <div class="score-pill"><div class="num" id="score-trust">—</div><div class="lbl">Trust score</div></div>
+          </div>
+          <p style="font-size:0.8rem;color:#64748b;margin:0 0 0.5rem;">Retrieved chunks (highlighted = sent to LLM)</p>
+          <div class="chunks" id="chunk-list"></div>
+          <div class="answer-box" id="answer-box"></div>
+          <p class="verdict-line" id="verdict-line"></p>
+        </div>
+      </div>
+
+      <h2>What RAG is—and what it is not</h2>
+      <p>
+        <strong>RAG is:</strong> retrieve relevant evidence, pack it into a bounded context, then generate an answer grounded in that evidence.
+      </p>
+      <p>
+        <strong>RAG is not:</strong> a guarantee of truth. It is not a substitute for access control, evaluation, or fresh data. It does not fix a vague system prompt.
+      </p>
+      <p>
+        Think of RAG as giving the model a <em>closed-book exam with allowed notes</em>—if you slip the wrong notes under the desk, the student will ace the wrong exam.
+      </p>
+
+      <h2>The production pipeline, stage by stage</h2>
+
+      <pre class="mermaid blog-mermaid">
+flowchart LR
+  IN[Ingest + normalize] --> CH[Chunk]
+  CH --> EM[Embed + index]
+  EM --> RT[Retrieve top-K]
+  RT --> RR[Rerank]
+  RR --> PK[Pack context]
+  PK --> GEN[LLM generate]
+  GEN --> VF[Verify + cite]
+      </pre>
+
+      <div class="stage-list">
+        <div class="stage">
+          <h4>1. Ingest & normalize</h4>
+          <p>PDFs, HTML, tickets, wikis—cleaned to text with stable IDs and source metadata. Garbage in becomes unfindable garbage out.</p>
+        </div>
+        <div class="stage">
+          <h4>2. Chunk</h4>
+          <p>Split documents into retrieval units. Too large mixes topics; too small loses context. Headers and section boundaries matter.</p>
+        </div>
+        <div class="stage">
+          <h4>3. Embed & index</h4>
+          <p>Vectors (and often keyword/BM25 hybrid) land in a store with version tags. Stale index = confident outdated answers.</p>
+        </div>
+        <div class="stage">
+          <h4>4. Retrieve</h4>
+          <p>Query embedding finds nearest neighbors. High top-K without filtering floods the prompt with noise.</p>
+        </div>
+        <div class="stage">
+          <h4>5. Rerank</h4>
+          <p>Cross-encoder or LLM reranker re-orders candidates. Often the highest ROI step teams skip.</p>
+        </div>
+        <div class="stage">
+          <h4>6. Pack & generate</h4>
+          <p>Fit the best chunks into token budget; model answers with instructions to cite or abstain.</p>
+        </div>
+        <div class="stage">
+          <h4>7. Verify</h4>
+          <p>Citation checks, confidence thresholds, escalation to human when evidence is weak.</p>
+        </div>
+      </div>
+
+      <h2>Evidence locker: failures I see in the wild</h2>
+
+      <div class="blog-card">
+        <p class="blog-tag">Exhibit A</p>
+        <p style="margin:0;line-height:1.75;"><strong>Chunk boundary split.</strong> Refund policy table cut mid-row. Retrieval returns half a rule; model infers the rest.</p>
+      </div>
+      <div class="blog-card">
+        <p class="blog-tag">Exhibit B</p>
+        <p style="margin:0;line-height:1.75;"><strong>Semantic collision.</strong> "Termination" in HR doc ranks above "termination clause" in contract because embedding similarity is deceptively close.</p>
+      </div>
+      <div class="blog-card">
+        <p class="blog-tag">Exhibit C</p>
+        <p style="margin:0;line-height:1.75;"><strong>Stale corpus.</strong> Index not refreshed after policy v3 launch. Answers cite v2; legal team cites v3. Trust dies fast.</p>
+      </div>
+      <div class="blog-card">
+        <p class="blog-tag">Exhibit D</p>
+        <p style="margin:0;line-height:1.75;"><strong>Top-K inflation.</strong> Team raises K from 5 to 20 after one miss. Precision collapses; latency and cost rise; misses continue for different queries.</p>
+      </div>
+      <div class="blog-card">
+        <p class="blog-tag">Exhibit E</p>
+        <p style="margin:0;line-height:1.75;"><strong>No abstention path.</strong> Weak retrieval still triggers fluent generation. Users prefer "I don't know" over wrong policy.</p>
+      </div>
+
+      <h2>Design rules that survive production</h2>
+      <ul>
+        <li>Measure <strong>retrieval precision@K</strong> and <strong>answer groundedness</strong> separately.</li>
+        <li>Version your index; tie answers to <strong>document version IDs</strong> in logs.</li>
+        <li>Prefer hybrid search when keywords matter (SKUs, policy IDs, error codes).</li>
+        <li>Rerank before you widen K.</li>
+        <li>Pack by token budget, not chunk count.</li>
+        <li>Ship an explicit <strong>insufficient evidence</strong> response path.</li>
+      </ul>
+
+      <h2>When RAG is the wrong tool</h2>
+      <p>
+        Skip RAG when you need deterministic policy execution (use rules engine + LLM for language only), when data changes second-by-second without index pipeline, or when the task is pure transformation of provided input.
+        Adding vectors adds latency, ops burden, and new failure modes—earn that complexity.
+      </p>
+
+      <h2>Minimal production-shaped code</h2>
+      <pre class="blog-code"><code>async function answerWithRag(query, userCtx) {
+  const candidates = await hybridSearch({
+    query,
+    topK: 24,
+    filters: aclFilter(userCtx), // tenant + role scoping
+  });
+
+  const ranked = await rerank(query, candidates.slice(0, 12));
+  const packed = packByTokenBudget(ranked, { maxTokens: 3200, reserveForAnswer: 700 });
+
+  if (packed.bestScore &lt; GROUNDING_THRESHOLD) {
+    return { type: "abstain", message: "Insufficient policy evidence." };
+  }
+
+  return llm.generate({
+    system: "Answer only from CONTEXT. Cite chunk_id per claim.",
+    context: packed.chunks,
+    query,
+  });
+}</code></pre>
+
+      <h2>Metrics that actually change decisions</h2>
+      <div class="blog-card overflow-x-auto">
+        <table class="blog-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Tells you</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Recall@K (offline)</td><td>Did the right doc appear in candidates?</td></tr>
+            <tr><td>MRR / nDCG after rerank</td><td>Is ranking fixing search?</td></tr>
+            <tr><td>Citation accuracy</td><td>Did claims match retrieved text?</td></tr>
+            <tr><td>Abstain rate</td><td>Is the system honest when evidence is thin?</td></tr>
+            <tr><td>p95 retrieval + gen latency</td><td>User experience under load</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Your mission</h2>
+      <p>
+        In the Investigator above, turn off reranking and fresh index, set Top-K loose, and run the query. Read the simulated answer.
+        Then turn on every guardrail and run again. That gap is what your users feel when retrieval is treated as "solved" because vectors are enabled.
+      </p>
+      <p style="color:#5c4a14;font-weight:600;">
+        Build RAG like infrastructure: observable, versioned, and testable—not like a feature flag.
+      </p>
+    </article>
+  </main>
+
+  <footer class="blog-footer border-t border-slate-300/70 py-12 mt-16">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+      <p>© <span id="year"></span> Prem. Professional profile.</p>
+      <a href="../blogs.html" class="hover:text-amber-700 transition-colors">← Back to blogs</a>
+    </div>
+  </footer>
+
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
+  <script src="../assets/js/main.js"></script>
+  <script>
+    (function () {
+      const CORPUS = [
+        { id: "KB-881", title: "Refund Policy v3 (current)", relevance: 0.98,
+          text: "Standard refund window: 30 days from purchase. After 30 days, not eligible for automatic refund; manager exception only. §4.2 effective Jan 2026." },
+        { id: "KB-881-v2", title: "Refund Policy v2 (archived)", relevance: 0.72,
+          text: "Refunds available within 60 days for enterprise tier. (Superseded by v3—do not use for customer-facing answers.)" },
+        { id: "MKT-12", title: "Marketing FAQ — happiness guarantee", relevance: 0.45,
+          text: "We love our customers! Ask us anything about refunds—we're here to help you feel great about your purchase." },
+        { id: "HR-04", title: "Employee leave policy", relevance: 0.08,
+          text: "Annual leave accrual terminates on separation date. Return equipment within 5 business days." },
+        { id: "BILL-02", title: "Billing SOP — charge reversal", relevance: 0.55,
+          text: "Duplicate charges: verify ledger, initiate reversal per SOP-B12 within 48 hours." },
+        { id: "LEG-09", title: "Legal disclaimer footer", relevance: 0.12,
+          text: "Informational only. Not legal advice. Policies subject to change without notice." },
+        { id: "ONB-3", title: "Onboarding welcome email template", relevance: 0.05,
+          text: "Welcome to Acme! Here's how to get started with your dashboard." },
+        { id: "SOC-1", title: "SOC2 audit summary 2024", relevance: 0.02,
+          text: "Controls tested: access management, change management, encryption at rest." },
+      ];
+
+      const ANSWERS = {
+        good: "Not eligible for a standard automatic refund at day 45. Per KB-881 (Policy v3 §4.2), the window is 30 days; beyond that requires manager exception—not guaranteed full refund.",
+        bad_wrong: "Yes—customers can typically request a full refund within 60 days under our enterprise guarantee. We're committed to making it right!",
+        bad_vague: "Refund eligibility depends on several factors. Please contact support for personalized assistance. We value your business!",
+        bad_stale: "Refunds are available within 60 days for enterprise tier per KB-881-v2. You should be eligible at day 45.",
+      };
+
+      const queryEl = document.getElementById("rag-query");
+      const resultsEl = document.getElementById("results");
+      const chunkList = document.getElementById("chunk-list");
+      const answerBox = document.getElementById("answer-box");
+      const verdictLine = document.getElementById("verdict-line");
+      const steps = document.querySelectorAll(".pipe-step");
+
+      function getConfig() {
+        return {
+          chunk: document.getElementById("c-chunk").checked,
+          rerank: document.getElementById("c-rerank").checked,
+          fresh: document.getElementById("c-fresh").checked,
+          pack: document.getElementById("c-pack").checked,
+          topk: document.getElementById("c-topk").checked,
+          ground: document.getElementById("c-ground").checked,
+        };
+      }
+
+      function scoreChunk(c, cfg) {
+        let r = c.relevance;
+        if (!cfg.fresh && (c.id.includes("v2") || c.title.includes("archived"))) r += 0.22;
+        if (!cfg.chunk && c.id === "KB-881") r -= 0.15;
+        if (!cfg.rerank) r += (Math.random() - 0.5) * 0.35;
+        if (c.id === "MKT-12" && !cfg.rerank) r += 0.25;
+        return Math.max(0, Math.min(1, r));
+      }
+
+      function animatePipeline() {
+        steps.forEach((s) => s.classList.remove("active"));
+        let i = 0;
+        const t = setInterval(() => {
+          if (i < steps.length) {
+            steps[i].classList.add("active");
+            i++;
+          } else clearInterval(t);
+        }, 220);
+      }
+
+      function investigate() {
+        const cfg = getConfig();
+        animatePipeline();
+        resultsEl.hidden = false;
+
+        let scored = CORPUS.map((c) => ({ ...c, score: scoreChunk(c, cfg) }));
+        scored.sort((a, b) => b.score - a.score);
+
+        const k = cfg.topk ? 3 : 8;
+        const retrieved = scored.slice(0, k);
+        const hasGold = retrieved.some((c) => c.id === "KB-881");
+        const hasNoise = retrieved.some((c) => c.id === "MKT-12" || c.id.includes("v2"));
+        const hasStale = retrieved.some((c) => c.id.includes("v2"));
+
+        const relevance = Math.round((retrieved.reduce((s, c) => s + c.score, 0) / retrieved.length) * 100);
+        const signal = hasGold ? (hasNoise ? 52 : 92) : 28;
+        const signalDisplay = cfg.rerank && cfg.fresh && cfg.topk ? Math.min(signal + 8, 95) : signal;
+        let trust = cfg.ground && hasGold && !hasStale ? 88 : cfg.ground ? 55 : 40;
+        if (!cfg.ground) trust = Math.max(15, trust - 25);
+
+        document.getElementById("score-relevance").textContent = relevance;
+        document.getElementById("score-signal").textContent = signalDisplay + "%";
+        document.getElementById("score-trust").textContent = Math.max(0, Math.min(99, trust)) + "%";
+
+        chunkList.innerHTML = "";
+        scored.forEach((c) => {
+          const div = document.createElement("div");
+          const isRet = retrieved.find((r) => r.id === c.id);
+          div.className = "chunk" + (isRet ? " retrieved" : "");
+          div.innerHTML = '<div class="meta">' + c.id + " · score " + c.score.toFixed(2) + (isRet ? " · IN CONTEXT" : "") + '</div>' + c.title + " — " + c.text;
+          chunkList.appendChild(div);
+        });
+
+        let answer, cls, verdict;
+        if (hasGold && cfg.rerank && cfg.fresh && cfg.ground && cfg.topk) {
+          answer = ANSWERS.good;
+          cls = "good";
+          verdict = "Strong retrieval: canonical policy chunk ranked first; answer grounded and correct.";
+        } else if (hasStale && !cfg.fresh) {
+          answer = ANSWERS.bad_stale;
+          cls = "bad";
+          verdict = "Stale index pulled archived policy. Classic v2/v3 incident.";
+        } else if (hasNoise && !cfg.rerank) {
+          answer = ANSWERS.bad_wrong;
+          cls = "bad";
+          verdict = "Marketing fluff outranked policy without reranking. Model trusted the wrong context.";
+        } else {
+          answer = ANSWERS.bad_vague;
+          cls = "bad";
+          verdict = "Weak or noisy context produced a non-committal answer—or hallucination risk if forced to sound confident.";
+        }
+
+        answerBox.className = "answer-box " + cls;
+        answerBox.innerHTML = "<strong>Simulated model answer:</strong><br><br>" + answer;
+        verdictLine.textContent = verdict;
+      }
+
+      document.getElementById("btn-investigate").addEventListener("click", investigate);
+      setTimeout(investigate, 400);
+    })();
+  </script>
+</body>
+</html>

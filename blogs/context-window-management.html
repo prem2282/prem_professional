@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Context window management for production LLM apps: budget packing, truncation trade-offs, and an interactive Context Tape allocator." />
+  <title>Context Window Management | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .memo-strip {
+      display: grid; gap: 0.65rem; margin: 1.25rem 0;
+    }
+    .memo-item {
+      display: grid; grid-template-columns: 100px 1fr;
+      gap: 0.75rem; padding: 0.75rem 1rem;
+      background: #fffdf8; border-radius: 12px;
+      border: 1px solid rgba(15,23,42,0.08);
+      border-left: 4px solid #c9a227;
+    }
+    .memo-item .tag { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #8a6f1f; }
+    .tape-wrap { margin: 1rem 0; }
+    .tape-bar {
+      display: flex; height: 44px; border-radius: 12px; overflow: hidden;
+      border: 1px solid rgba(15,23,42,0.12); background: #e8e4d9;
+    }
+    .tape-seg {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.62rem; font-weight: 700; color: #fff;
+      transition: flex 0.35s ease; min-width: 2px; overflow: hidden;
+    }
+    .tape-legend { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.65rem; font-size: 0.76rem; }
+    .tape-legend span::before {
+      content: ""; display: inline-block; width: 10px; height: 10px;
+      border-radius: 3px; margin-right: 0.3rem; vertical-align: middle;
+    }
+    .sl-row label { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .sl-row label span { color: #8a6f1f; font-variant-numeric: tabular-nums; }
+    .sl-row input { width: 100%; accent-color: #c9a227; margin-bottom: 0.7rem; }
+    .alert-box {
+      padding: 0.85rem; border-radius: 12px; font-size: 0.88rem; margin-top: 0.75rem;
+    }
+    .alert-box.ok { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+    .alert-box.warn { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+    .alert-box.caution { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
+    .preset-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+    .preset-btn {
+      font-size: 0.76rem; padding: 0.35rem 0.65rem; border-radius: 999px;
+      border: 1px solid rgba(15,23,42,0.1); background: #f7f1db; cursor: pointer;
+    }
+    .preset-btn.active { background: #c9a227; color: #fffdf8; }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.75rem; }
+    .stat-cell { text-align: center; padding: 0.55rem; background: #f8f5ee; border-radius: 10px; }
+    .stat-cell .n { font-size: 1.2rem; font-weight: 800; }
+    .stat-cell .l { font-size: 0.62rem; color: #64748b; text-transform: uppercase; }
+    .priority-list { margin: 1rem 0; }
+    .priority-row {
+      display: grid; grid-template-columns: 28px 1fr auto;
+      gap: 0.5rem; align-items: center; padding: 0.55rem 0.65rem;
+      margin-bottom: 0.4rem; border-radius: 10px; background: #f8f5ee;
+      font-size: 0.85rem; transition: background 0.3s, opacity 0.3s;
+    }
+    .priority-row.dropped { opacity: 0.4; text-decoration: line-through; background: #fef2f2; }
+    .priority-row .ord { font-weight: 800; color: #94a3b8; }
+    .blog-card { margin: 1rem 0; }
+    .blog-tag { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #8a6f1f; }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="font-serif text-2xl tracking-tight text-slate-900 hover:text-amber-700 transition-colors">Prem</a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">Context Window Management</h1>
+        <p class="blog-subtitle">
+          The context window is not memory—it is a shared budget every layer competes for.
+          Run out of room and the model does not "forget politely"; it drops what you packed last, or truncates mid-thought.
+        </p>
+      </header>
+
+      <blockquote>
+        Field note from a copilot rollout: support tickets spiked after we doubled RAG chunk count. Latency was fine. Answers got worse. We had evicted the last three turns of conversation to make room.
+      </blockquote>
+
+      <p>
+        Context window size is marketed in bold on model cards—128k, 200k, 1M. In production, your <em>effective</em> window is smaller:
+        what remains after system prompts, tool JSON, safety wrappers, and the output you must reserve.
+        Treat the window like a shared cluster budget: every team that "just adds one more chunk" is spending someone else's tokens.
+      </p>
+
+      <h2>What actually fills the window</h2>
+      <p>
+        Every request is a stack: system instructions, tool schemas, retrieved documents, chat history, the user message, and reserved space for the model's reply.
+        Production failures often look like "the model ignored policy" when policy was simply truncated off the end of the prompt.
+      </p>
+
+      <div class="memo-strip">
+        <div class="memo-item"><span class="tag">Fixed</span><p>System prompt + tool definitions rarely shrink per request—budget them first.</p></div>
+        <div class="memo-item"><span class="tag">Variable</span><p>RAG chunks and history grow with every feature flag someone enables.</p></div>
+        <div class="memo-item"><span class="tag">Reserved</span><p>Output max tokens are not free—they subtract from what you can send.</p></div>
+      </div>
+
+      <h2>Context Tape Allocator</h2>
+      <p>
+        Drag sliders to allocate tokens across layers. Watch the tape fill, see what gets squeezed, and when truncation warnings fire.
+        Numbers are illustrative (128k-class window scaled for clarity).
+      </p>
+
+      <div class="blog-widget" id="tape-widget">
+        <h3>Context Tape Allocator</h3>
+        <p class="widget-note">Total budget = 128k tokens (simulated). Adjust layers; output reservation is mandatory.</p>
+
+        <div class="preset-row">
+          <button type="button" class="preset-btn active" data-preset="balanced">Balanced copilot</button>
+          <button type="button" class="preset-btn" data-preset="ragheavy">RAG-heavy</button>
+          <button type="button" class="preset-btn" data-preset="chatheavy">Long chat session</button>
+        </div>
+
+        <div class="sl-row"><label>Window size (k) <span id="v-win">128</span></label>
+          <input type="range" id="sl-win" min="32" max="200" value="128" step="8" /></div>
+        <div class="sl-row"><label>System + tools <span id="v-sys">8k</span></label>
+          <input type="range" id="sl-sys" min="2" max="24" value="8" step="1" /></div>
+        <div class="sl-row"><label>RAG context <span id="v-rag">24k</span></label>
+          <input type="range" id="sl-rag" min="0" max="80" value="24" step="2" /></div>
+        <div class="sl-row"><label>Chat history <span id="v-hist">18k</span></label>
+          <input type="range" id="sl-hist" min="0" max="60" value="18" step="2" /></div>
+        <div class="sl-row"><label>User message <span id="v-user">2k</span></label>
+          <input type="range" id="sl-user" min="1" max="16" value="2" step="1" /></div>
+        <div class="sl-row"><label>Output reserve <span id="v-out">4k</span></label>
+          <input type="range" id="sl-out" min="1" max="16" value="4" step="1" /></div>
+
+        <div class="tape-wrap">
+          <div class="tape-bar" id="tape-bar"></div>
+          <div class="tape-legend" id="tape-legend"></div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-cell"><div class="n" id="s-used">0</div><div class="l">Used</div></div>
+          <div class="stat-cell"><div class="n" id="s-free">0</div><div class="l">Headroom</div></div>
+          <div class="stat-cell"><div class="n" id="s-trunc">0</div><div class="l">Truncated</div></div>
+        </div>
+        <div class="alert-box ok" id="tape-alert">Within budget.</div>
+      </div>
+
+      <pre class="mermaid blog-mermaid">
+flowchart TB
+  subgraph fixed [Pinned first]
+    S[System + policy]
+    T[Tool schemas]
+    O[Output reserve]
+  end
+  subgraph variable [Competes for remainder]
+    R[RAG chunks]
+    H[Chat history]
+    U[User message]
+  end
+  fixed --> P[Pack order]
+  variable --> P
+  P --> API[Model API]
+      </pre>
+
+      <h2>Who gets evicted first?</h2>
+      <p>
+        When you exceed budget, something drops. Your packer should encode explicit priority—not leave it to provider-default middle truncation.
+        Reorder the list below to reflect your policy; the simulator drops from the bottom first when over budget.
+      </p>
+
+      <div class="blog-widget" id="priority-widget">
+        <h3>Truncation Priority Simulator</h3>
+        <p class="widget-note">Drag isn't required—use ↑↓ to reorder. Then crank RAG in the Tape Allocator until truncation fires.</p>
+        <div class="priority-list" id="priority-list"></div>
+        <p style="font-size:0.82rem;color:#64748b;margin:0.5rem 0 0;">Default enterprise copilot: drop low-score RAG → compress history → trim user attachments → never drop system/tools/output.</p>
+      </div>
+
+      <h2>Counting tokens like finance, not like guesswork</h2>
+      <p>
+        Use the same tokenizer family your billing uses (often via the provider's counter API). Approximations like "chars ÷ 4" drift on code, CJK, and JSON.
+        Log per-layer counts on every request—when quality shifts without a deploy, token histograms often explain it.
+      </p>
+      <ul>
+        <li><strong>Pre-flight check:</strong> Before retrieval, compute fixed overhead; cap retrieve_k so RAG cannot consume more than its slice.</li>
+        <li><strong>Post-flight audit:</strong> Compare estimated vs billed tokens weekly; surprises usually mean duplicate history or tool results re-injected every turn.</li>
+        <li><strong>Attachment policy:</strong> PDFs pasted into chat can dwarf your entire RAG budget—route large files to object storage + selective extract.</li>
+      </ul>
+
+      <h2>History: the silent budget thief</h2>
+      <p>
+        Multi-turn sessions feel cheap until turn twelve. Naive "send full history" scales linearly; summarization scales sublinearly if you do it right.
+      </p>
+      <div class="blog-card">
+        <p class="blog-tag">Pattern: rolling summary</p>
+        <p style="margin:0;line-height:1.75;">
+          Every N turns, summarize turns 1…N−2 into a compact state block; keep turns N−1 and N verbatim for local coherence.
+          Store summary + recent turns in session state—not re-summarize from scratch each request (that drifts).
+        </p>
+      </div>
+      <pre class="blog-code"><code># After turn 8, compress turns 1–5 into summary (once)
+session.summary = summarize(turns[1:5], max_tokens=800)
+prompt_history = [session.summary] + turns[6:8]  # recent verbatim</code></pre>
+
+      <h2>Multi-agent and tool results multiply fast</h2>
+      <p>
+        Agent loops append tool outputs to context every step. A five-step agent with 2k tokens per observation adds 10k before the model answers.
+        Cap observation size, truncate tool JSON to relevant fields, and consider externalizing large results to blob refs the model can fetch selectively.
+      </p>
+
+      <h2>Packing strategies that survive feature creep</h2>
+      <ul>
+        <li><strong>Budget-first packing:</strong> Allocate fixed slices before retrieval; never let RAG expand into output reserve.</li>
+        <li><strong>Summarize-then-pack history:</strong> Rolling summaries beat naive "last N messages" when sessions run long.</li>
+        <li><strong>Relevance-ordered RAG:</strong> Drop lowest-scoring chunks first, not the chunks appended last.</li>
+        <li><strong>Tool schema diet:</strong> One mega-schema per request can cost more than your top five chunks combined.</li>
+      </ul>
+
+      <pre class="blog-code"><code>def pack_prompt(budget: TokenBudget, layers: Layers) -&gt; Prompt:
+    fixed = layers.system + layers.tools + layers.output_reserve
+    remaining = budget.total - fixed
+    if remaining &lt;= 0:
+        raise BudgetError("fixed layers exceed window")
+
+    history = trim_history(layers.history, max_tokens=remaining * 0.35)
+    remaining -= count_tokens(history)
+
+    rag = trim_rag_by_score(layers.rag, max_tokens=remaining * 0.55)
+    remaining -= count_tokens(rag)
+
+    user = layers.user  # never truncate without explicit UX consent
+    if count_tokens(user) &gt; remaining:
+        raise BudgetError("user message does not fit")
+
+    return Prompt(system=layers.system, tools=layers.tools,
+                  history=history, rag=rag, user=user)</code></pre>
+
+      <h2>Truncation traps</h2>
+      <p>
+        Silent middle truncation (some APIs drop center context) destroys multi-turn debugging. Log token counts per layer on every request.
+        When headroom goes negative, prefer structured refusal ("session too long—start fresh") over partial prompts the model hallucinates through.
+      </p>
+
+      <h2>Decision rubric</h2>
+      <table class="blog-table" style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+        <tr><th style="border:1px solid #ddd;padding:0.5rem;">Symptom</th><th style="border:1px solid #ddd;padding:0.5rem;">Likely cause</th><th style="border:1px solid #ddd;padding:0.5rem;">First fix</th></tr>
+        <tr><td style="border:1px solid #ddd;padding:0.5rem;">Policy ignored mid-session</td><td style="border:1px solid #ddd;padding:0.5rem;">System prompt truncated</td><td style="border:1px solid #ddd;padding:0.5rem;">Pin system layer; shrink RAG</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:0.5rem;">Answers lose thread</td><td style="border:1px solid #ddd;padding:0.5rem;">History evicted</td><td style="border:1px solid #ddd;padding:0.5rem;">Summarize older turns</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:0.5rem;">Tool calls fail randomly</td><td style="border:1px solid #ddd;padding:0.5rem;">Schema clipped</td><td style="border:1px solid #ddd;padding:0.5rem;">Split tools by intent router</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:0.5rem;">Cost jumped 40% week-over-week</td><td style="border:1px solid #ddd;padding:0.5rem;">History + RAG both grew</td><td style="border:1px solid #ddd;padding:0.5rem;">Per-layer caps + session reset UX</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:0.5rem;">Works in dev, fails in prod</td><td style="border:1px solid #ddd;padding:0.5rem;">Prod has longer tools + ACL metadata</td><td style="border:1px solid #ddd;padding:0.5rem;">Measure prod-shaped prompts in CI</td></tr>
+      </table>
+
+      <h2>Observability checklist</h2>
+      <ol>
+        <li>Dashboard: p50/p95 tokens by layer (system, tools, RAG, history, user, completion).</li>
+        <li>Alert when truncation flag or "context overflow" errors exceed baseline.</li>
+        <li>Sample 20 sessions/week where users re-ask the same question—often a sign context was lost.</li>
+      </ol>
+
+      <h2>Your implementation challenge</h2>
+      <p>
+        Export one production trace with token breakdown. Identify the top two layers by size. Set hard caps for those layers and re-run 50 golden prompts.
+        If task success holds and cost drops, you found real slack—not theoretical optimization.
+      </p>
+
+      <p class="blog-footer-note">Related: <a href="tokens.html">Tokens</a> · <a href="chunking-and-embedding-strategies.html">Chunking</a> · <a href="agentic-workflows-multi-step-planning.html">Agentic Workflows</a></p>
+    </article>
+  </main>
+
+  <footer class="border-t border-slate-200/80 py-12 bg-[#f7f3ea]">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+      <p>© <span id="year"></span> Prem. Professional profile.</p>
+      <a href="../blogs.html" class="text-slate-600 hover:text-amber-700 transition-colors">← All blogs</a>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
+  <script>
+    (function () {
+      const PRIORITY_DEFAULT = [
+        "Low-score RAG chunks",
+        "Oldest chat turns / summary tail",
+        "User attachments (non-text)",
+        "Medium-score RAG chunks",
+        "Recent chat (last 2 turns)",
+        "System + tools + output reserve",
+      ];
+      let priority = [...PRIORITY_DEFAULT];
+      const listEl = document.getElementById("priority-list");
+
+      function renderPriority() {
+        listEl.innerHTML = priority.map((label, i) =>
+          '<div class="priority-row" data-i="' + i + '">' +
+          '<span class="ord">' + (i + 1) + '</span><span>' + label + '</span>' +
+          '<span style="font-size:0.72rem">' +
+          (i > 0 ? '<button type="button" class="preset-btn" data-up="' + i + '" style="padding:0.2rem 0.4rem">↑</button> ' : '') +
+          (i < priority.length - 1 ? '<button type="button" class="preset-btn" data-down="' + i + '" style="padding:0.2rem 0.4rem">↓</button>' : '') +
+          '</span></div>'
+        ).join("");
+        listEl.querySelectorAll("[data-up]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const i = +btn.dataset.up;
+            [priority[i], priority[i - 1]] = [priority[i - 1], priority[i]];
+            renderPriority();
+          });
+        });
+        listEl.querySelectorAll("[data-down]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const i = +btn.dataset.down;
+            [priority[i], priority[i + 1]] = [priority[i + 1], priority[i]];
+            renderPriority();
+          });
+        });
+      }
+      renderPriority();
+
+      const COLORS = { sys: "#6366f1", rag: "#c9a227", hist: "#14b8a6", user: "#ec4899", out: "#b45309", free: "#cbd5e1", trunc: "#ef4444" };
+      const PRESETS = {
+        balanced: { win: 128, sys: 8, rag: 24, hist: 18, user: 2, out: 4 },
+        ragheavy: { win: 128, sys: 8, rag: 52, hist: 10, user: 2, out: 4 },
+        chatheavy: { win: 128, sys: 8, rag: 12, hist: 48, user: 2, out: 4 },
+      };
+      const ids = ["win","sys","rag","hist","user","out"];
+      const sl = Object.fromEntries(ids.map((k) => [k, document.getElementById("sl-" + k)]));
+
+      function k(val) { return val * 1000; }
+
+      function render() {
+        const total = k(+sl.win.value);
+        const parts = {
+          sys: k(+sl.sys.value), rag: k(+sl.rag.value), hist: k(+sl.hist.value),
+          user: k(+sl.user.value), out: k(+sl.out.value),
+        };
+        ids.forEach((id) => {
+          if (id === "win") document.getElementById("v-win").textContent = sl.win.value;
+          else document.getElementById("v-" + id).textContent = sl[id].value + "k";
+        });
+
+        const used = Object.values(parts).reduce((a, b) => a + b, 0);
+        const trunc = Math.max(0, used - total);
+        const free = Math.max(0, total - used);
+        const displayUsed = Math.min(used, total);
+
+        const segs = [
+          { k: "sys", v: parts.sys }, { k: "rag", v: parts.rag }, { k: "hist", v: parts.hist },
+          { k: "user", v: parts.user }, { k: "out", v: parts.out },
+        ];
+        if (trunc > 0) segs.push({ k: "trunc", v: trunc });
+        else if (free > 0) segs.push({ k: "free", v: free });
+
+        const bar = document.getElementById("tape-bar");
+        bar.innerHTML = segs.map((s) => {
+          const flex = (s.v / total) * 100;
+          return '<div class="tape-seg" style="flex:' + flex + ';background:' + COLORS[s.k] + '" title="' + s.k + '">' + (flex > 8 ? Math.round(s.v/1000) + "k" : "") + '</div>';
+        }).join("");
+
+        document.getElementById("s-used").textContent = Math.round(displayUsed / 1000) + "k";
+        document.getElementById("s-free").textContent = Math.round(free / 1000) + "k";
+        document.getElementById("s-trunc").textContent = Math.round(trunc / 1000) + "k";
+
+        const legend = document.getElementById("tape-legend");
+        if (legend) {
+          legend.innerHTML = Object.entries(COLORS).filter(([k]) => k !== "trunc").map(([k, c]) =>
+            '<span style="--c:' + c + '"><span style="display:inline-block;width:10px;height:10px;background:' + c + ';border-radius:3px;margin-right:4px"></span>' + k + '</span>'
+          ).join("");
+        }
+
+        document.querySelectorAll(".priority-row").forEach((row, i) => {
+          row.classList.toggle("dropped", trunc > 0 && i < 3);
+        });
+
+        const alert = document.getElementById("tape-alert");
+        if (trunc > 0) {
+          alert.className = "alert-box warn";
+          alert.textContent = "Over budget by " + Math.round(trunc/1000) + "k tokens—bottom of your priority list drops first: " + priority.slice(0, 2).join(", ") + ". Pin system + output reserve.";
+        } else if (free < total * 0.05) {
+          alert.className = "alert-box caution";
+          alert.textContent = "Under 5% headroom—one extra RAG chunk or tool call can tip into truncation.";
+        } else {
+          alert.className = "alert-box ok";
+          alert.textContent = "Within budget. " + Math.round(free/1000) + "k tokens headroom for spikes.";
+        }
+      }
+
+      ids.forEach((id) => sl[id].addEventListener("input", render));
+      document.querySelectorAll(".preset-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".preset-btn").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          const p = PRESETS[btn.dataset.preset];
+          Object.keys(p).forEach((key) => { sl[key].value = p[key]; });
+          render();
+        });
+      });
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -10,8 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
-<body class="font-sans antialiased" style="background:#f8f4ec;color:#1f2937;">
+<body class="font-sans antialiased blog-post-body">
   <style>
     .ops-nav { background: rgba(248,244,236,0.96); border-bottom: 1px solid rgba(31,41,55,0.12); }
     .ops-wrap { max-width: 920px; margin: 0 auto; }
@@ -60,7 +62,6 @@
   <main class="pt-28 pb-24 px-6">
     <article class="ops-wrap content">
       <header class="mb-10">
-        <p class="kicker mb-4">Reliability Handbook</p>
         <h1 class="title mb-6">Structured Output and JSON Reliability</h1>
         <p class="sub">
           If your LLM output is feeding automations, workflows, or APIs, "mostly valid JSON" is a production incident waiting to happen.
@@ -168,6 +169,20 @@ Rules:
 5) If required information is missing, set severity="medium" and mention gaps in summary.</code></pre>
 
       <h2>Reliability architecture: parse, validate, repair, retry</h2>
+
+      <pre class="mermaid blog-mermaid">
+flowchart LR
+  G[LLM generate] --> P[Parse JSON]
+  P --> V{Schema valid?}
+  V -->|yes| OK[Accept + downstream]
+  V -->|no| R[Repair prompt + truncated raw]
+  R --> G2[Regenerate once]
+  G2 --> P2[Parse again]
+  P2 --> V2{Valid?}
+  V2 -->|yes| OK
+  V2 -->|no| F[Fail closed + alert]
+      </pre>
+
       <div class="incident overflow-x-auto">
         <table class="matrix">
           <thead>
@@ -327,5 +342,8 @@ Never include SQL text in this step.</code></pre>
   </footer>
 
   <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
 </body>
 </html>
