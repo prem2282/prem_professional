@@ -57,195 +57,179 @@
     </div>
   </header>
 
-  <main class="pt-28 pb-24 min-h-[70vh] flex flex-col">
-    <section class="mx-auto max-w-6xl px-6 lg:px-8 flex-1 flex flex-col justify-center">
-      <div class="reveal text-center max-w-xl mx-auto">
+  <main class="pt-28 pb-24">
+    <section class="blogs-page mx-auto w-full max-w-[90rem] px-6 lg:px-10 xl:px-12">
+      <header class="blogs-page-header reveal text-center max-w-3xl mx-auto mb-10 lg:mb-14">
         <p class="text-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4">Writing</p>
-        <h1 class="font-serif text-5xl sm:text-6xl text-cream mb-6">Blogs</h1>
-        <p class="text-cream/60 text-lg leading-relaxed mb-12">
-          A space for essays on technology, AI, leadership, and the craft of building software.
+        <h1 class="font-serif text-5xl sm:text-6xl text-cream mb-5">Blogs</h1>
+        <p class="text-cream/60 text-lg leading-relaxed">
+          Lessons from the past few years building enterprise AI in production—shared here so you can skip some of the scars I collected along the way.
         </p>
-        <div class="space-y-6 text-left">
-          <article class="reveal rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">First Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+        <p class="text-cream/40 text-sm mt-3"><span id="blog-count">14</span> posts</p>
+      </header>
+
+      <div class="blog-index-grid">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">01</p>
+            <h2 class="blog-index-title">
               <a href="blogs/tokens.html" class="hover:text-accent transition-colors">
                 Tokens: The Smallest Unit That Controls Your Entire AI Architecture
               </a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">
+            <p class="blog-index-desc">
               A practical field guide on token budgets, context windows, cost control, and the production guardrails that keep LLM systems reliable at scale.
             </p>
-            <a href="blogs/tokens.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">
-              Read post →
-            </a>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal reveal-delay rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Second Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">02</p>
+            <h2 class="blog-index-title">
               <a href="blogs/parameters.html" class="hover:text-accent transition-colors">
                 Parameters: Turning LLM Behavior into a Design Choice
               </a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">
+            <p class="blog-index-desc">
               A production-oriented guide to temperature, top_p, output limits, and profile-based tuning for consistency, creativity, and cost control.
             </p>
-            <a href="blogs/parameters.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">
-              Read post →
-            </a>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal reveal-delay-2 rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Third Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">03</p>
+            <h2 class="blog-index-title">
               <a href="blogs/prompt-engineering-patterns.html" class="hover:text-accent transition-colors">
                 Prompt Engineering Patterns: A Practical Pattern Library
               </a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">
+            <p class="blog-index-desc">
               A long-form prompt engineering reference manual with many practical templates, before/after examples, anti-patterns, and production checklists.
             </p>
-            <a href="blogs/prompt-engineering-patterns.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">
-              Read post →
-            </a>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal reveal-delay-3 rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Fourth Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">04</p>
+            <h2 class="blog-index-title">
               <a href="blogs/system-prompt-design-enterprise-apps.html" class="hover:text-accent transition-colors">
                 System Prompt Design for Enterprise Apps: A Blueprint
               </a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">
+            <p class="blog-index-desc">
               A long-form enterprise blueprint for layered system prompts, policy guardrails, modular composition, evaluation, and governance.
             </p>
-            <a href="blogs/system-prompt-design-enterprise-apps.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">
-              Read post →
-            </a>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Fifth Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">05</p>
+            <h2 class="blog-index-title">
               <a href="blogs/structured-output-json-reliability.html" class="hover:text-accent transition-colors">
                 Structured Output and JSON Reliability: Production Handbook
               </a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">
+            <p class="blog-index-desc">
               An incident-driven guide to schema-first design, strict validation, repair retries, and production guardrails for machine-parseable LLM output.
             </p>
-            <a href="blogs/structured-output-json-reliability.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">
-              Read post →
-            </a>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal reveal-delay rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Sixth Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">06</p>
+            <h2 class="blog-index-title">
               <a href="blogs/function-calling-and-tool-use-patterns.html" class="hover:text-accent transition-colors">
                 Function Calling and Tool Use Patterns: Operator Guide
               </a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">
+            <p class="blog-index-desc">
               A production playbook for tool-enabled agents: decision sequencing, function contracts, retries, idempotency, and safety guardrails.
             </p>
-            <a href="blogs/function-calling-and-tool-use-patterns.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">
-              Read post →
-            </a>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Seventh Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">07</p>
+            <h2 class="blog-index-title">
               <a href="blogs/rag-fundamentals-for-production.html" class="hover:text-accent transition-colors">
                 RAG Fundamentals for Production
               </a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">
+            <p class="blog-index-desc">
               A case-file deep dive with an interactive pipeline investigator: chunking, retrieval, reranking, and why most "hallucinations" start with wrong context.
             </p>
-            <a href="blogs/rag-fundamentals-for-production.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">
-              Read post →
-            </a>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal reveal-delay rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Eighth Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">08</p>
+            <h2 class="blog-index-title">
               <a href="blogs/chunking-and-embedding-strategies.html" class="hover:text-accent transition-colors">
                 Chunking and Embedding Strategies
               </a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">
+            <p class="blog-index-desc">
               A hands-on workshop with Split & Map Studio and an Embedding Space Explorer—see how boundaries and vectors shape retrieval quality.
             </p>
-            <a href="blogs/chunking-and-embedding-strategies.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">
-              Read post →
-            </a>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal reveal-delay-2 rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Ninth Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">09</p>
+            <h2 class="blog-index-title">
               <a href="blogs/reranking-and-retrieval-quality.html" class="hover:text-accent transition-colors">
                 Reranking and Retrieval Quality
               </a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">
+            <p class="blog-index-desc">
               Myth-busting flip cards, a dual-ladder Rerank Arena, and a budget composer—see how cross-encoders fix wrong-at-rank-1 without guessing in prod.
             </p>
-            <a href="blogs/reranking-and-retrieval-quality.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">
-              Read post →
-            </a>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Tenth Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">10</p>
+            <h2 class="blog-index-title">
               <a href="blogs/context-window-management.html" class="hover:text-accent transition-colors">Context Window Management</a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">Field notes plus a Context Tape Allocator—see how system, RAG, history, and output reserve compete for the same window.</p>
-            <a href="blogs/context-window-management.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">Read post →</a>
+            <p class="blog-index-desc">Field notes plus a Context Tape Allocator—see how system, RAG, history, and output reserve compete for the same window.</p>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal reveal-delay rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Eleventh Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">11</p>
+            <h2 class="blog-index-title">
               <a href="blogs/hallucination-mitigation-enterprise-workflows.html" class="hover:text-accent transition-colors">Hallucination Mitigation in Enterprise Workflows</a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">Production FAQ and a Grounding Control Panel—climb the ladder from raw completion to abstain-when-ungrounded.</p>
-            <a href="blogs/hallucination-mitigation-enterprise-workflows.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">Read post →</a>
+            <p class="blog-index-desc">Production FAQ and a Grounding Control Panel—climb the ladder from raw completion to abstain-when-ungrounded.</p>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal reveal-delay-2 rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Twelfth Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">12</p>
+            <h2 class="blog-index-title">
               <a href="blogs/evaluation-frameworks-offline-and-online.html" class="hover:text-accent transition-colors">Evaluation Frameworks (Offline and Online)</a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">Eval playbook with a Regression Board—compare releases, metrics, and deploy gates before canary.</p>
-            <a href="blogs/evaluation-frameworks-offline-and-online.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">Read post →</a>
+            <p class="blog-index-desc">Eval playbook with a Regression Board—compare releases, metrics, and deploy gates before canary.</p>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Thirteenth Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">13</p>
+            <h2 class="blog-index-title">
               <a href="blogs/agentic-workflows-multi-step-planning.html" class="hover:text-accent transition-colors">Agentic Workflows and Multi-step Planning</a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">Step through agent traces with a Trace Player—happy paths, runaway loops, and recovery after tool failure.</p>
-            <a href="blogs/agentic-workflows-multi-step-planning.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">Read post →</a>
+            <p class="blog-index-desc">Step through agent traces with a Trace Player—happy paths, runaway loops, and recovery after tool failure.</p>
+            <span class="blog-index-cta">Read post →</span>
           </article>
 
-          <article class="reveal reveal-delay rounded-2xl border border-cream/10 bg-ink-light/50 p-7 sm:p-8">
-            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-3">Fourteenth Blog</p>
-            <h2 class="font-serif text-3xl sm:text-4xl text-cream mb-3">
+          <article class="blog-index-card reveal">
+            <p class="blog-index-num">14</p>
+            <h2 class="blog-index-title">
               <a href="blogs/guardrails-safety-policy-enforcement.html" class="hover:text-accent transition-colors">Guardrails, Safety, and Policy Enforcement</a>
             </h2>
-            <p class="text-cream/60 leading-relaxed mb-6">Case lessons and a Policy Gate Simulator—run text through PII, injection, topic, and tool ACL layers.</p>
-            <a href="blogs/guardrails-safety-policy-enforcement.html" class="inline-flex items-center text-accent hover:text-accent-soft transition-colors text-sm font-medium tracking-wide">Read post →</a>
+            <p class="blog-index-desc">Case lessons and a Policy Gate Simulator—run text through PII, injection, topic, and tool ACL layers.</p>
+            <span class="blog-index-cta">Read post →</span>
           </article>
-        </div>
       </div>
     </section>
   </main>

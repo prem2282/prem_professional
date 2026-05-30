@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Prem — Technology executive, developer at heart. 23+ years leading enterprise AI, SaaS, and cloud transformation." />
-  <title>Prem | Technology Leader & Developer</title>
+  <meta name="description" content="PremAnand Sukumaran — Technology executive. Built in the trenches, leading from the front. Enterprise AI, SaaS, and cloud transformation." />
+  <title>PremAnand Sukumaran | Technology Leader</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -63,10 +63,13 @@
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div class="reveal order-2 lg:order-1">
             <p class="text-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4">Professional Profile</p>
-            <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-cream mb-8">
-              Developer at heart.<br />
-              <span class="italic text-cream/70">Leader by experience.</span>
+            <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.08] text-cream mb-5">
+              PremAnand Sukumaran
             </h1>
+            <p class="font-serif text-2xl sm:text-3xl lg:text-4xl leading-[1.15] text-cream mb-8">
+              Built in the trenches.<br />
+              <span class="italic text-cream/70">Leading from the front.</span>
+            </p>
             <div class="space-y-5 text-lg text-cream/75 leading-relaxed max-w-xl">
               <p>
                 Technology never fails to fascinate and I have never stopped admiring it.
@@ -89,18 +92,36 @@
               <div class="photo-glow" aria-hidden="true"></div>
               <img
                 src="Prem_2026.webp"
-                alt="Prem — technology executive and developer"
+                alt="PremAnand Sukumaran — technology executive"
                 width="480"
                 height="600"
                 class="relative z-10 w-full max-w-md rounded-2xl object-cover aspect-[4/5] shadow-2xl"
                 loading="eager"
               />
-              <div class="absolute -bottom-4 -left-4 z-20 rounded-xl border border-cream/10 bg-ink-light/90 backdrop-blur px-5 py-4 shadow-xl">
-                <p class="text-xs uppercase tracking-widest text-ink-muted">Experience</p>
-                <p class="font-serif text-3xl text-accent">23+ years</p>
-              </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="blog-marquee-section py-16 lg:py-20 border-t border-cream/5 bg-ink-light/30" aria-labelledby="blog-marquee-heading">
+      <div class="mx-auto max-w-6xl px-6 lg:px-8 mb-10 reveal">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-2">Writing</p>
+            <h2 id="blog-marquee-heading" class="font-serif text-3xl sm:text-4xl text-cream">From the blog</h2>
+            <p class="text-cream/55 text-sm mt-2 max-w-md">Production notes on GenAI, RAG, agents, and enterprise delivery—five picks rotate each visit.</p>
+          </div>
+          <a href="blogs.html" class="text-accent hover:text-accent-soft text-sm font-medium tracking-wide transition-colors shrink-0">
+            All posts →
+          </a>
+        </div>
+      </div>
+      <div class="blog-marquee reveal" role="region" aria-label="Scrolling featured blog posts">
+        <div class="blog-marquee-fade blog-marquee-fade--left" aria-hidden="true"></div>
+        <div class="blog-marquee-fade blog-marquee-fade--right" aria-hidden="true"></div>
+        <div class="blog-marquee-viewport">
+          <div class="blog-marquee-track" id="blog-marquee-track"></div>
         </div>
       </div>
     </section>
@@ -171,5 +192,6 @@
   </footer>
 
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/home-blog-marquee.js"></script>
 </body>
 </html>
