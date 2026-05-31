@@ -33,7 +33,7 @@
 
   <header class="site-header fixed top-0 inset-x-0 z-50">
     <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
-      <a href="index.html" class="font-serif text-2xl tracking-tight text-cream hover:text-accent transition-colors">Prem</a>
+      <a href="index.html" class="nav-home" aria-label="Home"><img src="Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
       <button type="button" id="nav-toggle" class="nav-toggle lg:hidden" aria-expanded="false" aria-controls="nav-menu">
         <span class="sr-only">Menu</span>
         <span class="nav-bar"></span>
@@ -65,12 +65,15 @@
         <p class="text-cream/60 text-lg leading-relaxed">
           Lessons from the past few years building enterprise AI in production—shared here so you can skip some of the scars I collected along the way.
         </p>
-        <p class="text-cream/40 text-sm mt-3"><span id="blog-count">14</span> posts</p>
+        <p class="text-cream/40 text-sm mt-3"><span id="blog-count">20</span> posts</p>
       </header>
 
       <div class="blog-index-grid">
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">01</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">01</span>
+              <span class="blog-index-tag">Foundations</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/tokens.html" class="hover:text-accent transition-colors">
                 Tokens: The Smallest Unit That Controls Your Entire AI Architecture
@@ -83,7 +86,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">02</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">02</span>
+              <span class="blog-index-tag">Tuning</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/parameters.html" class="hover:text-accent transition-colors">
                 Parameters: Turning LLM Behavior into a Design Choice
@@ -96,7 +102,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">03</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">03</span>
+              <span class="blog-index-tag">Patterns</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/prompt-engineering-patterns.html" class="hover:text-accent transition-colors">
                 Prompt Engineering Patterns: A Practical Pattern Library
@@ -109,7 +118,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">04</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">04</span>
+              <span class="blog-index-tag">Enterprise</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/system-prompt-design-enterprise-apps.html" class="hover:text-accent transition-colors">
                 System Prompt Design for Enterprise Apps: A Blueprint
@@ -122,7 +134,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">05</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">05</span>
+              <span class="blog-index-tag">Reliability</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/structured-output-json-reliability.html" class="hover:text-accent transition-colors">
                 Structured Output and JSON Reliability: Production Handbook
@@ -135,7 +150,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">06</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">06</span>
+              <span class="blog-index-tag">Tools</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/function-calling-and-tool-use-patterns.html" class="hover:text-accent transition-colors">
                 Function Calling and Tool Use Patterns: Operator Guide
@@ -148,7 +166,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">07</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">07</span>
+              <span class="blog-index-tag">RAG</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/rag-fundamentals-for-production.html" class="hover:text-accent transition-colors">
                 RAG Fundamentals for Production
@@ -161,7 +182,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">08</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">08</span>
+              <span class="blog-index-tag">RAG</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/chunking-and-embedding-strategies.html" class="hover:text-accent transition-colors">
                 Chunking and Embedding Strategies
@@ -174,7 +198,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">09</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">09</span>
+              <span class="blog-index-tag">RAG</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/reranking-and-retrieval-quality.html" class="hover:text-accent transition-colors">
                 Reranking and Retrieval Quality
@@ -187,7 +214,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">10</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">10</span>
+              <span class="blog-index-tag">Context</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/context-window-management.html" class="hover:text-accent transition-colors">Context Window Management</a>
             </h2>
@@ -196,7 +226,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">11</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">11</span>
+              <span class="blog-index-tag">Trust</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/hallucination-mitigation-enterprise-workflows.html" class="hover:text-accent transition-colors">Hallucination Mitigation in Enterprise Workflows</a>
             </h2>
@@ -205,7 +238,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">12</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">12</span>
+              <span class="blog-index-tag">Eval</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/evaluation-frameworks-offline-and-online.html" class="hover:text-accent transition-colors">Evaluation Frameworks (Offline and Online)</a>
             </h2>
@@ -214,7 +250,10 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">13</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">13</span>
+              <span class="blog-index-tag">Agents</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/agentic-workflows-multi-step-planning.html" class="hover:text-accent transition-colors">Agentic Workflows and Multi-step Planning</a>
             </h2>
@@ -223,11 +262,86 @@
           </article>
 
           <article class="blog-index-card reveal">
-            <p class="blog-index-num">14</p>
+            <div class="blog-index-meta">
+              <span class="blog-index-num">14</span>
+              <span class="blog-index-tag">Safety</span>
+            </div>
             <h2 class="blog-index-title">
               <a href="blogs/guardrails-safety-policy-enforcement.html" class="hover:text-accent transition-colors">Guardrails, Safety, and Policy Enforcement</a>
             </h2>
             <p class="blog-index-desc">Case lessons and a Policy Gate Simulator—run text through PII, injection, topic, and tool ACL layers.</p>
+            <span class="blog-index-cta">Read post →</span>
+          </article>
+
+          <article class="blog-index-card reveal">
+            <div class="blog-index-meta">
+              <span class="blog-index-num">15</span>
+              <span class="blog-index-tag">Performance</span>
+            </div>
+            <h2 class="blog-index-title">
+              <a href="blogs/latency-optimization-for-llm-apps.html" class="hover:text-accent transition-colors">Latency Optimization for LLM Apps</a>
+            </h2>
+            <p class="blog-index-desc">Performance autopsy, TTFT vs E2E SLOs, and a Latency Waterfall Lab to stack your p95 budget by layer.</p>
+            <span class="blog-index-cta">Read post →</span>
+          </article>
+
+          <article class="blog-index-card reveal">
+            <div class="blog-index-meta">
+              <span class="blog-index-num">16</span>
+              <span class="blog-index-tag">FinOps</span>
+            </div>
+            <h2 class="blog-index-title">
+              <a href="blogs/cost-optimization-and-token-budgeting.html" class="hover:text-accent transition-colors">Cost Optimization and Token Budgeting</a>
+            </h2>
+            <p class="blog-index-desc">Unit economics, chargeback, and a Monthly Burn Ledger—toggle optimization levers on real volume.</p>
+            <span class="blog-index-cta">Read post →</span>
+          </article>
+
+          <article class="blog-index-card reveal">
+            <div class="blog-index-meta">
+              <span class="blog-index-num">17</span>
+              <span class="blog-index-tag">Performance</span>
+            </div>
+            <h2 class="blog-index-title">
+              <a href="blogs/caching-strategies-for-ai-responses.html" class="hover:text-accent transition-colors">Caching Strategies for AI Responses</a>
+            </h2>
+            <p class="blog-index-desc">Exact, semantic, and prompt cache layers with a Cache Topology Explorer for hit rate vs staleness risk.</p>
+            <span class="blog-index-cta">Read post →</span>
+          </article>
+
+          <article class="blog-index-card reveal">
+            <div class="blog-index-meta">
+              <span class="blog-index-num">18</span>
+              <span class="blog-index-tag">Ops</span>
+            </div>
+            <h2 class="blog-index-title">
+              <a href="blogs/observability-for-genai-systems.html" class="hover:text-accent transition-colors">Observability for GenAI Systems</a>
+            </h2>
+            <p class="blog-index-desc">Traces, quality signals, and a Minimum Viable Dashboard builder—pick P0/P1 signals before prod sign-off.</p>
+            <span class="blog-index-cta">Read post →</span>
+          </article>
+
+          <article class="blog-index-card reveal">
+            <div class="blog-index-meta">
+              <span class="blog-index-num">19</span>
+              <span class="blog-index-tag">Security</span>
+            </div>
+            <h2 class="blog-index-title">
+              <a href="blogs/prompt-injection-and-security-hardening.html" class="hover:text-accent transition-colors">Prompt Injection and Security Hardening</a>
+            </h2>
+            <p class="blog-index-desc">Threat surfaces and a Red Team Payload Deck—simulate attacks against your defense layers.</p>
+            <span class="blog-index-cta">Read post →</span>
+          </article>
+
+          <article class="blog-index-card reveal">
+            <div class="blog-index-meta">
+              <span class="blog-index-num">20</span>
+              <span class="blog-index-tag">Governance</span>
+            </div>
+            <h2 class="blog-index-title">
+              <a href="blogs/ai-governance-and-responsible-deployment.html" class="hover:text-accent transition-colors">AI Governance and Responsible Deployment</a>
+            </h2>
+            <p class="blog-index-desc">Risk tiers, RACI, and a Governance Ladder—self-assess maturity and control gaps to the next level.</p>
             <span class="blog-index-cta">Read post →</span>
           </article>
       </div>

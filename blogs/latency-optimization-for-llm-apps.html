@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Latency optimization for production LLM apps: TTFT, streaming, parallelization, and a Latency Waterfall budget lab." />
+  <title>Latency Optimization for LLM Apps | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .autopsy-row {
+      display: grid; grid-template-columns: 140px 1fr auto;
+      gap: 0.75rem; align-items: center; padding: 0.6rem 0.75rem;
+      margin-bottom: 0.45rem; border-radius: 10px; background: #f8f5ee;
+      font-size: 0.84rem;
+    }
+    .autopsy-row input[type="range"] { width: 100%; accent-color: #c9a227; }
+    .autopsy-row .ms { font-variant-numeric: tabular-nums; font-weight: 700; color: #8a6f1f; min-width: 52px; text-align: right; }
+    .waterfall {
+      display: flex; height: 52px; border-radius: 12px; overflow: hidden;
+      border: 1px solid rgba(15,23,42,0.12); margin: 1rem 0;
+    }
+    .wf-seg { display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem; font-weight: 700; color: #fff; transition: flex 0.3s; min-width: 2px; }
+    .p95-box {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.85rem;
+    }
+    .p95-cell { text-align: center; padding: 0.7rem; border-radius: 12px; background: #fffdf8; border: 1px solid rgba(15,23,42,0.08); }
+    .p95-cell .n { font-size: 1.35rem; font-weight: 800; }
+    .p95-cell .l { font-size: 0.62rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; }
+    .verdict { padding: 0.85rem; border-radius: 12px; font-size: 0.88rem; margin-top: 0.75rem; }
+    .verdict.ok { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+    .verdict.warn { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
+    .verdict.bad { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+    .lever-card { padding: 0.85rem 1rem; border-radius: 12px; border-left: 4px solid #c9a227; background: #fffdf8; margin: 0.65rem 0; }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="nav-home" aria-label="Home"><img src="../Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">Latency Optimization for LLM Apps</h1>
+        <p class="blog-subtitle">Users feel latency before they read quality. In enterprise copilots, the difference between “instant” and “loading…” is often not the model—it is how you schedule retrieval, tools, and tokens on the critical path.</p>
+      </header>
+
+      <section>
+        <h2>The autopsy that changed our SLO</h2>
+        <p>We had a RAG assistant hitting a 4-second p95 while the model vendor swore their API was “fast.” A waterfall trace showed the truth: 1.2s embedding + vector search, 0.8s rerank on eight chunks, 1.4s waiting for full completion before showing anything, and only 0.6s in actual generation. We did not need a bigger GPU—we needed to move work off the serial path and stream the answer.</p>
+        <p>Latency optimization for LLM apps is not one knob. It is <strong>budget accounting</strong>: every millisecond belongs to a layer, and product SLOs should name which layer is allowed to spend it.</p>
+      </section>
+
+      <section>
+        <h2>What users actually measure</h2>
+        <p>Product and infra teams often argue past each other because they track different clocks:</p>
+        <ul>
+          <li><strong>Time to first token (TTFT)</strong> — when the UI can show progress; dominates perceived speed in chat.</li>
+          <li><strong>Time to useful answer</strong> — first sentence that answers the question, not boilerplate disclaimers.</li>
+          <li><strong>End-to-end (E2E)</strong> — full response or structured payload delivered; matters for APIs and agents.</li>
+          <li><strong>Tool-augmented paths</strong> — sum of serial tool calls; agents can blow p99 without bad model latency.</li>
+        </ul>
+        <p>Pick one north-star per surface. Copilots optimize TTFT + streaming; batch extractors optimize E2E throughput per dollar.</p>
+      </section>
+
+      <section>
+        <h2>Critical path anatomy</h2>
+        <pre class="mermaid blog-mermaid">
+sequenceDiagram
+  participant U as User
+  participant G as Gateway
+  participant R as Retrieval
+  participant M as LLM
+  U->>G: request
+  G->>R: embed + search
+  R-->>G: chunks
+  G->>M: prompt + stream
+  M-->>G: tokens
+  G-->>U: SSE chunks
+        </pre>
+        <p>Anything on the dashed critical path before the first token ships is “pre-LLM debt.” Parallelize or cache it. Anything after first token is “generation debt”—shrink output tokens, use smaller models for drafts, or speculative decoding where supported.</p>
+      </section>
+
+      <section>
+        <h2>Latency Waterfall Lab</h2>
+        <p>Stack your p95 budget by layer. Drag sliders to match a trace (or a guess). The bar and verdict show whether you are likely under a 3s copilot SLO.</p>
+        <div class="blog-widget">
+          <div id="wf-bar" class="waterfall" aria-label="Latency waterfall"></div>
+          <div class="autopsy-row"><span>Auth / gateway</span><input type="range" id="lat-gw" min="20" max="400" value="80" /><span class="ms" id="lat-gw-v">80ms</span></div>
+          <div class="autopsy-row"><span>Embed + vector</span><input type="range" id="lat-emb" min="50" max="2000" value="450" /><span class="ms" id="lat-emb-v">450ms</span></div>
+          <div class="autopsy-row"><span>Rerank</span><input type="range" id="lat-rr" min="0" max="1500" value="320" /><span class="ms" id="lat-rr-v">320ms</span></div>
+          <div class="autopsy-row"><span>Prompt build</span><input type="range" id="lat-pb" min="10" max="300" value="60" /><span class="ms" id="lat-pb-v">60ms</span></div>
+          <div class="autopsy-row"><span>TTFT (model)</span><input type="range" id="lat-ttft" min="100" max="3000" value="700" /><span class="ms" id="lat-ttft-v">700ms</span></div>
+          <div class="autopsy-row"><span>Generation</span><input type="range" id="lat-gen" min="200" max="8000" value="1400" /><span class="ms" id="lat-gen-v">1400ms</span></div>
+          <div class="autopsy-row"><span>Tool calls (serial)</span><input type="range" id="lat-tool" min="0" max="10000" value="0" /><span class="ms" id="lat-tool-v">0ms</span></div>
+          <div class="p95-box">
+            <div class="p95-cell"><div class="n" id="sum-pre">1610</div><div class="l">Pre-LLM ms</div></div>
+            <div class="p95-cell"><div class="n" id="sum-ttft">700</div><div class="l">TTFT ms</div></div>
+            <div class="p95-cell"><div class="n" id="sum-e2e">—</div><div class="l">E2E ms</div></div>
+          </div>
+          <div id="lat-verdict" class="verdict ok">Within a 3s copilot budget if you stream at TTFT.</div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Levers that actually move p95</h2>
+        <div class="lever-card"><strong>Stream early, render late.</strong> Open SSE as soon as TTFT lands; buffer tool JSON server-side. Users forgive 6s total if text appears in 1.2s.</div>
+        <div class="lever-card"><strong>Parallel retrieval fan-out.</strong> Query rewrite + hybrid search + metadata filter in parallel; merge with RRF instead of serial rerank-everything.</div>
+        <div class="lever-card"><strong>Shrink pre-LLM work.</strong> Smaller embedding models for routing, cache hot queries, cap chunks (see context-window post).</div>
+        <div class="lever-card"><strong>Model routing.</strong> Classifier sends simple FAQs to a small model; escalate only on low confidence.</div>
+        <div class="lever-card"><strong>Output caps.</strong> <code>max_tokens</code> and structured schemas reduce generation tail latency more than faster chips.</div>
+      </section>
+
+      <section>
+        <h2>Anti-patterns from production</h2>
+        <ul>
+          <li><strong>Blocking on full RAG</strong> before calling the model when the user only asked for a summary of attached text.</li>
+          <li><strong>Giant system prompts</strong> on every turn—TTFT scales with prompt tokens.</li>
+          <li><strong>Synchronous tool chains</strong> where two read-only lookups could run together.</li>
+          <li><strong>No timeout budget</strong>—one slow tool holds the whole agent trace hostage.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>SLO table for stakeholders</h2>
+        <table class="blog-table">
+          <thead><tr><th>Surface</th><th>Target TTFT</th><th>Target E2E</th><th>Measure</th></tr></thead>
+          <tbody>
+            <tr><td>In-app copilot</td><td>&lt; 1.5s</td><td>&lt; 8s streamed</td><td>Client TTFT, server span</td></tr>
+            <tr><td>API extraction</td><td>N/A</td><td>&lt; 12s p95</td><td>E2E job duration</td></tr>
+            <tr><td>Agent workflow</td><td>&lt; 2s first update</td><td>&lt; 60s with steps</td><td>Per-step spans + user wait</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Implementation challenge</h2>
+        <p>Export one slow trace from your gateway. Label each segment (gateway, retrieval, TTFT, generation, tools). If pre-LLM exceeds 40% of E2E, pick one parallelization or cache change before touching model size. Re-run the Waterfall Lab with before/after numbers.</p>
+      </section>
+
+      <p class="blog-footer-note"><a href="../blogs.html">← All blogs</a> · <a href="cost-optimization-and-token-budgeting.html">Cost</a> · <a href="caching-strategies-for-ai-responses.html">Caching →</a></p>
+    </article>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+    (function () {
+      const ids = ["gw","emb","rr","pb","ttft","gen","tool"];
+      const colors = { gw:"#94a3b8", emb:"#6366f1", rr:"#8b5cf6", pb:"#64748b", ttft:"#c9a227", gen:"#d97706", tool:"#dc2626" };
+      const sl = {};
+      ids.forEach((k) => { sl[k] = document.getElementById("lat-" + k); });
+      function render() {
+        const v = {};
+        let pre = 0, e2e = 0;
+        ids.forEach((k) => {
+          v[k] = +sl[k].value;
+          document.getElementById("lat-" + k + "-v").textContent = v[k] + "ms";
+          e2e += v[k];
+          if (k !== "ttft" && k !== "gen") pre += v[k];
+        });
+        pre += v.pb;
+        const preLlm = v.gw + v.emb + v.rr + v.pb + v.tool;
+        document.getElementById("sum-pre").textContent = preLlm;
+        document.getElementById("sum-ttft").textContent = v.ttft;
+        document.getElementById("sum-e2e").textContent = e2e;
+        const segs = [
+          { k:"gw", v:v.gw }, { k:"emb", v:v.emb }, { k:"rr", v:v.rr }, { k:"pb", v:v.pb },
+          { k:"ttft", v:v.ttft }, { k:"gen", v:v.gen }, { k:"tool", v:v.tool }
+        ].filter((s) => s.v > 0);
+        document.getElementById("wf-bar").innerHTML = segs.map((s) =>
+          '<div class="wf-seg" style="flex:' + s.v + ';background:' + colors[s.k] + '" title="' + s.k + '">' + (s.v > 200 ? s.v + "ms" : "") + '</div>'
+        ).join("");
+        const perceived = preLlm + v.ttft;
+        const el = document.getElementById("lat-verdict");
+        if (perceived > 3000) {
+          el.className = "verdict bad";
+          el.textContent = "Pre-LLM + TTFT exceeds 3s—users will churn before generation finishes. Cut retrieval/rerank or stream at TTFT.";
+        } else if (e2e > 8000 && v.gen > 2000) {
+          el.className = "verdict warn";
+          el.textContent = "E2E is heavy—streaming helps perception; also cap max_tokens and route simple queries to a smaller model.";
+        } else {
+          el.className = "verdict ok";
+          el.textContent = "Budget looks copilot-viable. Lock SLOs on TTFT (" + perceived + "ms to first token) not just E2E.";
+        }
+      }
+      ids.forEach((k) => sl[k].addEventListener("input", render));
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -89,6 +89,42 @@
       desc: 'Policy Gate Simulator—PII, injection, topic, and tool ACL layers.',
       href: 'blogs/guardrails-safety-policy-enforcement.html',
     },
+    {
+      tag: 'Performance',
+      title: 'Latency Optimization for LLM Apps',
+      desc: 'Latency Waterfall Lab—stack p95 by gateway, RAG, TTFT, and tools.',
+      href: 'blogs/latency-optimization-for-llm-apps.html',
+    },
+    {
+      tag: 'FinOps',
+      title: 'Cost Optimization and Token Budgeting',
+      desc: 'Monthly Burn Ledger—volume, token shape, and optimization levers.',
+      href: 'blogs/cost-optimization-and-token-budgeting.html',
+    },
+    {
+      tag: 'Performance',
+      title: 'Caching Strategies for AI Responses',
+      desc: 'Cache Topology Explorer—exact, semantic, prompt, and retrieval layers.',
+      href: 'blogs/caching-strategies-for-ai-responses.html',
+    },
+    {
+      tag: 'Ops',
+      title: 'Observability for GenAI Systems',
+      desc: 'Minimum Viable Dashboard builder—P0/P1 signals and readiness score.',
+      href: 'blogs/observability-for-genai-systems.html',
+    },
+    {
+      tag: 'Security',
+      title: 'Prompt Injection and Security Hardening',
+      desc: 'Red Team Payload Deck—attacks vs your defense layers.',
+      href: 'blogs/prompt-injection-and-security-hardening.html',
+    },
+    {
+      tag: 'Governance',
+      title: 'AI Governance and Responsible Deployment',
+      desc: 'Governance Ladder—maturity tiers, controls, and RACI.',
+      href: 'blogs/ai-governance-and-responsible-deployment.html',
+    },
   ];
 
   function shuffle(arr) {

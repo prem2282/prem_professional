@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cost optimization and token budgeting for LLM apps: unit economics, chargeback, and a Monthly Burn Ledger calculator." />
+  <title>Cost Optimization and Token Budgeting | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .ledger-line { display: grid; grid-template-columns: 1fr 100px; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; font-size: 0.86rem; }
+    .ledger-line input, .ledger-line select { width: 100%; padding: 0.4rem 0.5rem; border-radius: 8px; border: 1px solid rgba(15,23,42,0.12); background: #fffdf8; }
+    .ledger-total { font-size: 1.5rem; font-weight: 800; color: #8a6f1f; margin: 0.75rem 0; }
+    .stack-bar { display: flex; height: 36px; border-radius: 10px; overflow: hidden; margin: 0.75rem 0; border: 1px solid rgba(15,23,42,0.1); }
+    .stack-seg { font-size: 0.58rem; font-weight: 700; color: #fff; display: flex; align-items: center; justify-content: center; min-width: 2px; }
+    .savings-chip { display: inline-block; padding: 0.25rem 0.55rem; border-radius: 999px; background: #ecfdf5; color: #047857; font-size: 0.75rem; font-weight: 700; margin: 0.2rem 0.25rem 0 0; cursor: pointer; border: 1px solid #86efac; }
+    .savings-chip.off { opacity: 0.45; text-decoration: line-through; }
+    .memo-cfo { background: #fffdf8; border: 1px dashed #c9a227; padding: 1rem; border-radius: 12px; font-size: 0.9rem; margin: 1rem 0; }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="nav-home" aria-label="Home"><img src="../Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">Cost Optimization and Token Budgeting</h1>
+        <p class="blog-subtitle">Finance does not care about your embedding model’s vibes. They care about cost per successful task—and whether your token budget is a plan or a surprise invoice.</p>
+      </header>
+
+      <section>
+        <h2>Memo from the CFO review</h2>
+        <div class="memo-cfo">
+          <p><strong>Ask:</strong> “Why did GenAI spend 3× after launch?”</p>
+          <p><strong>Answer that works:</strong> We moved from pilot (1k users, short prompts) to production (40k users, RAG + agents). Unit cost per resolved ticket dropped 18%; total spend rose because volume and context size rose faster than we capped budgets.</p>
+          <p><strong>Answer that fails:</strong> “Tokens are expensive.”</p>
+        </div>
+        <p>Cost optimization is not shaving pennies on the flagship model—it is <strong>allocating tokens like capacity</strong>: who gets them, for what outcome, with what fallback when the budget is gone.</p>
+      </section>
+
+      <section>
+        <h2>Unit economics that engineering should own</h2>
+        <ul>
+          <li><strong>Cost per successful outcome</strong> — resolved ticket, approved draft, passed eval—not cost per request.</li>
+          <li><strong>Input vs output ratio</strong> — RAG-heavy apps often burn input tokens; agents burn output on tool JSON.</li>
+          <li><strong>Hidden multipliers</strong> — rerank calls, eval judges, nightly re-embeds, failed retries.</li>
+          <li><strong>Chargeback dimensions</strong> — team, feature flag, customer tier, environment.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Where spend leaks</h2>
+        <pre class="mermaid blog-mermaid">
+flowchart TB
+  subgraph leak [Common leaks]
+    A[Unbounded context]
+    B[Retry storms]
+    C[Judge models on every turn]
+    D[Dev keys in prod traffic]
+  end
+  subgraph fix [Controls]
+    E[Per-tenant budget]
+    F[Cache + route small model]
+    G[Sampled online eval]
+    H[Separate API keys]
+  end
+  A --> E
+  B --> F
+  C --> G
+  D --> H
+        </pre>
+      </section>
+
+      <section>
+        <h2>Monthly Burn Ledger</h2>
+        <p>Estimate monthly model spend from volume and token shape. Toggle optimization chips to see stacked savings (illustrative percentages).</p>
+        <div class="blog-widget">
+          <div class="ledger-line"><label>Requests / month</label><input type="number" id="cost-req" value="500000" min="1000" /></div>
+          <div class="ledger-line"><label>Avg input tokens</label><input type="number" id="cost-in" value="4200" min="100" /></div>
+          <div class="ledger-line"><label>Avg output tokens</label><input type="number" id="cost-out" value="650" min="50" /></div>
+          <div class="ledger-line"><label>Model tier</label>
+            <select id="cost-tier">
+              <option value="0.003,0.015">Frontier ($3 / $15 per 1M)</option>
+              <option value="0.0008,0.0032" selected>Mid ($0.8 / $3.2 per 1M)</option>
+              <option value="0.0002,0.0006">Small ($0.2 / $0.6 per 1M)</option>
+            </select>
+          </div>
+          <div class="ledger-line"><label>RAG + rerank $/req</label><input type="number" id="cost-rag" value="0.0004" step="0.0001" min="0" /></div>
+          <p class="blog-tag">Optimization levers (toggle)</p>
+          <span class="savings-chip" data-save="0.12" data-on="1">−12% cache hits</span>
+          <span class="savings-chip" data-save="0.18" data-on="1">−18% prompt trim</span>
+          <span class="savings-chip" data-save="0.25" data-on="0">−25% route to small model</span>
+          <span class="savings-chip" data-save="0.08" data-on="0">−8% cap max_tokens</span>
+          <div class="stack-bar" id="cost-stack"></div>
+          <div class="ledger-total" id="cost-total">$0 / mo</div>
+          <p id="cost-detail" style="font-size:0.84rem;color:#64748b"></p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Token budgeting mechanics</h2>
+        <p>Think in three envelopes:</p>
+        <ol>
+          <li><strong>Per-request ceiling</strong> — hard cap on input+output; reject or truncate with policy.</li>
+          <li><strong>Per-tenant daily pool</strong> — SaaS fairness; premium tiers buy more pool.</li>
+          <li><strong>Per-feature allocation</strong> — agents get a higher ceiling than FAQ bot, with finance sign-off.</li>
+        </ol>
+        <p>Expose remaining budget to the orchestrator so it can choose “cheap path” (cached FAQ) vs “expensive path” (multi-step agent).</p>
+      </section>
+
+      <section>
+        <h2>Trade-off matrix</h2>
+        <table class="blog-table">
+          <thead><tr><th>Tactic</th><th>Cost impact</th><th>Quality risk</th><th>Ops effort</th></tr></thead>
+          <tbody>
+            <tr><td>Semantic cache</td><td>High</td><td>Medium (stale answers)</td><td>Medium</td></tr>
+            <tr><td>Model routing</td><td>High</td><td>Medium on edge cases</td><td>High</td></tr>
+            <tr><td>Shrink context</td><td>Medium</td><td>High if careless</td><td>Low</td></tr>
+            <tr><td>Batch offline jobs</td><td>Medium</td><td>Low</td><td>Medium</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Governance hooks</h2>
+        <p>Align with FinOps: tag every call with <code>tenant_id</code>, <code>feature_id</code>, <code>model_id</code>. Weekly review top ten expensive traces—not averages. Pair with the observability post for dashboards finance can trust.</p>
+      </section>
+
+      <section>
+        <h2>Challenge</h2>
+        <p>Pull last month’s bill and one golden trace. Compute cost per successful outcome today. Set one per-tenant daily token pool and one routing rule—measure spend and success rate for two weeks.</p>
+      </section>
+
+      <p class="blog-footer-note"><a href="../blogs.html">← All blogs</a> · <a href="latency-optimization-for-llm-apps.html">Latency</a> · <a href="caching-strategies-for-ai-responses.html">Caching →</a></p>
+    </article>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+    (function () {
+      const chips = document.querySelectorAll(".savings-chip");
+      function render() {
+        const req = +document.getElementById("cost-req").value;
+        const tin = +document.getElementById("cost-in").value;
+        const tout = +document.getElementById("cost-out").value;
+        const rag = +document.getElementById("cost-rag").value;
+        const [pi, po] = document.getElementById("cost-tier").value.split(",").map(Number);
+        let llm = req * ((tin / 1e6) * pi + (tout / 1e6) * po);
+        let ragCost = req * rag;
+        let save = 0;
+        chips.forEach((c) => {
+          if (c.dataset.on === "1") save += parseFloat(c.dataset.save);
+        });
+        const baseline = llm + ragCost;
+        const after = baseline * (1 - Math.min(save, 0.55));
+        const colors = ["#c9a227", "#6366f1", "#22c55e"];
+        const parts = [
+          { v: llm * (1-save), c: colors[0], l: "LLM" },
+          { v: ragCost, c: colors[1], l: "RAG" },
+          { v: Math.max(0, baseline - after), c: colors[2], l: "saved" }
+        ].filter((p) => p.v > 0);
+        const max = Math.max(...parts.map((p) => p.v), 1);
+        document.getElementById("cost-stack").innerHTML = parts.map((p) =>
+          '<div class="stack-seg" style="flex:' + (p.v/max) + ';background:' + p.c + '">' + p.l + '</div>'
+        ).join("");
+        document.getElementById("cost-total").textContent = "$" + after.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " / mo";
+        document.getElementById("cost-detail").textContent =
+          "Baseline $" + baseline.toLocaleString(undefined, { maximumFractionDigits: 0 }) +
+          " · " + Math.round(save*100) + "% optimizations · " + (req/1000).toFixed(0) + "k requests";
+      }
+      chips.forEach((c) => {
+        c.addEventListener("click", () => {
+          c.dataset.on = c.dataset.on === "1" ? "0" : "1";
+          c.classList.toggle("off", c.dataset.on === "0");
+          render();
+        });
+      });
+      ["cost-req","cost-in","cost-out","cost-tier","cost-rag"].forEach((id) =>
+        document.getElementById(id).addEventListener("input", render)
+      );
+      render();
+    })();
+  </script>
+</body>
+</html>

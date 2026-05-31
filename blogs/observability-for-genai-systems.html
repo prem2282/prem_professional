@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Observability for GenAI systems: traces, eval signals, SLOs, and a Minimum Viable Dashboard builder." />
+  <title>Observability for GenAI Systems | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .signal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; }
+    .signal-card {
+      padding: 0.7rem; border-radius: 12px; border: 2px solid rgba(15,23,42,0.08);
+      background: #f8f5ee; cursor: pointer; font-size: 0.82rem; transition: all 0.2s;
+    }
+    .signal-card.on { border-color: #c9a227; background: #fffdf8; }
+    .signal-card .pri { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6f1f; }
+    .dash-preview {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem;
+      margin-top: 0.85rem; min-height: 120px;
+    }
+    .dash-tile {
+      padding: 0.5rem; border-radius: 10px; background: #0f172a; color: #e2e8f0;
+      font-size: 0.68rem; text-align: center;
+    }
+    .dash-tile.empty { background: #e8e4d9; color: #94a3b8; border: 1px dashed #cbd5e1; }
+    .readiness { font-size: 0.9rem; font-weight: 700; margin-top: 0.65rem; }
+    .gap-list { margin: 0.5rem 0; padding-left: 1.1rem; font-size: 0.86rem; color: #64748b; }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="nav-home" aria-label="Home"><img src="../Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">Observability for GenAI Systems</h1>
+        <p class="blog-subtitle">Classic APM tells you the pod restarted. GenAI observability tells you why the answer was wrong, which retrieval hop failed, and whether users abandoned before token two.</p>
+      </header>
+
+      <section>
+        <h2>The incident without a trace</h2>
+        <p>Support reported “the bot lied.” Logs showed HTTP 200. The model call succeeded. Without span-level attribution we burned two days guessing—was it RAG, a tool, or a policy change? We needed <strong>one trace ID per user turn</strong> linking retrieval, prompts (hashed), model, tools, guardrails, and feedback.</p>
+      </section>
+
+      <section>
+        <h2>Three pillars, GenAI-shaped</h2>
+        <ul>
+          <li><strong>Metrics</strong> — TTFT, E2E, token volume, cache hit rate, abstain rate, $/request.</li>
+          <li><strong>Logs</strong> — structured events; never raw PII prompts in shared logs.</li>
+          <li><strong>Traces</strong> — parent span = user request; children = embed, search, rerank, LLM, tools, guardrails.</li>
+        </ul>
+        <p>Add a fourth lane: <strong>quality signals</strong> — offline eval scores, online thumbs-down, judge model flags—joined by <code>trace_id</code>.</p>
+      </section>
+
+      <section>
+        <h2>Reference architecture</h2>
+        <pre class="mermaid blog-mermaid">
+flowchart TB
+  App[Orchestrator] --> OT[OpenTelemetry]
+  OT --> TS[Trace store]
+  OT --> M[Metrics]
+  Eval[Eval pipeline] --> TS
+  FB[User feedback] --> TS
+  TS --> Dash[Dashboards + alerts]
+        </pre>
+      </section>
+
+      <section>
+        <h2>Minimum Viable Dashboard builder</h2>
+        <p>Select signals for your maturity. The preview fills tiles; gaps list what you still need before production sign-off.</p>
+        <div class="blog-widget">
+          <p class="blog-tag">P0 — ship blockers</p>
+          <div class="signal-grid" id="sig-p0"></div>
+          <p class="blog-tag" style="margin-top:0.75rem">P1 — quality & cost</p>
+          <div class="signal-grid" id="sig-p1"></div>
+          <p class="blog-tag" style="margin-top:0.75rem">P2 — deep debug</p>
+          <div class="signal-grid" id="sig-p2"></div>
+          <div class="dash-preview" id="dash-preview"></div>
+          <p class="readiness" id="obs-ready">Readiness: —</p>
+          <ul class="gap-list" id="obs-gaps"></ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>What to put on every span</h2>
+        <table class="blog-table">
+          <thead><tr><th>Attribute</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td><code>tenant_id</code>, <code>feature_id</code></td><td>Cost and incident blast radius</td></tr>
+            <tr><td><code>model_id</code>, <code>prompt_hash</code></td><td>Regression correlation</td></tr>
+            <tr><td><code>kb_version</code>, <code>chunk_ids</code></td><td>RAG debugging</td></tr>
+            <tr><td><code>input_tokens</code>, <code>output_tokens</code></td><td>FinOps + latency</td></tr>
+            <tr><td><code>guardrail_outcome</code></td><td>Safety audits</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Alerting that wakes the right person</h2>
+        <ul>
+          <li><strong>SLO burn</strong> — TTFT p95 &gt; 3s for 15m → platform.</li>
+          <li><strong>Quality drift</strong> — thumbs-down rate 2× baseline → product + ML.</li>
+          <li><strong>Abstain spike</strong> — may mean retrieval broke, not “model mood.”</li>
+          <li><strong>Cost anomaly</strong> — tokens/request 3× → check cache invalidation or prompt bloat.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Sampling and privacy</h2>
+        <p>Store prompt/response payloads in a restricted store with retention limits; default traces carry hashes only. Sample 100% of failures and 1–5% of successes for deep storage. Redact before export to third-party APM.</p>
+      </section>
+
+      <section>
+        <h2>Challenge</h2>
+        <p>Pick five P0 signals below and implement them this sprint. Tie one alert to TTFT and one to quality drift. Run a fire drill: find one bad answer’s full trace in under five minutes.</p>
+      </section>
+
+      <p class="blog-footer-note"><a href="../blogs.html">← All blogs</a> · <a href="prompt-injection-and-security-hardening.html">Security →</a></p>
+    </article>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+    (function () {
+      const SIGNALS = [
+        { id: "ttft", label: "TTFT p95", tier: "p0", tile: "TTFT" },
+        { id: "e2e", label: "E2E latency", tier: "p0", tile: "E2E" },
+        { id: "err", label: "Error rate", tier: "p0", tile: "5xx" },
+        { id: "trace", label: "Trace coverage", tier: "p0", tile: "Traces" },
+        { id: "tok", label: "Tokens / req", tier: "p1", tile: "Tokens" },
+        { id: "cost", label: "$ / outcome", tier: "p1", tile: "$/OK" },
+        { id: "down", label: "Thumbs-down %", tier: "p1", tile: "👎 rate" },
+        { id: "abstain", label: "Abstain rate", tier: "p1", tile: "Abstain" },
+        { id: "cache", label: "Cache hit %", tier: "p2", tile: "Cache" },
+        { id: "rag", label: "RAG precision proxy", tier: "p2", tile: "RAG@" },
+        { id: "tool", label: "Tool failure %", tier: "p2", tile: "Tools" },
+        { id: "inj", label: "Injection blocks", tier: "p2", tile: "Block" }
+      ];
+      const selected = new Set(["ttft","e2e","err","trace","tok","down"]);
+      function mount() {
+        ["p0","p1","p2"].forEach((tier) => {
+          const el = document.getElementById("sig-" + tier);
+          el.innerHTML = SIGNALS.filter((s) => s.tier === tier).map((s) =>
+            '<div class="signal-card' + (selected.has(s.id) ? " on" : "") + '" data-id="' + s.id + '">' +
+            '<div class="pri">' + tier + '</div><strong>' + s.label + '</strong></div>'
+          ).join("");
+        });
+        document.querySelectorAll(".signal-card").forEach((card) => {
+          card.addEventListener("click", () => {
+            const id = card.dataset.id;
+            if (selected.has(id)) selected.delete(id); else selected.add(id);
+            card.classList.toggle("on");
+            render();
+          });
+        });
+        render();
+      }
+      function render() {
+        const p0ids = SIGNALS.filter((s) => s.tier === "p0").map((s) => s.id);
+        const p0on = p0ids.filter((id) => selected.has(id)).length;
+        const tiles = SIGNALS.filter((s) => selected.has(s.id)).slice(0, 9);
+        const prev = document.getElementById("dash-preview");
+        prev.innerHTML = "";
+        for (let i = 0; i < 9; i++) {
+          const t = tiles[i];
+          prev.innerHTML += t
+            ? '<div class="dash-tile">' + t.tile + '</div>'
+            : '<div class="dash-tile empty">—</div>';
+        }
+        const gaps = [];
+        if (p0on < p0ids.length) gaps.push("Missing P0: " + p0ids.filter((id) => !selected.has(id)).map((id) => SIGNALS.find((s) => s.id === id).label).join(", "));
+        if (!selected.has("down")) gaps.push("No user feedback signal—quality regressions will lag.");
+        if (!selected.has("trace")) gaps.push("No trace coverage—you cannot debug RAG vs model.");
+        document.getElementById("obs-gaps").innerHTML = gaps.map((g) => "<li>" + g + "</li>").join("") || "<li>No critical gaps—add P2 as you mature.</li>";
+        const score = Math.round((p0on / p0ids.length) * 50 + (selected.size / SIGNALS.length) * 50);
+        document.getElementById("obs-ready").textContent = "Readiness: " + score + "% · " + selected.size + " signals selected";
+      }
+      mount();
+    })();
+  </script>
+</body>
+</html>

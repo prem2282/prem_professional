@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI governance and responsible deployment: maturity tiers, RACI, and a Governance Ladder self-assessment." />
+  <title>AI Governance and Responsible Deployment | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .ladder-step {
+      padding: 0.85rem 1rem; margin-bottom: 0.5rem; border-radius: 12px;
+      border: 2px solid rgba(15,23,42,0.08); background: #f8f5ee;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .ladder-step.active { border-color: #c9a227; background: #fffdf8; box-shadow: 0 4px 14px rgba(201,162,39,0.15); }
+    .ladder-step .lvl { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; color: #8a6f1f; }
+    .control-checklist { margin-top: 0.75rem; }
+    .control-item {
+      display: flex; gap: 0.5rem; align-items: flex-start; padding: 0.45rem 0;
+      font-size: 0.86rem; border-bottom: 1px solid rgba(15,23,42,0.06);
+    }
+    .control-item input { margin-top: 0.25rem; accent-color: #c9a227; }
+    .control-item.done { color: #64748b; text-decoration: line-through; }
+    .raci-mini { font-size: 0.8rem; margin-top: 0.65rem; color: #475569; }
+    .gov-score { font-size: 1.4rem; font-weight: 800; color: #8a6f1f; margin-top: 0.5rem; }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="nav-home" aria-label="Home"><img src="../Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">AI Governance and Responsible Deployment</h1>
+        <p class="blog-subtitle">Governance is not a committee that says no—it is the operating system that lets teams ship fast without betting the company on an unowned model change Friday afternoon.</p>
+      </header>
+
+      <section>
+        <h2>What “responsible” means in production</h2>
+        <p>Responsible deployment is measurable: who approved the use case, what data can flow in, how failures are detected, how users are informed, and how you roll back. Ethics and compliance are part of the same system as evals and observability—not a slide deck after launch.</p>
+      </section>
+
+      <section>
+        <h2>Governance vs guardrails</h2>
+        <p><a href="guardrails-safety-policy-enforcement.html">Guardrails</a> enforce policy at runtime. <strong>Governance</strong> decides which policies exist, who owns them, and what evidence is required before prod. You need both; guardrails without governance become whack-a-mole.</p>
+      </section>
+
+      <section>
+        <h2>Maturity ladder</h2>
+        <pre class="mermaid blog-mermaid">
+stateDiagram-v2
+  [*] --> L0: Ad hoc
+  L0 --> L1: Inventory
+  L1 --> L2: Risk tiering
+  L2 --> L3: Continuous assurance
+  L3 --> L4: Auditable automation
+        </pre>
+      </section>
+
+      <section>
+        <h2>Governance Ladder self-assessment</h2>
+        <p>Click your current tier. Check controls you already have; score shows gap to next level.</p>
+        <div class="blog-widget">
+          <div class="ladder-step" data-level="0"><div class="lvl">Level 0</div><strong>Ad hoc pilots</strong> — no central inventory, heroes ship features.</div>
+          <div class="ladder-step" data-level="1"><div class="lvl">Level 1</div><strong>Catalog & owners</strong> — use case register, basic legal review.</div>
+          <div class="ladder-step active" data-level="2"><div class="lvl">Level 2</div><strong>Risk-tiered gates</strong> — tier 1–3 paths, eval + security sign-off.</div>
+          <div class="ladder-step" data-level="3"><div class="lvl">Level 3</div><strong>Continuous assurance</strong> — online metrics, drift, incident playbooks.</div>
+          <div class="ladder-step" data-level="4"><div class="lvl">Level 4</div><strong>Auditable automation</strong> — policy-as-code, evidence bundles per release.</div>
+          <div class="control-checklist" id="gov-controls"></div>
+          <div class="gov-score" id="gov-score">—</div>
+          <p class="raci-mini" id="gov-raci"></p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Risk tiers (practical)</h2>
+        <table class="blog-table">
+          <thead><tr><th>Tier</th><th>Examples</th><th>Gate</th></tr></thead>
+          <tbody>
+            <tr><td>T1 Low</td><td>Internal FAQ on public docs</td><td>Automated eval + security scan</td></tr>
+            <tr><td>T2 Medium</td><td>Customer support draft</td><td>Human review sample + DLP</td></tr>
+            <tr><td>T3 High</td><td>Credit, health, legal advice</td><td>Domain expert + legal + kill switch</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>RACI snapshot</h2>
+        <ul>
+          <li><strong>Product</strong> — use case owner, success metrics, user disclosure.</li>
+          <li><strong>Engineering</strong> — implementation, evals, observability, rollback.</li>
+          <li><strong>Security / Legal</strong> — data classification, third-party models, contracts.</li>
+          <li><strong>Risk / Compliance</strong> — tier approval, audit evidence.</li>
+          <li><strong>Executive sponsor</strong> — escalation when tier-3 incidents hit media.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Artifacts auditors ask for</h2>
+        <ul>
+          <li>Use case charter (purpose, users, data classes, prohibited uses).</li>
+          <li>Model card + change log (version, training cutoff, known limits).</li>
+          <li>Eval report per release (offline + sampled online).</li>
+          <li>Incident register and postmortems (including near-misses).</li>
+          <li>Human oversight plan for T2/T3 (when humans must be in the loop).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Responsible UX</h2>
+        <p>Disclose AI involvement where users might assume human judgment. Offer escalation and feedback. Do not hide abstains as generic errors—say when the system cannot answer safely.</p>
+      </section>
+
+      <section>
+        <h2>Challenge</h2>
+        <p>Inventory every prod LLM feature in one register. Assign tier and owner. Pick one control from the next maturity level and ship it in 30 days—usually trace IDs + eval gate on promote.</p>
+      </section>
+
+      <p class="blog-footer-note"><a href="../blogs.html">← All blogs</a> · End of series (20 posts)</p>
+    </article>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+    (function () {
+      const CONTROLS = {
+        0: ["Named exec sponsor", "Use case inventory started"],
+        1: ["Owner per use case", "Data classification documented", "Vendor DPAs on file"],
+        2: ["Risk tier per feature", "Offline eval gate on deploy", "Guardrails in prod path", "Incident playbook"],
+        3: ["Online quality metrics", "Quarterly red team", "Model change advisory board"],
+        4: ["Policy-as-code in CI", "Evidence bundle per release", "Automated rollback on SLO burn"]
+      };
+      const RACI = {
+        0: "RACI: Engineering ships; Legal engaged ad hoc.",
+        1: "RACI: Product owns charter; Security reviews data.",
+        2: "RACI: Risk approves tier-2/3; Eng owns eval evidence.",
+        3: "RACI: Continuous review board; Compliance samples audits.",
+        4: "RACI: Automated gates; humans review exceptions only."
+      };
+      let level = 2;
+      const steps = document.querySelectorAll(".ladder-step");
+      steps.forEach((s) => {
+        s.addEventListener("click", () => {
+          level = +s.dataset.level;
+          steps.forEach((x) => x.classList.toggle("active", +x.dataset.level === level));
+          renderControls();
+        });
+      });
+      function renderControls() {
+        const list = [];
+        for (let l = 0; l <= level; l++) list.push.apply(list, CONTROLS[l]);
+        const el = document.getElementById("gov-controls");
+        el.innerHTML = list.map((c, i) =>
+          '<label class="control-item" data-i="' + i + '"><input type="checkbox" /><span>' + c + '</span></label>'
+        ).join("");
+        el.querySelectorAll("input").forEach((cb) => {
+          cb.addEventListener("change", () => {
+            cb.closest(".control-item").classList.toggle("done", cb.checked);
+            updateScore();
+          });
+        });
+        document.getElementById("gov-raci").textContent = RACI[level];
+        updateScore();
+      }
+      function updateScore() {
+        const items = document.querySelectorAll("#gov-controls input");
+        const checked = [...items].filter((c) => c.checked).length;
+        const pct = items.length ? Math.round((checked / items.length) * 100) : 0;
+        const next = level < 4 ? "Level " + (level + 1) : "maintain L4";
+        document.getElementById("gov-score").textContent =
+          "Control coverage: " + pct + "% · Target next: " + next;
+      }
+      renderControls();
+    })();
+  </script>
+</body>
+</html>

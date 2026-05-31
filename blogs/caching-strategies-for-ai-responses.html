@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Caching strategies for AI responses: exact, semantic, and prompt cache layers with a Cache Topology Explorer." />
+  <title>Caching Strategies for AI Responses | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .cache-layer {
+      display: grid; grid-template-columns: 24px 1fr auto;
+      gap: 0.65rem; align-items: start; padding: 0.75rem;
+      margin-bottom: 0.5rem; border-radius: 12px; background: #f8f5ee;
+      border: 2px solid transparent; cursor: pointer; transition: border-color 0.2s;
+    }
+    .cache-layer.on { border-color: #c9a227; background: #fffdf8; }
+    .cache-layer input { margin-top: 0.35rem; accent-color: #c9a227; }
+    .cache-meta { font-size: 0.72rem; color: #64748b; }
+    .cache-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.45rem; margin-top: 0.85rem; }
+    .cache-stat { text-align: center; padding: 0.55rem; border-radius: 10px; background: #fffdf8; border: 1px solid rgba(15,23,42,0.08); }
+    .cache-stat .n { font-size: 1.1rem; font-weight: 800; }
+    .risk-meter { height: 8px; border-radius: 4px; background: #e8e4d9; margin-top: 0.5rem; overflow: hidden; }
+    .risk-fill { height: 100%; transition: width 0.3s, background 0.3s; }
+    .decision-out { font-size: 0.88rem; padding: 0.85rem; border-radius: 12px; margin-top: 0.75rem; background: #f0f9ff; border: 1px solid #7dd3fc; color: #0c4a6e; }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="nav-home" aria-label="Home"><img src="../Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">Caching Strategies for AI Responses</h1>
+        <p class="blog-subtitle">Caching LLM output is not like caching a product page. The same words can mean different things after a policy update, and “close enough” semantic matches can be wrong enough to hurt.</p>
+      </header>
+
+      <section>
+        <h2>Why we cache anyway</h2>
+        <p>After latency and cost posts, caching is the lever that hits both—but only if you know <strong>what</strong> you are willing to reuse. I treat caches as a stack of increasing reach and increasing staleness risk, not a single Redis key.</p>
+      </section>
+
+      <section>
+        <h2>Four layers on the request path</h2>
+        <pre class="mermaid blog-mermaid">
+flowchart LR
+  Q[Query] --> E[Exact hash]
+  E -->|miss| S[Semantic similarity]
+  S -->|miss| P[Provider prompt cache]
+  P -->|miss| L[Full LLM call]
+  L --> W[Write-through cache]
+        </pre>
+        <p><strong>Exact match</strong> — hash of normalized prompt + model + tool schema version. Safest, lowest hit rate on paraphrases.</p>
+        <p><strong>Semantic cache</strong> — embedding similarity above threshold; great for FAQs, dangerous for regulated answers unless versioned.</p>
+        <p><strong>Prompt / prefix cache</strong> — provider caches long static system prompts; saves input cost and TTFT, not full answer reuse.</p>
+        <p><strong>Retrieval cache</strong> — cache chunk IDs per query hash; avoids re-search, still runs generation.</p>
+      </section>
+
+      <section>
+        <h2>Cache Topology Explorer</h2>
+        <p>Toggle layers for your use case (FAQ bot vs live policy assistant). Stats are illustrative—tune TTL and threshold in implementation.</p>
+        <div class="blog-widget">
+          <label>Workload profile</label>
+          <select id="cache-profile" style="width:100%;padding:0.5rem;margin-bottom:0.75rem;border-radius:8px;border:1px solid rgba(15,23,42,0.12)">
+            <option value="faq">FAQ / docs (high repeat)</option>
+            <option value="copilot">Copilot (medium repeat)</option>
+            <option value="policy">Policy / compliance (low repeat)</option>
+          </select>
+          <div class="cache-layer on" data-layer="exact"><input type="checkbox" checked id="c-exact" /><div><strong>Exact response cache</strong><div class="cache-meta">TTL 1h–24h · Hit rate high on FAQ</div></div><span class="cache-meta">Risk: low</span></div>
+          <div class="cache-layer on" data-layer="semantic"><input type="checkbox" checked id="c-semantic" /><div><strong>Semantic answer cache</strong><div class="cache-meta">Similarity ≥ 0.92 · Invalidate on corpus version</div></div><span class="cache-meta">Risk: med</span></div>
+          <div class="cache-layer on" data-layer="prompt"><input type="checkbox" checked id="c-prompt" /><div><strong>Provider prompt cache</strong><div class="cache-meta">Static system + tools · $/latency win</div></div><span class="cache-meta">Risk: low</span></div>
+          <div class="cache-layer" data-layer="retrieval"><input type="checkbox" id="c-retrieval" /><div><strong>Retrieval result cache</strong><div class="cache-meta">Chunk set per query hash</div></div><span class="cache-meta">Risk: med</span></div>
+          <p style="font-size:0.82rem;margin:0.5rem 0">Semantic threshold</p>
+          <input type="range" id="cache-thresh" min="85" max="98" value="92" style="width:100%;accent-color:#c9a227" />
+          <div class="cache-stats">
+            <div class="cache-stat"><div class="n" id="st-hit">—</div><div class="l">Est. hit %</div></div>
+            <div class="cache-stat"><div class="n" id="st-lat">—</div><div class="l">p95 ms</div></div>
+            <div class="cache-stat"><div class="n" id="st-cost">—</div><div class="l">Cost idx</div></div>
+            <div class="cache-stat"><div class="n" id="st-stale">—</div><div class="l">Stale risk</div></div>
+          </div>
+          <div class="risk-meter"><div class="risk-fill" id="risk-fill" style="width:30%;background:#22c55e"></div></div>
+          <div class="decision-out" id="cache-decision">FAQ profile: enable exact + semantic with corpus version in cache key.</div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Invalidation you cannot skip</h2>
+        <ul>
+          <li><strong>Corpus version</strong> — bump <code>kb_v</code> in cache key on every ingest.</li>
+          <li><strong>Model / prompt version</strong> — system prompt hash in key.</li>
+          <li><strong>Tool schema version</strong> — agents must not reuse answers across tool changes.</li>
+          <li><strong>TTL by risk class</strong> — public FAQ 24h; HR policy 15m; financial 0 semantic cache.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>When not to cache</h2>
+        <p>Personalized streams, real-time inventory, medical dosing, or anything where the answer must reflect seconds-fresh data—use retrieval cache only, or none. Log cache hits with <code>cache_key_version</code> for audits.</p>
+      </section>
+
+      <section>
+        <h2>Challenge</h2>
+        <p>Classify your top 20 queries by repeat rate. For repeats &gt; 30%, pilot exact cache; for paraphrase clusters, pilot semantic with 0.94 threshold and corpus version key. Measure hit rate, wrong-answer reports, and p95 for two weeks.</p>
+      </section>
+
+      <p class="blog-footer-note"><a href="../blogs.html">← All blogs</a> · <a href="observability-for-genai-systems.html">Observability →</a></p>
+    </article>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+    (function () {
+      const layers = ["exact","semantic","prompt","retrieval"];
+      const base = {
+        faq: { hit: 45, lat: 2200, cost: 100 },
+        copilot: { hit: 22, lat: 3100, cost: 100 },
+        policy: { hit: 8, lat: 3800, cost: 100 }
+      };
+      function render() {
+        const prof = document.getElementById("cache-profile").value;
+        const thresh = +document.getElementById("cache-thresh").value / 100;
+        let hit = base[prof].hit, lat = base[prof].lat, cost = base[prof].cost, stale = 10;
+        layers.forEach((l) => {
+          const on = document.getElementById("c-" + l).checked;
+          document.querySelector('[data-layer="' + l + '"]').classList.toggle("on", on);
+          if (!on) return;
+          if (l === "exact") { hit += 18; lat *= 0.55; cost *= 0.7; }
+          if (l === "semantic") { hit += 12 * (1 - (thresh - 0.85)); lat *= 0.65; cost *= 0.75; stale += 25 * (0.98 - thresh + 0.1); }
+          if (l === "prompt") { lat *= 0.82; cost *= 0.88; }
+          if (l === "retrieval") { hit += 6; lat *= 0.78; cost *= 0.9; stale += 8; }
+        });
+        hit = Math.min(Math.round(hit), 75);
+        document.getElementById("st-hit").textContent = hit + "%";
+        document.getElementById("st-lat").textContent = Math.round(lat) + "";
+        document.getElementById("st-cost").textContent = Math.round(cost * (1 - hit/120)) + "";
+        document.getElementById("st-stale").textContent = Math.round(stale) + "";
+        const rf = document.getElementById("risk-fill");
+        rf.style.width = Math.min(stale, 90) + "%";
+        rf.style.background = stale > 50 ? "#ef4444" : stale > 30 ? "#eab308" : "#22c55e";
+        const el = document.getElementById("cache-decision");
+        if (prof === "policy" && document.getElementById("c-semantic").checked)
+          el.textContent = "Policy profile: disable semantic answer cache or use TTL &lt; 15m + strict threshold ≥ 0.96.";
+        else if (hit > 40)
+          el.textContent = "Strong repeat traffic—prioritize exact + prompt cache; audit semantic false positives weekly.";
+        else
+          el.textContent = "Moderate repeat—prompt cache + retrieval cache first; add semantic only with corpus version keys.";
+      }
+      document.getElementById("cache-profile").addEventListener("change", render);
+      document.getElementById("cache-thresh").addEventListener("input", render);
+      layers.forEach((l) => {
+        document.getElementById("c-" + l).addEventListener("change", render);
+        document.querySelector('[data-layer="' + l + '"]').addEventListener("click", (e) => {
+          if (e.target.tagName !== "INPUT") {
+            const cb = document.getElementById("c-" + l);
+            cb.checked = !cb.checked;
+            render();
+          }
+        });
+      });
+      render();
+    })();
+  </script>
+</body>
+</html>
