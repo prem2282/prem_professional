@@ -63,7 +63,7 @@
     <section class="hero min-h-screen flex items-center pt-28 pb-20 lg:pt-32">
       <div class="mx-auto max-w-6xl px-6 lg:px-8 w-full">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div class="reveal order-2 lg:order-1">
+          <div class="visible order-2 lg:order-1">
             <p class="text-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4">Professional Profile</p>
             <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.08] text-cream mb-5">
               PremAnand Sukumaran
@@ -84,13 +84,15 @@
                 destined to build, and happily consumed by the craft.
               </p>
             </div>
-            <div class="mt-10 flex flex-wrap gap-4">
+            <div class="mt-10 flex flex-wrap gap-3">
               <a href="ascent.html" class="btn-primary">View experience</a>
-              <a href="#highlights" class="btn-ghost">Quick highlights</a>
+              <a href="blogs.html" class="btn-ghost">Blogs</a>
+              <a href="mylearnings.html" class="btn-ghost">My Learnings</a>
+              <a href="learn.html" class="btn-ghost">Learn</a>
             </div>
           </div>
 
-          <div class="reveal reveal-delay order-1 lg:order-2 flex justify-center lg:justify-end w-full max-w-md lg:ml-auto">
+          <div class="visible order-1 lg:order-2 flex justify-center lg:justify-end w-full max-w-md lg:ml-auto">
             <div class="photo-frame relative w-full">
               <div class="photo-glow" aria-hidden="true"></div>
               <div class="hero-photo-wrap">
@@ -130,46 +132,33 @@
           <div>
             <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-2">Writing</p>
             <h2 id="blog-marquee-heading" class="font-serif text-3xl sm:text-4xl text-cream">From the blog</h2>
-            <p class="text-cream/55 text-sm mt-2 max-w-md">Production notes on GenAI, RAG, agents, and enterprise delivery—five picks rotate each visit.</p>
+            <p class="text-cream/55 text-sm mt-2 max-w-md">Production notes on GenAI, RAG, agents, and enterprise delivery—three featured cards rotate over time.</p>
           </div>
           <a href="blogs.html" class="text-accent hover:text-accent-soft text-sm font-medium tracking-wide transition-colors shrink-0">
             All posts →
           </a>
         </div>
       </div>
-      <div class="blog-marquee reveal" role="region" aria-label="Scrolling featured blog posts">
-        <div class="blog-marquee-fade blog-marquee-fade--left" aria-hidden="true"></div>
-        <div class="blog-marquee-fade blog-marquee-fade--right" aria-hidden="true"></div>
-        <div class="blog-marquee-viewport">
-          <div class="blog-marquee-track" id="blog-marquee-track"></div>
-        </div>
+      <div class="mx-auto max-w-6xl px-6 lg:px-8 reveal" role="region" aria-label="Featured blog posts">
+        <div class="featured-rotator-grid" id="blog-rotator-track"></div>
       </div>
     </section>
 
-    <section id="highlights" class="py-24 border-t border-cream/5 bg-ink-light/40">
-      <div class="mx-auto max-w-6xl px-6 lg:px-8">
-        <div class="reveal text-center max-w-2xl mx-auto mb-16">
-          <h2 class="font-serif text-4xl sm:text-5xl text-cream mb-4">At a glance</h2>
-          <p class="text-cream/60">Enterprise technology leadership with hands-on depth across AI, cloud, and product engineering.</p>
+    <section class="blog-marquee-section py-16 lg:py-20 border-t border-cream/5 bg-ink-light/20" aria-labelledby="learning-marquee-heading">
+      <div class="mx-auto max-w-6xl px-6 lg:px-8 mb-10 reveal">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <p class="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-2">Field stories</p>
+            <h2 id="learning-marquee-heading" class="font-serif text-3xl sm:text-4xl text-cream">From My Learnings</h2>
+            <p class="text-cream/55 text-sm mt-2 max-w-md">Production decisions from real projects—three rotating stories with hard lessons.</p>
+          </div>
+          <a href="mylearnings.html" class="text-accent hover:text-accent-soft text-sm font-medium tracking-wide transition-colors shrink-0">
+            All learnings →
+          </a>
         </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <article class="stat-card reveal">
-            <p class="stat-value">$6M+</p>
-            <p class="stat-label">Annual portfolio managed</p>
-          </article>
-          <article class="stat-card reveal reveal-delay">
-            <p class="stat-value">100+</p>
-            <p class="stat-label">Global team members led</p>
-          </article>
-          <article class="stat-card reveal reveal-delay-2">
-            <p class="stat-value">40%</p>
-            <p class="stat-label">Faster task turnaround (GenAI)</p>
-          </article>
-          <article class="stat-card reveal reveal-delay-3">
-            <p class="stat-value">50%</p>
-            <p class="stat-label">Reduction in deployment cycles</p>
-          </article>
-        </div>
+      </div>
+      <div class="mx-auto max-w-6xl px-6 lg:px-8 reveal" role="region" aria-label="Featured My Learnings stories">
+        <div class="featured-rotator-grid" id="learning-rotator-track"></div>
       </div>
     </section>
 

@@ -1,10 +1,11 @@
 (function () {
   'use strict';
 
-  var track = document.getElementById('blog-marquee-track');
-  if (!track) return;
+  var blogTrack = document.getElementById('blog-rotator-track');
+  var learningTrack = document.getElementById('learning-rotator-track');
+  if (!blogTrack && !learningTrack) return;
 
-  var POSTS = [
+  var BLOG_POSTS = [
     {
       tag: 'Foundations',
       title: 'Tokens: The Smallest Unit That Controls Your Entire AI Architecture',
@@ -127,6 +128,27 @@
     },
   ];
 
+  var LEARNING_POSTS = [
+    {
+      tag: 'Experience',
+      title: 'When "Hi" Cost 20,000 Tokens: Routing Greetings Before RAG',
+      desc: 'A first-turn intent gate saved ~20% tokens in an early enterprise chatbot pilot.',
+      href: 'mylearnings/greeting-vs-real-question-rag-gate.html',
+    },
+    {
+      tag: 'Field Story',
+      title: 'Beautiful Markdown, Wrong Numbers: Vision PDF Precision Fix',
+      desc: 'Why vision-only ingest failed dense catalog tables and how text grounding fixed it.',
+      href: 'mylearnings/precision-vs-details-vision-pdf-grounding.html',
+    },
+    {
+      tag: 'My Learnings',
+      title: 'All My Learnings',
+      desc: 'Browse practical field stories from production GenAI and cloud delivery.',
+      href: 'mylearnings.html',
+    },
+  ];
+
   function shuffle(arr) {
     var a = arr.slice();
     for (var i = a.length - 1; i > 0; i--) {
@@ -138,9 +160,9 @@
     return a;
   }
 
-  function cardHtml(post) {
+  function cardHtml(post, tone) {
     return (
-      '<a class="blog-marquee-card" href="' + post.href + '">' +
+      '<a class="blog-marquee-card tone-' + tone + '" href="' + post.href + '">' +
       '<span class="blog-marquee-card-tag">' + post.tag + '</span>' +
       '<h3 class="blog-marquee-card-title">' + post.title + '</h3>' +
       '<p class="blog-marquee-card-desc">' + post.desc + '</p>' +
@@ -149,7 +171,68 @@
     );
   }
 
-  var picked = shuffle(POSTS).slice(0, 5);
-  var html = picked.map(cardHtml).join('');
-  track.innerHTML = html + html;
+  function chooseInitial(pool, count) {
+    var shuffled = shuffle(pool);
+    var chosen = [];
+    for (var i = 0; i < count; i++) {
+      chosen.push(shuffled[i % shuffled.length]);
+    }
+    return chosen;
+  }
+
+  function chooseNext(pool, currentHref) {
+    var candidates = pool.filter(function (p) {
+      return p.href !== currentHref;
+    });
+    if (!candidates.length) return pool[Math.floor(Math.random() * pool.length)];
+    return candidates[Math.floor(Math.random() * candidates.length)];
+  }
+
+  function chooseNextTone(currentTone) {
+    var next = 1 + Math.floor(Math.random() * 5);
+    if (next === currentTone) next = (next % 5) + 1;
+    return next;
+  }
+
+  function buildRotator(track, pool) {
+    if (!track || !pool.length) return;
+    var slots = Math.min(3, pool.length || 3);
+    var current = chooseInitial(pool, slots);
+    var tones = [];
+    for (var i = 0; i < slots; i++) tones.push((i % 5) + 1);
+    track.innerHTML = current.map(function (post, idx) {
+      return cardHtml(post, tones[idx]);
+    }).join('');
+
+    var nextSlot = 0;
+    setInterval(function () {
+      var cards = Array.prototype.slice.call(track.querySelectorAll('.blog-marquee-card'));
+      if (!cards.length) return;
+      var idx = nextSlot % cards.length;
+      var card = cards[idx];
+      card.classList.add('is-swapping');
+
+      setTimeout(function () {
+        var nextPost = chooseNext(pool, current[idx].href);
+        var nextTone = chooseNextTone(tones[idx]);
+        current[idx] = nextPost;
+        tones[idx] = nextTone;
+        card.outerHTML = cardHtml(nextPost, nextTone);
+        cards = Array.prototype.slice.call(track.querySelectorAll('.blog-marquee-card'));
+        card = cards[idx];
+        if (!card) return;
+        card.classList.add('is-entering');
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            card.classList.remove('is-entering');
+          });
+        });
+      }, 460);
+
+      nextSlot = (nextSlot + 1) % slots;
+    }, 5000);
+  }
+
+  buildRotator(blogTrack, BLOG_POSTS);
+  buildRotator(learningTrack, LEARNING_POSTS);
 })();
