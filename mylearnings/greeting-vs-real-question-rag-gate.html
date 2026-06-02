@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Field story: routing greetings before RAG in an enterprise chatbot pilot—20K tokens for Hello, a first-turn classifier, and AWS Lambda without a 24/7 server." />
+  <title>When “Hi” Cost 20,000 Tokens | My Learnings | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .field-memo { background: #fffdf8; border: 1px dashed #c9a227; padding: 1rem 1.15rem; border-radius: 12px; font-size: 0.92rem; margin: 1rem 0; }
+    .eye-opener { background: linear-gradient(135deg, #fef9ee 0%, #fffdf8 100%); border-left: 4px solid #c9a227; padding: 1rem 1.15rem; border-radius: 0 12px 12px 0; margin: 1.25rem 0; }
+    .eye-opener strong { color: #8a6f1f; }
+    .sim-row { display: grid; grid-template-columns: 1fr 120px; gap: 0.5rem; align-items: center; margin-bottom: 0.55rem; font-size: 0.86rem; }
+    .sim-row input[type="range"] { width: 100%; }
+    .sim-metric { font-size: 1.35rem; font-weight: 800; color: #8a6f1f; margin: 0.5rem 0; }
+    .sim-bar { display: flex; height: 32px; border-radius: 10px; overflow: hidden; margin: 0.65rem 0; border: 1px solid rgba(15,23,42,0.1); }
+    .sim-seg { font-size: 0.6rem; font-weight: 700; color: #fff; display: flex; align-items: center; justify-content: center; min-width: 2px; }
+    .path-pill { display: inline-block; padding: 0.3rem 0.65rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; cursor: pointer; border: 1px solid rgba(15,23,42,0.15); background: #fff; margin: 0.15rem 0.25rem 0 0; }
+    .path-pill.on { background: #fef3c7; border-color: #c9a227; color: #78350f; }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="nav-home" aria-label="Home"><img src="../Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-link">Blogs</a></li>
+        <li><a href="../mylearnings.html" class="blog-nav-active">My Learnings</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1">Blogs</a></li>
+        <li><a href="../mylearnings.html" class="block py-1 text-amber-700">My Learnings</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">When “Hi” Cost 20,000 Tokens: Routing Greetings Before RAG</h1>
+        <p class="blog-subtitle">In our early GenAI customer-support pilot, the chatbot was forbidden from general knowledge—so every message, even a two-letter greeting, triggered full retrieval. The fix was not a smarter model. It was orchestration with a scope box.</p>
+      </header>
+
+      <section>
+        <h2>The invoice hiding in a handshake</h2>
+        <p>We were building a customer-support chatbot in the early GenAI era—before models were good at small talk, and long before mini and nano tiers existed as cheap routers. The product rule was strict: answers had to come from <strong>private proprietary documents only</strong>. No Wikipedia, no model parametric knowledge, no “helpful” improvisation.</p>
+        <p>That policy pushed us into a classic enterprise pattern: <strong>RAG on every user turn</strong>. Embed the question, pull top-k chunks from the vector store, pack them into the prompt, call the flagship LLM. On average, a real question consumed <strong>20,000–30,000 input tokens</strong>—system prompt, retrieved chunks, formatting overhead. For a genuine policy or product question, that was the cost of staying grounded.</p>
+        <p>Then someone opened the widget and typed <strong>“Hi”</strong>.</p>
+        <p>The pipeline did exactly what we told it to do. Retrieval returned <strong>30 chunks</strong> loosely related to “Hi”—headers, contact boilerplate, fragments that happened to embed near the greeting. Context assembly ballooned. The LLM burned roughly <strong>20K tokens</strong> to produce… “Hello, how can I help you today?”</p>
+        <div class="field-memo">
+          <p><strong>What hurt:</strong> not the quality of the reply—the <em>unit economics</em> of treating social openers like substantive queries in a closed-corpus bot.</p>
+        </div>
+        <p>RAG on every turn is like running a full database scan to shake hands. The analogy breaks if your corpus is tiny—but ours was not, and top-30 retrieval was non-negotiable for real questions.</p>
+      </section>
+
+      <section>
+        <h2>Baseline architecture: closed corpus, open throttle</h2>
+        <p>Before any fix, the happy path looked like this. Every message—turn 1 through turn N—hit the same heavy path because we could not trust the model to answer without evidence.</p>
+        <pre class="mermaid blog-mermaid">
+flowchart LR
+  U[User message] --> E[Embed query]
+  E --> V[Vector search top-30]
+  V --> C[Context assembly]
+  C --> L[Flagship LLM]
+  L --> R[Reply]
+        </pre>
+        <p><strong>Ingress:</strong> chat orchestrator receives text from the support widget.<br />
+        <strong>Retrieval:</strong> embedding model + vector DB; k=30.<br />
+        <strong>Context assembly:</strong> system instructions + chunk text + user message → ~20K–30K tokens for real questions.<br />
+        <strong>Model:</strong> single flagship tier—no small model on the menu yet.<br />
+        <strong>Invariant:</strong> no answer without retrieved evidence.</p>
+        <p>In short: we had optimized for <em>grounding</em>, not for <em>intent shape</em>. Greetings are not questions—but our pipeline could not tell the difference.</p>
+      </section>
+
+      <section>
+        <h2>Why “Hi” still retrieved 30 chunks</h2>
+        <p>Embeddings measure semantic similarity, not conversational intent. “Hi” is short, ambiguous, and sits near many vectors in a support corpus—welcome pages, chat scripts, “Say hi to our team,” FAQ intros. With top-30 retrieval, you almost always get <em>something</em>, even when the user asked for nothing.</p>
+        <p>The LLM then dutifully read a wall of context and generated a polite opener. Technically correct. Financially absurd.</p>
+        <p>We considered quick fixes:</p>
+        <ul>
+          <li><strong>Regex for “hi/hello”</strong> — brittle across languages, typos, and “Hi, I need help with billing.”</li>
+          <li><strong>Skip RAG for all short messages</strong> — dangerous; “refund?” is short but not a greeting.</li>
+          <li><strong>Cheaper model for openers</strong> — did not exist in our model catalog at the time.</li>
+          <li><strong>Always-on RAG</strong> — status quo; unacceptable burn rate at pilot scale.</li>
+        </ul>
+        <p>What looked like a token problem was really an <strong>orchestration problem</strong>: we needed a gate <em>before</em> retrieval, not a better answer after it.</p>
+      </section>
+
+      <section>
+        <h2>Conversation Token Lab</h2>
+        <p>Illustrative simulator based on pilot averages—not live billing data. Toggle the greeting gate and adjust turns per conversation to see token shape.</p>
+        <div class="blog-widget" id="token-lab">
+          <p class="widget-note">Assumes ~25K tokens per full RAG turn, ~400 tokens for a greeting-only path, 4–5 turns per conversation on average.</p>
+          <p class="blog-tag">Routing mode</p>
+          <button type="button" class="path-pill on" id="pill-always" data-mode="always">Always RAG</button>
+          <button type="button" class="path-pill" id="pill-gate" data-mode="gate">First-turn greeting gate</button>
+          <div class="sim-row" style="margin-top:1rem">
+            <label for="sim-turns">Q&amp;A turns per conversation</label>
+            <span id="sim-turns-val">5</span>
+          </div>
+          <input type="range" id="sim-turns" min="2" max="8" value="5" />
+          <div class="sim-row">
+            <label for="sim-convos">Conversations / day (pilot)</label>
+            <span id="sim-convos-val">400</span>
+          </div>
+          <input type="range" id="sim-convos" min="100" max="2000" step="50" value="400" />
+          <div class="sim-bar" id="sim-bar"></div>
+          <div class="sim-metric" id="sim-total">125K tokens / conversation</div>
+          <p id="sim-detail" style="font-size:0.84rem;color:#64748b"></p>
+        </div>
+      </section>
+
+      <section>
+        <h2>The gate: classify intent, not answer content</h2>
+        <p>We built a small <strong>in-house classifier</strong>—not to replace the LLM, but to label the first user message: <em>greeting/social opener</em> vs <em>real question</em>. Binary route:</p>
+        <ul>
+          <li><strong>Greeting</strong> → lightweight LLM reply, <strong>no RAG</strong>, fixed short template policy.</li>
+          <li><strong>Real question</strong> → full retrieval pipeline unchanged.</li>
+        </ul>
+        <p>The critical scope box: run the classifier on the <strong>first message of a conversation only</strong>.</p>
+        <p>Most greetings happen at open. Turn 3 is rarely “Hi.” Running classification on every turn would add latency and compute for marginal gain—classic over-engineering. The boundary saved us twice: less inference, simpler ops.</p>
+        <pre class="blog-code"># Orchestrator pseudocode (first turn only)
+if conversation.turn_index == 1:
+    label = greeting_classifier(user_text)  # sync call
+    if label == "greeting":
+        return llm_reply_without_rag(user_text)
+return rag_pipeline(user_text)</pre>
+        <p>In short: we stopped paying for retrieval when the user had not asked anything yet.</p>
+        <pre class="mermaid blog-mermaid">
+flowchart TB
+  M[First user message] --> F{Turn 1?}
+  F -->|no| RAG[Full RAG path]
+  F -->|yes| C{Greeting classifier}
+  C -->|yes| LIGHT[LLM without retrieval]
+  C -->|no| RAG
+  RAG --> OUT[Reply]
+  LIGHT --> OUT
+        </pre>
+      </section>
+
+      <section>
+        <h2>Infra: why Lambda beat a always-on server</h2>
+        <p>The classifier needed compute—but our pilot saw only a few <strong>hundred conversations per day</strong>. Provisioning a dedicated GPU/CPU server to stay up 24/7 for that duty cycle was ops overhead we did not want: patching, monitoring, paying for idle hours.</p>
+        <p>We packaged the model as an <strong>AWS Lambda</strong> function, invoked synchronously from the chat orchestrator on first turn only.</p>
+        <pre class="mermaid blog-mermaid">
+sequenceDiagram
+  participant O as Chat orchestrator
+  participant L as Lambda classifier
+  participant R as RAG pipeline
+  O->>L: first message text
+  L-->>O: greeting | question
+  alt greeting
+    O->>O: LLM lite path
+  else question
+    O->>R: embed + retrieve + LLM
+  end
+        </pre>
+        <p><strong>Compute model:</strong> per-invocation billing vs idle baseline.<br />
+        <strong>Trigger scope:</strong> once per conversation start—not per message.<br />
+        <strong>Cold start:</strong> acceptable in pilot; first message already waited on network + LLM.<br />
+        <strong>Ops:</strong> deploy artifact, CloudWatch logs, no cluster to babysit.<br />
+        <strong>Scale path:</strong> at 10× traffic I would revisit containerized always-warm instances or swap the classifier for a managed mini-model endpoint—but at pilot volume, serverless was the apt fit.</p>
+        <div class="eye-opener">
+          <strong>Eye-opener:</strong> The ML model was not the innovation—the <em>scope box</em> (first turn only) plus <em>duty-cycle-matched infra</em> (Lambda for hundreds/day) was. Many teams buy GPUs; we bought a routing decision.
+        </div>
+      </section>
+
+      <section>
+        <h2>Impact we measured</h2>
+        <p>Typical conversations ran <strong>4–5 Q&amp;A turns</strong>. Skipping full RAG on the opening greeting removed one heavy token event per session—roughly <strong>20% token savings per conversation</strong> in the pilot, with infra cost for classification negligible at that volume.</p>
+        <p>That percentage is not magic—it is arithmetic. One of five turns no longer paid the 20K–30K retrieval tax. As sessions grew longer, the percentage shrinks; as users greeted repeatedly in new sessions, it grows. We tracked tokens per conversation, not per request, because finance and capacity plan at session level.</p>
+      </section>
+
+      <section>
+        <h2>Alternatives we did not pick (and when they win)</h2>
+        <table class="blog-table">
+          <thead>
+            <tr><th>Option</th><th>Why we skipped it then</th><th>When it wins</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Regex / keyword list</td><td>Fragile; fails on compound openers</td><td>Single-locale MVP with tight UX control</td></tr>
+            <tr><td>Classify every turn</td><td>Extra latency + compute; low yield after turn 1</td><td>High multi-turn small-talk abuse</td></tr>
+            <tr><td>Always-on classifier server</td><td>Idle cost >> request volume in pilot</td><td>Steady high QPS, strict p99 latency SLO</td></tr>
+            <tr><td>Skip RAG for short text</td><td>Short ≠ greeting; high grounding risk</td><td>Never—without another gate</td></tr>
+            <tr><td>Wait for mini/nano models</td><td>Product could not wait on roadmap</td><td>Today—often the first move</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>What changed when mini and nano models arrived</h2>
+        <p>The ecosystem caught up. Cheap, capable small models can route intent with a single LLM call—often replacing a bespoke classifier entirely. We retired the in-house model and simplified the stack.</p>
+        <p>The lesson survived the swap: <strong>separate routing from answering</strong>, and <strong>match infra to duty cycle</strong>. The implementation medium changed; the architecture pattern did not.</p>
+        <p>If I were shipping the same product today, I would likely start with a mini-model router on turn one, keep the no-RAG path for greetings, and only rebuild custom ML if evals showed systematic misroutes on our domain vocabulary.</p>
+      </section>
+
+      <section>
+        <h2>Takeaways</h2>
+        <ol>
+          <li><strong>Grounding policy creates traffic shape.</strong> Closed-corpus RAG makes every turn expensive by design—budget for orchestration, not just retrieval quality.</li>
+          <li><strong>Retrieval follows intent, not politeness.</strong> Embed “Hi” and you will get chunks; that is working as designed, not a bug.</li>
+          <li><strong>Scope boxes beat brute force.</strong> First-turn-only classification captured most savings without taxing every message.</li>
+          <li><strong>Infra follows volume.</strong> Lambda for hundreds/day; revisit when cold starts or concurrency become your p99 enemy.</li>
+          <li><strong>Patterns outlive implementations.</strong> Custom classifier → mini model; greeting gate stays.</li>
+        </ol>
+        <div class="eye-opener">
+          <strong>Repeat in a design review:</strong> “Are we retrieving before we know the user asked a question?”
+        </div>
+      </section>
+
+      <p class="blog-footer-note"><a href="../mylearnings.html">← All My Learnings</a> · <a href="../blogs/cost-optimization-and-token-budgeting.html">Token budgeting</a> · <a href="../blogs/rag-fundamentals-for-production.html">RAG fundamentals →</a></p>
+    </article>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+    (function () {
+      const RAG = 25000;
+      const GREET = 400;
+      let mode = "always";
+      const pills = document.querySelectorAll(".path-pill");
+      const turnsEl = document.getElementById("sim-turns");
+      const convosEl = document.getElementById("sim-convos");
+
+      pills.forEach((p) => {
+        p.addEventListener("click", () => {
+          pills.forEach((x) => x.classList.remove("on"));
+          p.classList.add("on");
+          mode = p.dataset.mode;
+          render();
+        });
+      });
+
+      function render() {
+        const turns = +turnsEl.value;
+        const convos = +convosEl.value;
+        document.getElementById("sim-turns-val").textContent = turns;
+        document.getElementById("sim-convos-val").textContent = convos;
+
+        let perConvo;
+        if (mode === "always") {
+          perConvo = turns * RAG;
+        } else {
+          perConvo = GREET + (turns - 1) * RAG;
+        }
+        const daily = perConvo * convos;
+        const saved = mode === "gate" ? Math.round((1 - perConvo / (turns * RAG)) * 100) : 0;
+
+        const greetShare = mode === "gate" ? GREET : 0;
+        const ragShare = perConvo - greetShare;
+        const max = perConvo || 1;
+        const bar = document.getElementById("sim-bar");
+        if (mode === "gate") {
+          bar.innerHTML =
+            '<div class="sim-seg" style="flex:' + (greetShare / max) + ';background:#22c55e">greeting</div>' +
+            '<div class="sim-seg" style="flex:' + (ragShare / max) + ';background:#6366f1">RAG turns</div>';
+        } else {
+          bar.innerHTML = '<div class="sim-seg" style="flex:1;background:#6366f1">all RAG</div>';
+        }
+
+        document.getElementById("sim-total").textContent =
+          perConvo.toLocaleString() + " tokens / conversation";
+        document.getElementById("sim-detail").textContent =
+          mode === "gate"
+            ? "~" + saved + "% vs always-RAG · ~" + daily.toLocaleString() + " tokens/day at " + convos + " conversations"
+            : "Baseline · ~" + daily.toLocaleString() + " tokens/day · toggle greeting gate to compare";
+      }
+
+      turnsEl.addEventListener("input", render);
+      convosEl.addEventListener("input", render);
+      render();
+    })();
+  </script>
+</body>
+</html>

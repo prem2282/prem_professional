@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Learn — tutorials and learning content by Prem on technology and engineering." />
-  <title>Learn | Prem</title>
+  <meta name="description" content="My Learnings by Prem — field stories from building GenAI and cloud systems in production." />
+  <title>My Learnings | Prem</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -44,8 +44,8 @@
         <li><a href="index.html" class="nav-link">Home</a></li>
         <li><a href="ascent.html" class="nav-link">The Ascent</a></li>
         <li><a href="blogs.html" class="nav-link">Blogs</a></li>
-        <li><a href="mylearnings.html" class="nav-link">My Learnings</a></li>
-        <li><a href="learn.html" class="nav-link active">Learn</a></li>
+        <li><a href="mylearnings.html" class="nav-link active">My Learnings</a></li>
+        <li><a href="learn.html" class="nav-link">Learn</a></li>
       </ul>
     </nav>
     <div id="mobile-menu" class="mobile-menu hidden lg:hidden" aria-hidden="true">
@@ -53,29 +53,55 @@
         <li><a href="index.html" class="mobile-link">Home</a></li>
         <li><a href="ascent.html" class="mobile-link">The Ascent</a></li>
         <li><a href="blogs.html" class="mobile-link">Blogs</a></li>
-        <li><a href="mylearnings.html" class="mobile-link">My Learnings</a></li>
-        <li><a href="learn.html" class="mobile-link active">Learn</a></li>
+        <li><a href="mylearnings.html" class="mobile-link active">My Learnings</a></li>
+        <li><a href="learn.html" class="mobile-link">Learn</a></li>
       </ul>
     </div>
   </header>
 
-  <main class="pt-28 pb-24 min-h-[70vh] flex flex-col">
-    <section class="mx-auto max-w-6xl px-6 lg:px-8 flex-1 flex flex-col justify-center">
-      <div class="reveal text-center max-w-xl mx-auto">
-        <p class="text-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4">Teaching</p>
-        <h1 class="font-serif text-5xl sm:text-6xl text-cream mb-6">Learn</h1>
-        <p class="text-cream/60 text-lg leading-relaxed mb-12">
-          Tutorials and learning content I create—sharing knowledge that grows the more we give it away.
+  <main class="pt-28 pb-24">
+    <section class="blogs-page mx-auto w-full max-w-[90rem] px-6 lg:px-10 xl:px-12">
+      <header class="blogs-page-header reveal text-center max-w-3xl mx-auto mb-10 lg:mb-14">
+        <p class="text-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4">Field stories</p>
+        <h1 class="font-serif text-5xl sm:text-6xl text-cream mb-5">My Learnings</h1>
+        <p class="text-cream/60 text-lg leading-relaxed">
+          Real problems from the trenches—GenAI pipelines, cloud trade-offs, and the decisions that looked obvious only in hindsight. Written so you can steal the pattern, not just the punchline.
         </p>
-        <div class="placeholder-card">
-          <div class="placeholder-icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-12 h-12">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-            </svg>
+        <p class="text-cream/40 text-sm mt-3"><span id="learning-count">2</span> stories</p>
+      </header>
+
+      <div class="blog-index-grid">
+        <article class="blog-index-card reveal">
+          <div class="blog-index-meta">
+            <span class="blog-index-num">01</span>
+            <span class="blog-index-tag">Experience</span>
           </div>
-          <p class="font-serif text-2xl text-cream/80 mb-2">Coming soon</p>
-          <p class="text-cream/40 text-sm">Tutorials and courses will appear here. Stay tuned.</p>
-        </div>
+          <h2 class="blog-index-title">
+            <a href="mylearnings/greeting-vs-real-question-rag-gate.html" class="hover:text-accent transition-colors">
+              When “Hi” Cost 20,000 Tokens: Routing Greetings Before RAG
+            </a>
+          </h2>
+          <p class="blog-index-desc">
+            Early enterprise chatbot pilot: a closed corpus forced RAG on every turn until a two-word greeting burned 30 chunks and a flagship model call—how a first-turn classifier on AWS Lambda cut conversation tokens ~20% without a 24/7 server.
+          </p>
+          <span class="blog-index-cta">Read story →</span>
+        </article>
+
+        <article class="blog-index-card reveal">
+          <div class="blog-index-meta">
+            <span class="blog-index-num">02</span>
+            <span class="blog-index-tag">Field Story</span>
+          </div>
+          <h2 class="blog-index-title">
+            <a href="mylearnings/precision-vs-details-vision-pdf-grounding.html" class="hover:text-accent transition-colors">
+              Beautiful Markdown, Wrong Numbers: When Vision-Only PDF Ingest Failed Precision
+            </a>
+          </h2>
+          <p class="blog-index-desc">
+            Client catalog RAG on dense PDF tables—vision models produced gorgeous markdown until 70.12 became 1012; dual-source ingest with PyMuPDF raw text plus page images let the LLM reconcile OCR mistakes.
+          </p>
+          <span class="blog-index-cta">Read story →</span>
+        </article>
       </div>
     </section>
   </main>

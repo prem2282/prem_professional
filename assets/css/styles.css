@@ -360,6 +360,96 @@
   background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201, 162, 39, 0.08), transparent);
 }
 
+/* Hero photo + contact overlay (bottom 25%) */
+.hero-photo-wrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  aspect-ratio: 4 / 5;
+}
+
+.hero-photo-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.hero-photo-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 25%;
+  min-height: 6rem;
+  max-height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.7rem 0.9rem 0.8rem;
+  background: rgba(0, 0, 0, 0.68);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.hero-photo-overlay-note {
+  margin: 0;
+  font-size: clamp(0.62rem, 2.2vw, 0.78rem);
+  line-height: 1.35;
+  color: rgba(244, 240, 232, 0.92);
+  text-align: center;
+}
+
+.hero-photo-overlay-note strong {
+  color: #e8d48a;
+  font-weight: 600;
+}
+
+.hero-photo-overlay-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+@media (min-width: 380px) {
+  .hero-photo-overlay-contact {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem 0.85rem;
+  }
+}
+
+.hero-photo-overlay-link {
+  font-size: clamp(0.9rem, 3.8vw, 1.1rem);
+  font-weight: 600;
+  color: #f4f0e8;
+  text-decoration: none;
+  text-align: center;
+  line-height: 1.25;
+  transition: color 0.2s ease;
+}
+
+.hero-photo-overlay-link:hover {
+  color: #e8d48a;
+}
+
+.hero-photo-overlay-label {
+  font-size: clamp(0.62rem, 2vw, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(201, 162, 39, 0.9);
+  margin-right: 0.4rem;
+}
+
 /* Story pages */
 .story-hero {
   background: radial-gradient(ellipse 70% 60% at 30% 0%, rgba(201, 162, 39, 0.1), transparent);

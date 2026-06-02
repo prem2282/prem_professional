@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Field story: vision-only PDF extraction looked perfect until catalog numbers were wrong—how PyMuPDF raw text plus images grounded tables for client RAG." />
+  <title>Beautiful Markdown, Wrong Numbers | My Learnings | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/blog-post.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body class="font-sans antialiased blog-post-body">
+  <style>
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+    @media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+    .compare-pane {
+      padding: 0.85rem; border-radius: 12px; border: 2px solid rgba(15,23,42,0.1);
+      background: #fffdf8; font-size: 0.82rem;
+    }
+    .compare-pane.bad { border-color: #fca5a5; background: #fef2f2; }
+    .compare-pane.good { border-color: #86efac; background: #f0fdf4; }
+    .compare-pane h4 { margin: 0 0 0.5rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; }
+    .num-cell { font-family: ui-monospace, monospace; font-weight: 700; font-size: 1rem; }
+    .path-toggle { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+    .path-btn {
+      padding: 0.45rem 0.85rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700;
+      border: 1px solid rgba(15,23,42,0.12); background: #fff; cursor: pointer;
+    }
+    .path-btn.on { background: #fef3c7; border-color: #c9a227; color: #78350f; }
+    .trust-meter { height: 10px; border-radius: 5px; background: #e8e4d9; margin: 0.65rem 0; overflow: hidden; }
+    .trust-fill { height: 100%; transition: width 0.35s, background 0.35s; }
+    .verdict-box { padding: 0.85rem; border-radius: 12px; font-size: 0.88rem; margin-top: 0.5rem; }
+    .verdict-box.warn { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
+    .verdict-box.ok { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+    .eye-opener { background: linear-gradient(135deg, #fef9ee 0%, #fffdf8 100%); border-left: 4px solid #c9a227; padding: 1rem 1.15rem; border-radius: 0 12px 12px 0; margin: 1.25rem 0; }
+    .eye-opener strong { color: #8a6f1f; }
+    .md-preview {
+      font-family: ui-monospace, monospace; font-size: 0.72rem; line-height: 1.5;
+      white-space: pre-wrap; color: #334155; margin-top: 0.5rem;
+    }
+  </style>
+
+  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
+      <a href="../index.html" class="nav-home" aria-label="Home"><img src="../Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
+      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
+        <span class="sr-only">Menu</span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
+        <span class="block h-0.5 w-6 bg-slate-700"></span>
+      </button>
+      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
+        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
+        <li><a href="../blogs.html" class="blog-nav-link">Blogs</a></li>
+        <li><a href="../mylearnings.html" class="blog-nav-active">My Learnings</a></li>
+        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
+      </ul>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
+      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
+        <li><a href="../index.html" class="block py-1">Home</a></li>
+        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
+        <li><a href="../blogs.html" class="block py-1">Blogs</a></li>
+        <li><a href="../mylearnings.html" class="block py-1 text-amber-700">My Learnings</a></li>
+        <li><a href="../learn.html" class="block py-1">Learn</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-24 px-6">
+    <article class="blog-post-shell blog-content">
+      <header class="mb-10">
+        <h1 class="blog-title mb-6">Beautiful Markdown, Wrong Numbers: When Vision-Only PDF Ingest Failed Precision</h1>
+        <p class="blog-subtitle">A client RAG pipeline needed dense product-catalog tables from PDFs—vision models gave us gorgeous structure and catastrophic decimals. The fix was not a better prompt alone; it was giving the model a second, boring source of truth.</p>
+      </header>
+
+      <section>
+        <h2>The demo that almost shipped a lie</h2>
+        <p>We were ingesting a large set of <strong>product-catalog PDFs</strong> for a client chatbot. Pages were brutal: numerical tables, spec grids, small charts, and marketing graphics crammed into <strong>one or two pages</strong>—far more information density than a typical brochure. Users would ask precise questions: wattage, dimensions, compatibility codes, price breaks. In RAG, <strong>one wrong number is not a formatting issue</strong>; it is a business-loss event.</p>
+        <p>This was the window when <strong>vision-capable models</strong> had just become practical for document understanding. The pitch was seductive: render each PDF page to an image, send it to the vision model with a careful system prompt, receive clean <strong>markdown with tables and bullets</strong>. On a human read, the output looked publication-ready.</p>
+        <p>Then we spot-checked values against the PDF. A rating listed as <strong>70.12</strong> in the source became <strong>1012</strong> in the extracted markdown. The chatbot would later cite that chunk with confidence. Retrieval was working. Embeddings were working. <strong>The corpus was poisoned at ingest.</strong></p>
+        <p>What looked like a retrieval-quality problem was really an <strong>extraction-precision problem</strong> wearing a presentation-quality mask.</p>
+      </section>
+
+      <section>
+        <h2>Why this corpus was harder than “just OCR”</h2>
+        <p>Classic text extractors struggle when layout is complex—merged cells, footnotes, multi-column tables, tiny fonts. Vision models shine at <strong>layout and structure</strong>: they “see” the table, infer headers, and emit readable markdown. Under the hood, though, many vision pipelines still lean on <strong>OCR-like character recognition</strong> for the actual digits. Dense pages amplify OCR failure modes:</p>
+        <ul>
+          <li><strong>Decimal collapse</strong> — the dot between 70 and 12 disappears; digits merge into 1012.</li>
+          <li><strong>Column bleed</strong> — adjacent cells smear in tight grids.</li>
+          <li><strong>Graphic vs data confusion</strong> — labels on charts read as table values.</li>
+        </ul>
+        <p>Chunking and reranking cannot fix a spec sheet that was wrong before it was embedded. Garbage in, confident garbage out.</p>
+      </section>
+
+      <section>
+        <h2>Path A — vision only (what we tried first)</h2>
+        <pre class="mermaid blog-mermaid">
+flowchart LR
+  PDF[PDF page] --> IMG[Page image]
+  IMG --> V[Vision LLM]
+  V --> MD[Markdown chunks]
+  MD --> E[Embed + vector store]
+  E --> RAG[Chatbot RAG]
+        </pre>
+        <p><strong>Components:</strong> PDF rasterizer → image per page → vision model + system prompt (“extract tables, preserve units, output markdown”) → chunker → vector DB → existing RAG orchestrator.</p>
+        <p><strong>What worked:</strong> structure, headings, bullet hierarchy, table shape, interpreting graphics in context.</p>
+        <p><strong>What failed:</strong> numeric fidelity on packed tables—the exact fields users query most.</p>
+        <p>In short: we optimized for <em>readability of the ingest artifact</em>, not <em>trustworthiness of the facts</em>.</p>
+      </section>
+
+      <section>
+        <h2>Extraction Path Lab</h2>
+        <p>Illustrative comparison based on patterns we saw in catalog QA—not a live PDF viewer. Toggle the ingest path and pick a failure mode common on dense pages.</p>
+        <div class="blog-widget" id="extract-lab">
+          <p class="widget-note">Ground truth from PDF text layer (PyMuPDF-style extraction) vs vision-only OCR-style glitches.</p>
+          <div class="path-toggle">
+            <button type="button" class="path-btn on" data-path="vision">Vision only</button>
+            <button type="button" class="path-btn" data-path="dual">Vision + raw text</button>
+          </div>
+          <label for="glitch-select" style="font-size:0.84rem;font-weight:600">Typical glitch</label>
+          <select id="glitch-select" style="width:100%;padding:0.5rem;margin:0.4rem 0 0.75rem;border-radius:8px;border:1px solid rgba(15,23,42,0.12)">
+            <option value="decimal">Decimal collapse (70.12 → 1012)</option>
+            <option value="unit">Unit dropped (240 V → 240)</option>
+            <option value="column">Column shift (wrong row value)</option>
+          </select>
+          <div class="compare-grid">
+            <div class="compare-pane" id="pane-source">
+              <h4>Source (text extract)</h4>
+              <div class="num-cell" id="src-val">70.12 W</div>
+              <p style="margin:0.35rem 0 0;font-size:0.78rem;color:#64748b">Boring, layout-ugly, numerically faithful</p>
+            </div>
+            <div class="compare-pane bad" id="pane-out">
+              <h4>Vision-only markdown</h4>
+              <div class="num-cell" id="out-val">1012 W</div>
+              <div class="md-preview" id="md-preview">| Spec | Value |
+|------|-------|
+| Power | 1012 W |</div>
+            </div>
+          </div>
+          <div class="trust-meter"><div class="trust-fill" id="trust-fill" style="width:35%;background:#ef4444"></div></div>
+          <div class="verdict-box warn" id="lab-verdict">Structure score: high · Numeric trust: low — RAG will retrieve wrong specs.</div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Path B — dual source: image + raw text</h2>
+        <p>We did not abandon vision—it was too good at structure. We added a parallel, unglamorous lane: <strong>raw text extraction with PyMuPDF</strong> (any faithful text library would do). Same page, two inputs to the same vision-capable model:</p>
+        <ol>
+          <li><strong>Page image</strong> — layout, tables, graphics, reading order.</li>
+          <li><strong>Raw extracted text</strong> — character-level ground truth for numbers and codes, however messy.</li>
+          <li><strong>System prompt</strong> — explicit instruction: use the image for structure; <strong>reconcile every numeric field against the raw text</strong>; flag conflicts.</li>
+        </ol>
+        <pre class="mermaid blog-mermaid">
+flowchart TB
+  PDF[PDF page] --> IMG[Page image]
+  PDF --> TXT[PyMuPDF raw text]
+  IMG --> V[Vision LLM]
+  TXT --> V
+  V --> MD[Verified markdown]
+  MD --> E[Embed + vector store]
+        </pre>
+        <pre class="mermaid blog-mermaid">
+sequenceDiagram
+  participant I as Ingest worker
+  participant P as PyMuPDF
+  participant V as Vision LLM
+  I->>P: extract text layer
+  I->>V: image + raw text + prompt
+  Note over V: Structure from vision<br/>Digits from text reconcile
+  V-->>I: markdown tables
+  I->>I: chunk + embed
+        </pre>
+        <p>The LLM’s job shifted from “transcribe what you see” to <strong>editor with two manuscripts</strong>—the photograph and the accountant’s ledger. When OCR inside the vision stack mangled a decimal, the raw text still said <code>70.12</code>, and the model consistently preferred it for the final table.</p>
+        <p>On the complicated catalog pages we tested in QA, we reached <strong>accurate numeric extraction</strong>—the bar the client cared about. Not “pretty markdown.” Correct specs.</p>
+        <div class="eye-opener">
+          <strong>Eye-opener:</strong> The breakthrough was not “smarter vision.” It was <em>refusing to let vision be the only witness for digits</em>.
+        </div>
+      </section>
+
+      <section>
+        <h2>Prompt contract (sketch)</h2>
+        <p>The system prompt had to be boring and enforceable—not creative.</p>
+        <pre class="blog-code">You receive (1) a page image and (2) raw text extracted from the PDF.
+Use the image for layout, tables, headings, and chart interpretation.
+For every number, unit, SKU, and dimension, prefer the raw text when
+image-derived values disagree. Output markdown tables. List unresolved
+conflicts in a short "qa_flags" block.</pre>
+        <p>We still human-sampled pages after ingest, but the dual-source contract cut systematic OCR-style errors on dense tables.</p>
+      </section>
+
+      <section>
+        <h2>Failure modes if you copy this blindly</h2>
+        <ul>
+          <li><strong>Scanned PDFs with no text layer</strong> — PyMuPDF returns empty or garbage; you need real OCR or a human pass, not a fake second source.</li>
+          <li><strong>Text layer itself wrong</strong> — some PDFs embed incorrect copy; reconciliation needs checksums or spot QA.</li>
+          <li><strong>Token cost</strong> — image + long raw text per page is expensive; batch ingest and cache markdown artifacts.</li>
+          <li><strong>Over-trusting the reconciler</strong> — the LLM can still hallucinate a merge; keep eval hooks on critical fields.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Alternatives we weighed</h2>
+        <table class="blog-table">
+          <thead>
+            <tr><th>Approach</th><th>Strength</th><th>Why we moved on</th><th>When it wins</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>PyMuPDF / text only</td><td>Exact digits</td><td>Destroyed table structure on dense pages</td><td>Simple linear PDFs</td></tr>
+            <tr><td>Vision only</td><td>Structure + charts</td><td>Numeric OCR glitches on packed tables</td><td>Narrative docs, light tables</td></tr>
+            <tr><td>Traditional OCR + rules</td><td>Deterministic</td><td>High build cost per catalog layout</td><td>Fixed templates, years of ops</td></tr>
+            <tr><td>Vision + raw text (ours)</td><td>Structure + digit grounding</td><td>Higher ingest cost per page</td><td>Dense product PDFs, RAG for specs</td></tr>
+            <tr><td>Human re-keying</td><td>Perfect trust</td><td>Does not scale across catalogs</td><td>Regulated, tiny corpora</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>What I’d do today</h2>
+        <p>Models and vendor parsers have improved, but the pattern holds: <strong>separate presentation inference from fact grounding</strong>. For table-heavy RAG, I would still run a cheap text-layer extract alongside any vision or layout model, plus a regression suite of “known spec” cells per template family.</p>
+        <p>Downstream, I would tag chunks with <code>page_id</code> and <code>extract_version</code> so when a user reports a wrong wattage, we can re-run ingest for that page—not retrain retrieval.</p>
+      </section>
+
+      <section>
+        <h2>Takeaways</h2>
+        <ol>
+          <li><strong>Precision and presentation diverge on dense PDFs.</strong> Judge ingest on spot-checked fields, not markdown beauty.</li>
+          <li><strong>Vision is layout intelligence, not automatic truth.</strong> OCR limitations do not disappear because the API says “vision.”</li>
+          <li><strong>Dual-source beats dual-model.</strong> One capable model with image + text often outperforms vision-only with a longer prompt.</li>
+          <li><strong>RAG cannot fix poisoned chunks.</strong> Fix extraction before embedding; retrieval quality is downstream.</li>
+          <li><strong>One wrong spec is a business event.</strong> In catalog bots, numeric QA is part of the architecture—not a nice-to-have.</li>
+        </ol>
+        <div class="eye-opener">
+          <strong>Repeat in a design review:</strong> “What is the ground-truth lane for digits—and is it in the prompt context?”
+        </div>
+      </section>
+
+      <p class="blog-footer-note"><a href="../mylearnings.html">← All My Learnings</a> · <a href="greeting-vs-real-question-rag-gate.html">Greeting vs RAG</a> · <a href="../blogs/rag-fundamentals-for-production.html">RAG fundamentals →</a></p>
+    </article>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+    (function () {
+      const GLITCHES = {
+        decimal: { src: "70.12 W", bad: "1012 W", good: "70.12 W", mdBad: "| Power | 1012 W |", mdGood: "| Power | 70.12 W |" },
+        unit: { src: "240 V AC", bad: "240", good: "240 V AC", mdBad: "| Voltage | 240 |", mdGood: "| Voltage | 240 V AC |" },
+        column: { src: "SKU-8842", bad: "SKU-8843", good: "SKU-8842", mdBad: "| SKU | SKU-8843 |", mdGood: "| SKU | SKU-8842 |" }
+      };
+      let path = "vision";
+      const pathBtns = document.querySelectorAll(".path-btn");
+      const select = document.getElementById("glitch-select");
+
+      pathBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          pathBtns.forEach((b) => b.classList.remove("on"));
+          btn.classList.add("on");
+          path = btn.dataset.path;
+          render();
+        });
+      });
+      select.addEventListener("change", render);
+
+      function render() {
+        const g = GLITCHES[select.value];
+        const dual = path === "dual";
+        document.getElementById("src-val").textContent = g.src;
+        document.getElementById("out-val").textContent = dual ? g.good : g.bad;
+        document.getElementById("md-preview").textContent =
+          "| Spec | Value |\n|------|-------|\n" + (dual ? g.mdGood : g.mdBad);
+        const pane = document.getElementById("pane-out");
+        pane.className = "compare-pane " + (dual ? "good" : "bad");
+        pane.querySelector("h4").textContent = dual ? "Dual-source markdown" : "Vision-only markdown";
+        const trust = dual ? 98 : 35;
+        const fill = document.getElementById("trust-fill");
+        fill.style.width = trust + "%";
+        fill.style.background = dual ? "#22c55e" : "#ef4444";
+        const v = document.getElementById("lab-verdict");
+        if (dual) {
+          v.className = "verdict-box ok";
+          v.textContent = "Structure from vision · Digits reconciled to text layer — suitable for spec RAG.";
+        } else {
+          v.className = "verdict-box warn";
+          v.textContent = "Structure score: high · Numeric trust: low — one wrong cell can surface in chatbot answers.";
+        }
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>
