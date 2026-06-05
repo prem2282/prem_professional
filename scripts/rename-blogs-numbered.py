@@ -155,6 +155,13 @@ def main() -> None:
     (ROOT / "blogs" / "BLOG_INDEX.md").write_text("".join(lines), encoding="utf-8")
     print("Wrote blogs/BLOG_INDEX.md")
 
+    # 6) Legacy redirect stubs (old slug.html -> NN-slug.html)
+    import subprocess
+    subprocess.run(
+        ["python3", str(ROOT / "scripts" / "write-blog-redirects.py")],
+        check=True,
+    )
+
 
 if __name__ == "__main__":
     main()
