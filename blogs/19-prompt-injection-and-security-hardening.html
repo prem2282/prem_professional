@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Prompt injection and security hardening: attack surfaces, defenses, and a Red Team Payload Deck simulator." />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Prompt Injection and Security Hardening" />
+  <meta property="og:description" content="Prompt injection and security hardening: attack surfaces, defenses, and a Red Team Payload Deck simulator." />
+  <meta property="og:url" content="https://prem2282.github.io/prem_professional/blogs/19-prompt-injection-and-security-hardening.html" />
+  <meta property="og:image" content="https://prem2282.github.io/prem_professional/assets/images/blogs/19.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Prompt Injection and Security Hardening" />
+  <meta name="twitter:description" content="Prompt injection and security hardening: attack surfaces, defenses, and a Red Team Payload Deck simulator." />
+  <meta name="twitter:image" content="https://prem2282.github.io/prem_professional/assets/images/blogs/19.webp" />
   <title>Prompt Injection and Security Hardening | Prem</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -71,6 +82,10 @@
   <main class="pt-28 pb-24 px-6">
     <article class="blog-post-shell blog-content">
       <header class="mb-10">
+      <figure class="blog-hero" aria-label="Article thumbnail" hidden>
+        <img src="../assets/images/blogs/19.webp" alt="Infographic: prompt injection security hardening" width="1200" height="630" class="blog-hero-img" decoding="async" fetchpriority="high" />
+      </figure>
+
         <h1 class="blog-title mb-6">Prompt Injection and Security Hardening</h1>
         <p class="blog-subtitle">Your model will follow instructions—it cannot reliably tell which instructions are yours. Security hardening means assuming hostile text in every untrusted field and limiting blast radius when the model obeys the wrong master.</p>
       </header>
@@ -149,11 +164,12 @@ flowchart LR
         <p>Run the deck against your staging stack. For every FAIL, assign owner and date. Add one deterministic gate on your highest-risk tool before the next prod deploy.</p>
       </section>
 
-      <p class="blog-footer-note"><a href="../blogs.html">← All blogs</a> · <a href="guardrails-safety-policy-enforcement.html">Guardrails</a> · <a href="ai-governance-and-responsible-deployment.html">Governance →</a></p>
+      <p class="blog-footer-note"><a href="../blogs.html">← All blogs</a> · <a href="14-guardrails-safety-policy-enforcement.html">Guardrails</a> · <a href="20-ai-governance-and-responsible-deployment.html">Governance →</a></p>
     </article>
   </main>
 
   <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/blog-hero.js"></script>
   <script>
     mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
     (function () {

@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="LLM parameters explained with production lessons and an interactive Parameter Cockpit to explore temperature, top_p, and output behavior." />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Parameters: Turning LLM Behavior into a Design Choice" />
+  <meta property="og:description" content="LLM parameters explained with production lessons and an interactive Parameter Cockpit to explore temperature, top_p, and output behavior." />
+  <meta property="og:url" content="https://prem2282.github.io/prem_professional/blogs/02-parameters.html" />
+  <meta property="og:image" content="https://prem2282.github.io/prem_professional/assets/images/blogs/02.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Parameters: Turning LLM Behavior into a Design Choice" />
+  <meta name="twitter:description" content="LLM parameters explained with production lessons and an interactive Parameter Cockpit to explore temperature, top_p, and output behavior." />
+  <meta name="twitter:image" content="https://prem2282.github.io/prem_professional/assets/images/blogs/02.webp" />
   <title>Parameters: Turning LLM Behavior into a Design Choice | Prem</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -148,6 +159,10 @@
   <main class="pt-28 pb-24 px-6">
     <article class="memo-wrap">
       <header class="mb-10">
+      <figure class="blog-hero" aria-label="Article thumbnail" hidden>
+        <img src="../assets/images/blogs/02.webp" alt="Infographic: LLM parameters as design knobs" width="1200" height="630" class="blog-hero-img" decoding="async" fetchpriority="high" />
+      </figure>
+
         <h1 class="memo-title mb-5">Parameters: Turning LLM Behavior into a Design Choice</h1>
         <p class="text-slate-600 text-lg leading-relaxed max-w-3xl">
           Temperature, top_p, and output limits are not "fine tuning" knobs you twist until the demo feels good.
@@ -411,6 +426,7 @@ const response = await llm.responses.create({
   </footer>
 
   <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/blog-hero.js"></script>
   <script>
     (function () {
       const SCENARIOS = {
