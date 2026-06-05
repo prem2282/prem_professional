@@ -222,3 +222,75 @@
   margin: 1.25rem 0 1.5rem;
   overflow-x: auto;
 }
+
+/* Floating prev/next post navigation (post-nav.js) */
+.post-nav-float {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.post-nav-float-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.94);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.1);
+  backdrop-filter: blur(6px);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.post-nav-float-btn svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.post-nav-float-btn--prev {
+  left: max(0.65rem, env(safe-area-inset-left, 0px));
+}
+
+.post-nav-float-btn--next {
+  right: max(0.65rem, env(safe-area-inset-right, 0px));
+}
+
+.post-nav-float-btn:hover,
+.post-nav-float-btn:focus-visible {
+  background: #fef3c7;
+  border-color: #c9a227;
+  color: #78350f;
+  box-shadow: 0 6px 22px rgba(201, 162, 39, 0.22);
+  outline: none;
+}
+
+.post-nav-float-btn--prev:hover,
+.post-nav-float-btn--prev:focus-visible {
+  transform: translateY(-50%) translateX(-2px);
+}
+
+.post-nav-float-btn--next:hover,
+.post-nav-float-btn--next:focus-visible {
+  transform: translateY(-50%) translateX(2px);
+}
+
+@media (max-width: 640px) {
+  .post-nav-float-btn {
+    width: 2.35rem;
+    height: 2.35rem;
+    opacity: 0.88;
+  }
+
+  .post-nav-float-btn svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+}

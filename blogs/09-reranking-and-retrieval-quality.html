@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
   <meta name="description" content="Reranking and retrieval quality for production RAG: myths, cross-encoder trade-offs, and interactive Rerank Arena plus Quality vs Cost Composer." />
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Reranking and Retrieval Quality" />
@@ -21,6 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/page-transitions.css" />
   <link rel="stylesheet" href="../assets/css/blog-post.css" />
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
@@ -510,7 +513,9 @@ flowchart LR
     </div>
   </footer>
 
+  <script src="../assets/js/page-transitions.js"></script>
   <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/post-nav.js"></script>
   <script src="../assets/js/blog-hero.js"></script>
   <script>
     mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });

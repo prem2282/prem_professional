@@ -1,0 +1,31 @@
+/**
+ * Smooth enter/exit when moving between blog and my learnings pages.
+ * Pair with page-transitions.js and the inline head bootstrap script.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  html.page-transition-pending body {
+    opacity: 0;
+  }
+
+  html.page-leaving body {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+  }
+
+  html.page-entering body {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  html.page-entering.page-enter-active body {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.34s ease, transform 0.34s ease;
+  }
+}
+
+@view-transition {
+  navigation: auto;
+}
