@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 15,
-      total: 20,
-      title: "Hallucination Mitigation",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 15,
+  "total": 20,
+  "title": "Hallucination Mitigation",
+  "questions": [
+    {
+      "text": "Your assistant answers confidently without evidence when retrieval returns low-confidence matches. What policy is most effective?",
+      "choices": [
         {
-          text: "Your assistant answers confidently without evidence when retrieval returns low-confidence matches. What policy is most effective?",
-          choices: [
-            { id: "A", text: "Always answer anyway to maintain UX flow" },
-            { id: "B", text: "Increase top-p for more options" },
-            { id: "C", text: "Remove retrieval to avoid conflicts" },
-            { id: "D", text: "Require confidence thresholds and abstain when grounding is insufficient" },
-          ],
-          answer: "D",
-          insight: "Abstention is a core safety behavior when evidence is weak. It is better to admit uncertainty than fabricate authority."
+          "id": "A",
+          "text": "Always answer anyway to maintain UX flow"
         },
         {
-          text: "A CFO asks why citations matter if answers sound correct. What is the strongest response?",
-          choices: [
-            { id: "A", text: "Citations allow verification and auditability, reducing hidden factual risk" },
-            { id: "B", text: "Citations guarantee legal compliance automatically" },
-            { id: "C", text: "Citations only improve visual formatting" },
-            { id: "D", text: "Citations are optional in enterprise settings" },
-          ],
-          answer: "A",
-          insight: "Enterprise trust depends on verifiable provenance. Citation-enabled workflows let humans and systems check claims before action."
+          "id": "B",
+          "text": "Increase top-p for more options"
         },
         {
-          text: "Which intervention typically reduces hallucinations more than prompt wording tweaks alone?",
-          choices: [
-            { id: "A", text: "Adding more adjectives to the prompt" },
-            { id: "B", text: "Improving retrieval relevance and context quality in the generation pipeline" },
-            { id: "C", text: "Increasing UI animation smoothness" },
-            { id: "D", text: "Switching from JSON to YAML output only" },
-          ],
-          answer: "B",
-          insight: "Better evidence in means better grounded answers out. Prompt polish cannot compensate for missing or irrelevant context."
+          "id": "C",
+          "text": "Remove retrieval to avoid conflicts"
         },
         {
-          text: "A model invents policy IDs in final responses. What guard is best before showing output to users?",
-          choices: [
-            { id: "A", text: "Disable all output filters for speed" },
-            { id: "B", text: "Let users correct policy IDs manually" },
-            { id: "C", text: "Post-generation verification against authoritative sources with fail-closed behavior" },
-            { id: "D", text: "Use only longer prompts" },
-          ],
-          answer: "C",
-          insight: "Verification layers catch fabricated entities before they propagate. Fail-closed design is critical for high-impact domains."
+          "id": "D",
+          "text": "Require confidence thresholds and abstain when grounding is insufficient"
+        }
+      ],
+      "answer": "D",
+      "insight": "Abstention is a core safety behavior when evidence is weak. It is better to admit uncertainty than fabricate authority."
+    },
+    {
+      "text": "A CFO asks why citations matter if answers sound correct. What is the strongest response?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Citations allow verification and auditability, reducing hidden factual risk"
         },
         {
-          text: "Which metric is most useful for tracking hallucination risk over time?",
-          choices: [
-            { id: "A", text: "Model name popularity on social media" },
-            { id: "B", text: "Number of UI clicks per session only" },
-            { id: "C", text: "Average response length only" },
-            { id: "D", text: "Rate of unsupported claims on labeled eval sets and sampled production audits" },
-          ],
-          answer: "D",
-          insight: "Hallucination is a quality and safety signal that needs direct measurement. Pair offline labeling with production sampling for durable control."
+          "id": "B",
+          "text": "Citations guarantee legal compliance automatically"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Citations only improve visual formatting"
+        },
+        {
+          "id": "D",
+          "text": "Citations are optional in enterprise settings"
+        }
+      ],
+      "answer": "A",
+      "insight": "Enterprise trust depends on verifiable provenance. Citation-enabled workflows let humans and systems check claims before action."
+    },
+    {
+      "text": "Which intervention typically reduces hallucinations more than prompt wording tweaks alone?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Adding more adjectives to the prompt"
+        },
+        {
+          "id": "B",
+          "text": "Improving retrieval relevance and context quality in the generation pipeline"
+        },
+        {
+          "id": "C",
+          "text": "Increasing UI animation smoothness"
+        },
+        {
+          "id": "D",
+          "text": "Switching from JSON to YAML output only"
+        }
+      ],
+      "answer": "B",
+      "insight": "Better evidence in means better grounded answers out. Prompt polish cannot compensate for missing or irrelevant context."
+    },
+    {
+      "text": "A model invents policy IDs in final responses. What guard is best before showing output to users?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Disable all output filters for speed"
+        },
+        {
+          "id": "B",
+          "text": "Let users correct policy IDs manually"
+        },
+        {
+          "id": "C",
+          "text": "Post-generation verification against authoritative sources with fail-closed behavior"
+        },
+        {
+          "id": "D",
+          "text": "Use only longer prompts"
+        }
+      ],
+      "answer": "C",
+      "insight": "Verification layers catch fabricated entities before they propagate. Fail-closed design is critical for high-impact domains."
+    },
+    {
+      "text": "Which metric is most useful for tracking hallucination risk over time?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Model name popularity on social media"
+        },
+        {
+          "id": "B",
+          "text": "Number of UI clicks per session only"
+        },
+        {
+          "id": "C",
+          "text": "Average response length only"
+        },
+        {
+          "id": "D",
+          "text": "Rate of unsupported claims on labeled eval sets and sampled production audits"
+        }
+      ],
+      "answer": "D",
+      "insight": "Hallucination is a quality and safety signal that needs direct measurement. Pair offline labeling with production sampling for durable control."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

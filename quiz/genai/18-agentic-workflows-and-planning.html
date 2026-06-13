@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 18,
-      total: 20,
-      title: "Agentic Workflows and Planning",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 18,
+  "total": 20,
+  "title": "Agentic Workflows and Planning",
+  "questions": [
+    {
+      "text": "Your procurement agent keeps querying vendors repeatedly without deciding. What is the first orchestration fix?",
+      "choices": [
         {
-          text: "Your procurement agent keeps querying vendors repeatedly without deciding. What is the first orchestration fix?",
-          choices: [
-            { id: "A", text: "Set temperature to maximum" },
-            { id: "B", text: "Increase context window only" },
-            { id: "C", text: "Add explicit planning/execution step limits and success criteria for termination" },
-            { id: "D", text: "Remove tool logs to reduce overhead" },
-          ],
-          answer: "C",
-          insight: "Agent loops need deterministic control rails from the host system. Termination criteria prevent infinite tool cycling."
+          "id": "A",
+          "text": "Set temperature to maximum"
         },
         {
-          text: "A finance workflow agent can trigger payments. Which control is essential before action execution?",
-          choices: [
-            { id: "A", text: "No approval if confidence text sounds strong" },
-            { id: "B", text: "Only a longer system prompt" },
-            { id: "C", text: "Allow autonomous retries without limits" },
-            { id: "D", text: "Human approval gate for high-risk actions with full trace context" },
-          ],
-          answer: "D",
-          insight: "Human-in-the-loop is a governance mechanism for irreversible or high-impact actions. Confidence language is not authorization."
+          "id": "B",
+          "text": "Increase context window only"
         },
         {
-          text: "Why is ReAct-style reasoning/action separation useful in operations?",
-          choices: [
-            { id: "A", text: "It structures decision traces so teams can audit why each tool call happened" },
-            { id: "B", text: "It prevents malformed tool outputs by itself" },
-            { id: "C", text: "It always reduces total token cost" },
-            { id: "D", text: "It eliminates all need for monitoring" },
-          ],
-          answer: "A",
-          insight: "Traceable step-by-step execution helps debugging and governance. Explainable action paths are crucial for enterprise trust."
+          "id": "C",
+          "text": "Add explicit planning/execution step limits and success criteria for termination"
         },
         {
-          text: "An agent fails midway after calling two external services. What makes recovery robust?",
-          choices: [
-            { id: "A", text: "Hiding intermediate steps from observability systems" },
-            { id: "B", text: "Checkpointing state and designing tools/idempotent operations for replay-safe continuation" },
-            { id: "C", text: "Restarting from scratch without logs" },
-            { id: "D", text: "Disabling error handling" },
-          ],
-          answer: "B",
-          insight: "Agent workflows are distributed transactions in practice. State checkpoints and idempotency enable reliable recovery."
+          "id": "D",
+          "text": "Remove tool logs to reduce overhead"
+        }
+      ],
+      "answer": "C",
+      "insight": "Agent loops need deterministic control rails from the host system. Termination criteria prevent infinite tool cycling."
+    },
+    {
+      "text": "A finance workflow agent can trigger payments. Which control is essential before action execution?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "No approval if confidence text sounds strong"
         },
         {
-          text: "A PM asks when to avoid agentic design and use a fixed pipeline. Which answer is best?",
-          choices: [
-            { id: "A", text: "Agents are required whenever prompts exceed 200 tokens" },
-            { id: "B", text: "Never use tools with fixed workflows" },
-            { id: "C", text: "Use fixed pipelines for narrow, deterministic tasks with stable steps and strict compliance needs" },
-            { id: "D", text: "Always use agents because they are more advanced" },
-          ],
-          answer: "C",
-          insight: "Agent flexibility adds complexity and risk. Deterministic orchestration is often better when task flow is known and auditable."
+          "id": "B",
+          "text": "Only a longer system prompt"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Allow autonomous retries without limits"
+        },
+        {
+          "id": "D",
+          "text": "Human approval gate for high-risk actions with full trace context"
+        }
+      ],
+      "answer": "D",
+      "insight": "Human-in-the-loop is a governance mechanism for irreversible or high-impact actions. Confidence language is not authorization."
+    },
+    {
+      "text": "Why is ReAct-style reasoning/action separation useful in operations?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It structures decision traces so teams can audit why each tool call happened"
+        },
+        {
+          "id": "B",
+          "text": "It prevents malformed tool outputs by itself"
+        },
+        {
+          "id": "C",
+          "text": "It always reduces total token cost"
+        },
+        {
+          "id": "D",
+          "text": "It eliminates all need for monitoring"
+        }
+      ],
+      "answer": "A",
+      "insight": "Traceable step-by-step execution helps debugging and governance. Explainable action paths are crucial for enterprise trust."
+    },
+    {
+      "text": "An agent fails midway after calling two external services. What makes recovery robust?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Hiding intermediate steps from observability systems"
+        },
+        {
+          "id": "B",
+          "text": "Checkpointing state and designing tools/idempotent operations for replay-safe continuation"
+        },
+        {
+          "id": "C",
+          "text": "Restarting from scratch without logs"
+        },
+        {
+          "id": "D",
+          "text": "Disabling error handling"
+        }
+      ],
+      "answer": "B",
+      "insight": "Agent workflows are distributed transactions in practice. State checkpoints and idempotency enable reliable recovery."
+    },
+    {
+      "text": "A PM asks when to avoid agentic design and use a fixed pipeline. Which answer is best?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Agents are required whenever prompts exceed 200 tokens"
+        },
+        {
+          "id": "B",
+          "text": "Never use tools with fixed workflows"
+        },
+        {
+          "id": "C",
+          "text": "Use fixed pipelines for narrow, deterministic tasks with stable steps and strict compliance needs"
+        },
+        {
+          "id": "D",
+          "text": "Always use agents because they are more advanced"
+        }
+      ],
+      "answer": "C",
+      "insight": "Agent flexibility adds complexity and risk. Deterministic orchestration is often better when task flow is known and auditable."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

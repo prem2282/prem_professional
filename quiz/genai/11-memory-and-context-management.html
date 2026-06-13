@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 11,
-      total: 20,
-      title: "Memory and Context Management",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 11,
+  "total": 20,
+  "title": "Memory and Context Management",
+  "questions": [
+    {
+      "text": "A user says your assistant keeps forgetting preferences within one chat session. Which layer is most likely broken?",
+      "choices": [
         {
-          text: "A user says your assistant keeps forgetting preferences within one chat session. Which layer is most likely broken?",
-          choices: [
-            { id: "A", text: "HTTP status code mapping" },
-            { id: "B", text: "Cloud region selection" },
-            { id: "C", text: "Embedding dimensionality only" },
-            { id: "D", text: "Short-term conversation state assembly into each model call" },
-          ],
-          answer: "D",
-          insight: "If turn history is not passed correctly, the model cannot maintain continuity. Session memory is mostly an application orchestration problem."
+          "id": "A",
+          "text": "HTTP status code mapping"
         },
         {
-          text: "When should user profile preferences be stored as long-term memory instead of prompt-only context?",
-          choices: [
-            { id: "A", text: "When preferences should persist across sessions and are consented, scoped, and governable" },
-            { id: "B", text: "For every transient conversation detail" },
-            { id: "C", text: "Only when model context window is full" },
-            { id: "D", text: "Never; persistent memory is always prohibited" },
-          ],
-          answer: "A",
-          insight: "Persistent memory is a product decision tied to privacy and lifecycle controls. Not all context deserves retention."
+          "id": "B",
+          "text": "Cloud region selection"
         },
         {
-          text: "Your summarization layer compresses chat history too aggressively, causing wrong follow-up answers. What trade-off is being mismanaged?",
-          choices: [
-            { id: "A", text: "Color theme versus readability" },
-            { id: "B", text: "Context efficiency versus fidelity of critical details" },
-            { id: "C", text: "Language locale versus tokenization" },
-            { id: "D", text: "GPU utilization versus browser paint time" },
-          ],
-          answer: "B",
-          insight: "Summaries save tokens but can erase constraints and commitments. Compression strategies need domain-aware salience rules."
+          "id": "C",
+          "text": "Embedding dimensionality only"
         },
         {
-          text: "A healthcare assistant stores all raw patient chats indefinitely as memory. What is the primary governance risk?",
-          choices: [
-            { id: "A", text: "Fewer available emojis" },
-            { id: "B", text: "Reduced creativity in model outputs" },
-            { id: "C", text: "Unbounded retention of sensitive data without purpose limitation and deletion controls" },
-            { id: "D", text: "Slight increase in token cost only" },
-          ],
-          answer: "C",
-          insight: "Memory policies must align with privacy laws and enterprise data governance. Retain only what is necessary and auditable."
+          "id": "D",
+          "text": "Short-term conversation state assembly into each model call"
+        }
+      ],
+      "answer": "D",
+      "insight": "If turn history is not passed correctly, the model cannot maintain continuity. Session memory is mostly an application orchestration problem."
+    },
+    {
+      "text": "When should user profile preferences be stored as long-term memory instead of prompt-only context?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "When preferences should persist across sessions and are consented, scoped, and governable"
         },
         {
-          text: "What is a robust strategy when context exceeds model limits during long conversations?",
-          choices: [
-            { id: "A", text: "Disable context entirely and answer statelessly" },
-            { id: "B", text: "Drop all system instructions first" },
-            { id: "C", text: "Send the earliest messages only" },
-            { id: "D", text: "Use layered memory: keep recent turns verbatim, summarize older turns, and retrieve relevant long-term facts selectively" },
-          ],
-          answer: "D",
-          insight: "Layered context management balances fidelity, relevance, and token budget. It scales better than naive truncation for production assistants."
+          "id": "B",
+          "text": "For every transient conversation detail"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Only when model context window is full"
+        },
+        {
+          "id": "D",
+          "text": "Never; persistent memory is always prohibited"
+        }
+      ],
+      "answer": "A",
+      "insight": "Persistent memory is a product decision tied to privacy and lifecycle controls. Not all context deserves retention."
+    },
+    {
+      "text": "Your summarization layer compresses chat history too aggressively, causing wrong follow-up answers. What trade-off is being mismanaged?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Color theme versus readability"
+        },
+        {
+          "id": "B",
+          "text": "Context efficiency versus fidelity of critical details"
+        },
+        {
+          "id": "C",
+          "text": "Language locale versus tokenization"
+        },
+        {
+          "id": "D",
+          "text": "GPU utilization versus browser paint time"
+        }
+      ],
+      "answer": "B",
+      "insight": "Summaries save tokens but can erase constraints and commitments. Compression strategies need domain-aware salience rules."
+    },
+    {
+      "text": "A healthcare assistant stores all raw patient chats indefinitely as memory. What is the primary governance risk?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Fewer available emojis"
+        },
+        {
+          "id": "B",
+          "text": "Reduced creativity in model outputs"
+        },
+        {
+          "id": "C",
+          "text": "Unbounded retention of sensitive data without purpose limitation and deletion controls"
+        },
+        {
+          "id": "D",
+          "text": "Slight increase in token cost only"
+        }
+      ],
+      "answer": "C",
+      "insight": "Memory policies must align with privacy laws and enterprise data governance. Retain only what is necessary and auditable."
+    },
+    {
+      "text": "What is a robust strategy when context exceeds model limits during long conversations?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Disable context entirely and answer statelessly"
+        },
+        {
+          "id": "B",
+          "text": "Drop all system instructions first"
+        },
+        {
+          "id": "C",
+          "text": "Send the earliest messages only"
+        },
+        {
+          "id": "D",
+          "text": "Use layered memory: keep recent turns verbatim, summarize older turns, and retrieve relevant long-term facts selectively"
+        }
+      ],
+      "answer": "D",
+      "insight": "Layered context management balances fidelity, relevance, and token budget. It scales better than naive truncation for production assistants."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

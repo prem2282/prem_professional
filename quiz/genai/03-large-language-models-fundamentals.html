@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 3,
-      total: 20,
-      title: "Large Language Models — Fundamentals",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 3,
+  "total": 20,
+  "title": "Large Language Models — Fundamentals",
+  "questions": [
+    {
+      "text": "A product manager asks what an LLM does at inference time. Which explanation is most accurate?",
+      "choices": [
         {
-          text: "A product manager asks what an LLM does at inference time. Which explanation is most accurate?",
-          choices: [
-            { id: "A", text: "It runs deterministic rules for every domain" },
-            { id: "B", text: "It retrieves exact answers from a hidden SQL table" },
-            { id: "C", text: "It checks the internet by default for every sentence" },
-            { id: "D", text: "It predicts the next token repeatedly based on prior context" },
-          ],
-          answer: "D",
-          insight: "Autoregressive decoding is the core mechanism behind LLM outputs. Understanding that helps teams reason about variability, latency, and hallucination behavior."
+          "id": "A",
+          "text": "It runs deterministic rules for every domain"
         },
         {
-          text: "Your legal chatbot answers with outdated regulation details from two years ago. Which limitation is most likely in play?",
-          choices: [
-            { id: "A", text: "Knowledge cutoff in pretrained weights without current grounding" },
-            { id: "B", text: "Missing CSS minification" },
-            { id: "C", text: "Too many API retries" },
-            { id: "D", text: "Low monitor refresh rate" },
-          ],
-          answer: "A",
-          insight: "An LLM's internal knowledge is bounded by its training horizon. Fresh enterprise facts require retrieval, tools, or model updates."
+          "id": "B",
+          "text": "It retrieves exact answers from a hidden SQL table"
         },
         {
-          text: "Why does instruction tuning improve enterprise usability compared to a raw base model?",
-          choices: [
-            { id: "A", text: "It guarantees no harmful outputs in any setting" },
-            { id: "B", text: "It aligns model behavior with human-followable instruction formats and task intents" },
-            { id: "C", text: "It eliminates the need for prompts" },
-            { id: "D", text: "It removes token limits" },
-          ],
-          answer: "B",
-          insight: "Instruction tuning teaches the model to respond in useful assistant-like patterns. It improves compliance with task framing but still requires guardrails and evaluation."
+          "id": "C",
+          "text": "It checks the internet by default for every sentence"
         },
         {
-          text: "An engineer says: \"If temperature is 0, the model is always factual.\" What is the best correction?",
-          choices: [
-            { id: "A", text: "Temperature 0 disables all hallucinations by design" },
-            { id: "B", text: "Temperature only matters for image models" },
-            { id: "C", text: "Temperature controls randomness, not truthfulness" },
-            { id: "D", text: "Temperature 0 makes retrieval mandatory" },
-          ],
-          answer: "C",
-          insight: "Lower temperature reduces sampling variance but does not create external verification. Grounding and validation are separate controls."
+          "id": "D",
+          "text": "It predicts the next token repeatedly based on prior context"
+        }
+      ],
+      "answer": "D",
+      "insight": "Autoregressive decoding is the core mechanism behind LLM outputs. Understanding that helps teams reason about variability, latency, and hallucination behavior."
+    },
+    {
+      "text": "Your legal chatbot answers with outdated regulation details from two years ago. Which limitation is most likely in play?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Knowledge cutoff in pretrained weights without current grounding"
         },
         {
-          text: "A team notices the model follows user instructions that conflict with system policy. What concept should they revisit first?",
-          choices: [
-            { id: "A", text: "Webhook retry intervals" },
-            { id: "B", text: "GPU batch size scheduling" },
-            { id: "C", text: "DNS TTL values" },
-            { id: "D", text: "Prompt hierarchy and instruction precedence across system, developer, and user messages" },
-          ],
-          answer: "D",
-          insight: "LLM behavior depends on message hierarchy and prompt assembly quality. Policy robustness requires explicit precedence plus downstream enforcement layers."
+          "id": "B",
+          "text": "Missing CSS minification"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Too many API retries"
+        },
+        {
+          "id": "D",
+          "text": "Low monitor refresh rate"
+        }
+      ],
+      "answer": "A",
+      "insight": "An LLM's internal knowledge is bounded by its training horizon. Fresh enterprise facts require retrieval, tools, or model updates."
+    },
+    {
+      "text": "Why does instruction tuning improve enterprise usability compared to a raw base model?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It guarantees no harmful outputs in any setting"
+        },
+        {
+          "id": "B",
+          "text": "It aligns model behavior with human-followable instruction formats and task intents"
+        },
+        {
+          "id": "C",
+          "text": "It eliminates the need for prompts"
+        },
+        {
+          "id": "D",
+          "text": "It removes token limits"
+        }
+      ],
+      "answer": "B",
+      "insight": "Instruction tuning teaches the model to respond in useful assistant-like patterns. It improves compliance with task framing but still requires guardrails and evaluation."
+    },
+    {
+      "text": "An engineer says: \"If temperature is 0, the model is always factual.\" What is the best correction?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Temperature 0 disables all hallucinations by design"
+        },
+        {
+          "id": "B",
+          "text": "Temperature only matters for image models"
+        },
+        {
+          "id": "C",
+          "text": "Temperature controls randomness, not truthfulness"
+        },
+        {
+          "id": "D",
+          "text": "Temperature 0 makes retrieval mandatory"
+        }
+      ],
+      "answer": "C",
+      "insight": "Lower temperature reduces sampling variance but does not create external verification. Grounding and validation are separate controls."
+    },
+    {
+      "text": "A team notices the model follows user instructions that conflict with system policy. What concept should they revisit first?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Webhook retry intervals"
+        },
+        {
+          "id": "B",
+          "text": "GPU batch size scheduling"
+        },
+        {
+          "id": "C",
+          "text": "DNS TTL values"
+        },
+        {
+          "id": "D",
+          "text": "Prompt hierarchy and instruction precedence across system, developer, and user messages"
+        }
+      ],
+      "answer": "D",
+      "insight": "LLM behavior depends on message hierarchy and prompt assembly quality. Policy robustness requires explicit precedence plus downstream enforcement layers."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

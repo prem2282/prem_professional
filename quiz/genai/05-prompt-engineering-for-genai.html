@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 5,
-      total: 20,
-      title: "Prompt Engineering for GenAI",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 5,
+  "total": 20,
+  "title": "Prompt Engineering for GenAI",
+  "questions": [
+    {
+      "text": "Your team gets inconsistent summaries from the same model. Which prompt improvement usually helps most first?",
+      "choices": [
         {
-          text: "Your team gets inconsistent summaries from the same model. Which prompt improvement usually helps most first?",
-          choices: [
-            { id: "A", text: "Hide task goals from the model" },
-            { id: "B", text: "Add a clear output schema and acceptance criteria in the system prompt" },
-            { id: "C", text: "Remove all examples to keep prompt short" },
-            { id: "D", text: "Only increase temperature" },
-          ],
-          answer: "B",
-          insight: "Explicit contracts reduce ambiguity and make outputs more testable. Prompt engineering is strongest when it translates requirements into constraints."
+          "id": "A",
+          "text": "Hide task goals from the model"
         },
         {
-          text: "A teammate pastes 12 few-shot examples and quality drops. What is the most likely issue?",
-          choices: [
-            { id: "A", text: "The model cannot use examples" },
-            { id: "B", text: "Examples automatically disable system prompts" },
-            { id: "C", text: "Examples may be noisy, conflicting, or consume context needed for the actual input" },
-            { id: "D", text: "Few-shot prompting only works in code generation" },
-          ],
-          answer: "C",
-          insight: "Few-shot helps only when examples are representative and concise. Poor examples can anchor the model to wrong style or evict critical context."
+          "id": "B",
+          "text": "Add a clear output schema and acceptance criteria in the system prompt"
         },
         {
-          text: "For regulated use cases, what is the best stance on chain-of-thought prompting?",
-          choices: [
-            { id: "A", text: "Replace all prompts with embeddings" },
-            { id: "B", text: "Never ask the model to think before answering" },
-            { id: "C", text: "Always force full hidden reasoning in final output" },
-            { id: "D", text: "Ask for concise, verifiable rationale or structured evidence instead of exposing unrestricted reasoning text" },
-          ],
-          answer: "D",
-          insight: "Enterprise workflows benefit from auditable explanations tied to evidence, not verbose speculative reasoning. Design for traceability and safety, not prompt folklore."
+          "id": "C",
+          "text": "Remove all examples to keep prompt short"
         },
         {
-          text: "A support bot should answer only from provided policy excerpts. Which instruction pattern is strongest?",
-          choices: [
-            { id: "A", text: "If evidence is insufficient, abstain and state missing information" },
-            { id: "B", text: "Use the shortest possible prompt without constraints" },
-            { id: "C", text: "Ignore citations to improve speed" },
-            { id: "D", text: "Always answer confidently, even without evidence" },
-          ],
-          answer: "A",
-          insight: "Abstention rules reduce fabricated outputs in high-risk flows. Good prompts define both what to do and what to do when evidence is missing."
+          "id": "D",
+          "text": "Only increase temperature"
+        }
+      ],
+      "answer": "B",
+      "insight": "Explicit contracts reduce ambiguity and make outputs more testable. Prompt engineering is strongest when it translates requirements into constraints."
+    },
+    {
+      "text": "A teammate pastes 12 few-shot examples and quality drops. What is the most likely issue?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The model cannot use examples"
         },
         {
-          text: "Your extractor returns markdown instead of JSON every few calls. What should be added to the prompt/system design?",
-          choices: [
-            { id: "A", text: "Higher temperature to increase diversity" },
-            { id: "B", text: "A strict output contract with schema examples and parser-aware error handling" },
-            { id: "C", text: "Fewer required fields in the schema and no validation" },
-            { id: "D", text: "No delimiters in instructions" },
-          ],
-          answer: "B",
-          insight: "Prompt contracts and schema validation work together for reliability. Production systems assume occasional format drift and recover automatically."
+          "id": "B",
+          "text": "Examples automatically disable system prompts"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Examples may be noisy, conflicting, or consume context needed for the actual input"
+        },
+        {
+          "id": "D",
+          "text": "Few-shot prompting only works in code generation"
+        }
+      ],
+      "answer": "C",
+      "insight": "Few-shot helps only when examples are representative and concise. Poor examples can anchor the model to wrong style or evict critical context."
+    },
+    {
+      "text": "For regulated use cases, what is the best stance on chain-of-thought prompting?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Replace all prompts with embeddings"
+        },
+        {
+          "id": "B",
+          "text": "Never ask the model to think before answering"
+        },
+        {
+          "id": "C",
+          "text": "Always force full hidden reasoning in final output"
+        },
+        {
+          "id": "D",
+          "text": "Ask for concise, verifiable rationale or structured evidence instead of exposing unrestricted reasoning text"
+        }
+      ],
+      "answer": "D",
+      "insight": "Enterprise workflows benefit from auditable explanations tied to evidence, not verbose speculative reasoning. Design for traceability and safety, not prompt folklore."
+    },
+    {
+      "text": "A support bot should answer only from provided policy excerpts. Which instruction pattern is strongest?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "If evidence is insufficient, abstain and state missing information"
+        },
+        {
+          "id": "B",
+          "text": "Use the shortest possible prompt without constraints"
+        },
+        {
+          "id": "C",
+          "text": "Ignore citations to improve speed"
+        },
+        {
+          "id": "D",
+          "text": "Always answer confidently, even without evidence"
+        }
+      ],
+      "answer": "A",
+      "insight": "Abstention rules reduce fabricated outputs in high-risk flows. Good prompts define both what to do and what to do when evidence is missing."
+    },
+    {
+      "text": "Your extractor returns markdown instead of JSON every few calls. What should be added to the prompt/system design?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Higher temperature to increase diversity"
+        },
+        {
+          "id": "B",
+          "text": "A strict output contract with schema examples and parser-aware error handling"
+        },
+        {
+          "id": "C",
+          "text": "Fewer required fields in the schema and no validation"
+        },
+        {
+          "id": "D",
+          "text": "No delimiters in instructions"
+        }
+      ],
+      "answer": "B",
+      "insight": "Prompt contracts and schema validation work together for reliability. Production systems assume occasional format drift and recover automatically."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

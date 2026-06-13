@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 19,
-      total: 20,
-      title: "AI Governance and Responsible Deployment",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 19,
+  "total": 20,
+  "title": "AI Governance and Responsible Deployment",
+  "questions": [
+    {
+      "text": "A team ships a model update Friday evening without notifying risk owners. What governance gap is most obvious?",
+      "choices": [
         {
-          text: "A team ships a model update Friday evening without notifying risk owners. What governance gap is most obvious?",
-          choices: [
-            { id: "A", text: "Too many eval metrics" },
-            { id: "B", text: "Low top-p value" },
-            { id: "C", text: "Insufficient CSS testing" },
-            { id: "D", text: "Missing change-management ownership and release approval workflow" },
-          ],
-          answer: "D",
-          insight: "Responsible deployment requires clear accountability for model changes. Governance aligns speed with controlled risk."
+          "id": "A",
+          "text": "Too many eval metrics"
         },
         {
-          text: "Why are model cards useful in enterprise AI programs?",
-          choices: [
-            { id: "A", text: "They document intended use, limitations, evaluation results, and risk considerations for stakeholders" },
-            { id: "B", text: "They automatically improve model accuracy" },
-            { id: "C", text: "They are only marketing assets" },
-            { id: "D", text: "They replace all legal and security reviews" },
-          ],
-          answer: "A",
-          insight: "Model cards create shared understanding across technical and non-technical teams. They support transparent risk communication and audit readiness."
+          "id": "B",
+          "text": "Low top-p value"
         },
         {
-          text: "A regulator asks how decisions from your GenAI system can be audited. What architecture answer is strongest?",
-          choices: [
-            { id: "A", text: "Delete traces immediately after each call regardless of policy" },
-            { id: "B", text: "Maintain immutable logs of prompts, context sources, model/tool versions, and decision outcomes with access controls" },
-            { id: "C", text: "Keep only final user-visible responses" },
-            { id: "D", text: "Rely on memory of the support team" },
-          ],
-          answer: "B",
-          insight: "Auditability depends on end-to-end provenance and retention policy. Without traces, accountability and incident response both fail."
+          "id": "C",
+          "text": "Insufficient CSS testing"
         },
         {
-          text: "Which governance pattern best supports multi-team GenAI delivery?",
-          choices: [
-            { id: "A", text: "Only legal team owns all operational decisions" },
-            { id: "B", text: "No policies until first major incident" },
-            { id: "C", text: "Risk-tiered controls: lightweight for low-risk use, stricter gates for high-impact workflows" },
-            { id: "D", text: "One identical approval path for every tiny change" },
-          ],
-          answer: "C",
-          insight: "Tiered governance avoids both over-bureaucracy and under-control. Control intensity should match impact and exposure."
+          "id": "D",
+          "text": "Missing change-management ownership and release approval workflow"
+        }
+      ],
+      "answer": "D",
+      "insight": "Responsible deployment requires clear accountability for model changes. Governance aligns speed with controlled risk."
+    },
+    {
+      "text": "Why are model cards useful in enterprise AI programs?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "They document intended use, limitations, evaluation results, and risk considerations for stakeholders"
         },
         {
-          text: "A business unit wants to skip post-deployment monitoring because pre-launch tests passed. What is the best response?",
-          choices: [
-            { id: "A", text: "Monitoring is optional once approval is granted" },
-            { id: "B", text: "Only monthly manual checks are enough" },
-            { id: "C", text: "Disable feedback collection to reduce noise" },
-            { id: "D", text: "Production monitoring is mandatory because model behavior and user traffic evolve after launch" },
-          ],
-          answer: "D",
-          insight: "Governance is continuous, not a one-time gate. Drift, misuse, and policy changes require ongoing operational visibility."
+          "id": "B",
+          "text": "They automatically improve model accuracy"
         },
-      ];
+        {
+          "id": "C",
+          "text": "They are only marketing assets"
+        },
+        {
+          "id": "D",
+          "text": "They replace all legal and security reviews"
+        }
+      ],
+      "answer": "A",
+      "insight": "Model cards create shared understanding across technical and non-technical teams. They support transparent risk communication and audit readiness."
+    },
+    {
+      "text": "A regulator asks how decisions from your GenAI system can be audited. What architecture answer is strongest?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Delete traces immediately after each call regardless of policy"
+        },
+        {
+          "id": "B",
+          "text": "Maintain immutable logs of prompts, context sources, model/tool versions, and decision outcomes with access controls"
+        },
+        {
+          "id": "C",
+          "text": "Keep only final user-visible responses"
+        },
+        {
+          "id": "D",
+          "text": "Rely on memory of the support team"
+        }
+      ],
+      "answer": "B",
+      "insight": "Auditability depends on end-to-end provenance and retention policy. Without traces, accountability and incident response both fail."
+    },
+    {
+      "text": "Which governance pattern best supports multi-team GenAI delivery?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Only legal team owns all operational decisions"
+        },
+        {
+          "id": "B",
+          "text": "No policies until first major incident"
+        },
+        {
+          "id": "C",
+          "text": "Risk-tiered controls: lightweight for low-risk use, stricter gates for high-impact workflows"
+        },
+        {
+          "id": "D",
+          "text": "One identical approval path for every tiny change"
+        }
+      ],
+      "answer": "C",
+      "insight": "Tiered governance avoids both over-bureaucracy and under-control. Control intensity should match impact and exposure."
+    },
+    {
+      "text": "A business unit wants to skip post-deployment monitoring because pre-launch tests passed. What is the best response?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Monitoring is optional once approval is granted"
+        },
+        {
+          "id": "B",
+          "text": "Only monthly manual checks are enough"
+        },
+        {
+          "id": "C",
+          "text": "Disable feedback collection to reduce noise"
+        },
+        {
+          "id": "D",
+          "text": "Production monitoring is mandatory because model behavior and user traffic evolve after launch"
+        }
+      ],
+      "answer": "D",
+      "insight": "Governance is continuous, not a one-time gate. Drift, misuse, and policy changes require ongoing operational visibility."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

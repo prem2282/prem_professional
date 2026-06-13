@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 2,
-      total: 20,
-      title: "Pretrained Transformers and the Rise of GenAI",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 2,
+  "total": 20,
+  "title": "Pretrained Transformers and the Rise of GenAI",
+  "questions": [
+    {
+      "text": "Your team compares an old RNN summarizer with a transformer model. The transformer handles long policy documents far better. What architectural reason best explains this?",
+      "choices": [
         {
-          text: "Your team compares an old RNN summarizer with a transformer model. The transformer handles long policy documents far better. What architectural reason best explains this?",
-          choices: [
-            { id: "A", text: "RNNs cannot process more than one sentence" },
-            { id: "B", text: "Transformers only train on legal documents" },
-            { id: "C", text: "Self-attention lets tokens directly relate to distant tokens in parallel" },
-            { id: "D", text: "Transformers guarantee factual outputs" },
-          ],
-          answer: "C",
-          insight: "Self-attention reduces the path length between distant dependencies and enables parallel training. That is a key reason transformers scale and preserve context better than sequence-only recurrence."
+          "id": "A",
+          "text": "RNNs cannot process more than one sentence"
         },
         {
-          text: "A VP asks why \"pretraining\" mattered so much for GenAI adoption. What is the most accurate answer?",
-          choices: [
-            { id: "A", text: "Pretraining creates task-specific labels automatically" },
-            { id: "B", text: "Pretraining prevents prompt injection" },
-            { id: "C", text: "Pretraining removes the need for inference compute" },
-            { id: "D", text: "Pretraining learns broad language patterns that can be adapted with prompting or fine-tuning" },
-          ],
-          answer: "D",
-          insight: "Foundation behavior comes from large-scale next-token learning before any narrow task setup. That transfer ability is why one model can be reused across many enterprise use cases."
+          "id": "B",
+          "text": "Transformers only train on legal documents"
         },
         {
-          text: "You are debugging slow model training. Why is transformer parallelism strategically important compared to older sequence models?",
-          choices: [
-            { id: "A", text: "It allows all tokens in a sequence to be processed simultaneously during training" },
-            { id: "B", text: "It ensures zero data preprocessing effort" },
-            { id: "C", text: "It makes GPUs unnecessary" },
-            { id: "D", text: "It removes the need for optimizers like Adam" },
-          ],
-          answer: "A",
-          insight: "Parallel token processing is a major throughput unlock that enabled scaling laws in practice. Without that efficiency, training frontier models at modern sizes would be far less feasible."
+          "id": "C",
+          "text": "Self-attention lets tokens directly relate to distant tokens in parallel"
         },
         {
-          text: "A stakeholder claims \"bigger model always means better product.\" Which response is technically correct?",
-          choices: [
-            { id: "A", text: "Only inference latency matters, never quality" },
-            { id: "B", text: "Model quality scales, but product outcomes still depend on data, retrieval, guardrails, and UX" },
-            { id: "C", text: "Size has no impact on model performance" },
-            { id: "D", text: "All transformer models have identical capabilities" },
-          ],
-          answer: "B",
-          insight: "Scaling helps base capability but does not replace system design. Enterprise success depends on the full pipeline, not parameter count alone."
+          "id": "D",
+          "text": "Transformers guarantee factual outputs"
+        }
+      ],
+      "answer": "C",
+      "insight": "Self-attention reduces the path length between distant dependencies and enables parallel training. That is a key reason transformers scale and preserve context better than sequence-only recurrence."
+    },
+    {
+      "text": "A VP asks why \"pretraining\" mattered so much for GenAI adoption. What is the most accurate answer?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Pretraining creates task-specific labels automatically"
         },
         {
-          text: "Why did transformers help unlock multimodal and tool-augmented systems beyond plain chat?",
-          choices: [
-            { id: "A", text: "Because attention works only for English text" },
-            { id: "B", text: "Because transformers are hard-coded for images and APIs" },
-            { id: "C", text: "Because attention-based architectures can generalize sequence modeling across tokenized modalities and actions" },
-            { id: "D", text: "Because transformers never require alignment tuning" },
-          ],
-          answer: "C",
-          insight: "The same sequence modeling core can consume text, vision tokens, audio tokens, and structured tool descriptions. That architectural flexibility fueled modern GenAI ecosystems."
+          "id": "B",
+          "text": "Pretraining prevents prompt injection"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Pretraining removes the need for inference compute"
+        },
+        {
+          "id": "D",
+          "text": "Pretraining learns broad language patterns that can be adapted with prompting or fine-tuning"
+        }
+      ],
+      "answer": "D",
+      "insight": "Foundation behavior comes from large-scale next-token learning before any narrow task setup. That transfer ability is why one model can be reused across many enterprise use cases."
+    },
+    {
+      "text": "You are debugging slow model training. Why is transformer parallelism strategically important compared to older sequence models?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It allows all tokens in a sequence to be processed simultaneously during training"
+        },
+        {
+          "id": "B",
+          "text": "It ensures zero data preprocessing effort"
+        },
+        {
+          "id": "C",
+          "text": "It makes GPUs unnecessary"
+        },
+        {
+          "id": "D",
+          "text": "It removes the need for optimizers like Adam"
+        }
+      ],
+      "answer": "A",
+      "insight": "Parallel token processing is a major throughput unlock that enabled scaling laws in practice. Without that efficiency, training frontier models at modern sizes would be far less feasible."
+    },
+    {
+      "text": "A stakeholder claims \"bigger model always means better product.\" Which response is technically correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Only inference latency matters, never quality"
+        },
+        {
+          "id": "B",
+          "text": "Model quality scales, but product outcomes still depend on data, retrieval, guardrails, and UX"
+        },
+        {
+          "id": "C",
+          "text": "Size has no impact on model performance"
+        },
+        {
+          "id": "D",
+          "text": "All transformer models have identical capabilities"
+        }
+      ],
+      "answer": "B",
+      "insight": "Scaling helps base capability but does not replace system design. Enterprise success depends on the full pipeline, not parameter count alone."
+    },
+    {
+      "text": "Why did transformers help unlock multimodal and tool-augmented systems beyond plain chat?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Because attention works only for English text"
+        },
+        {
+          "id": "B",
+          "text": "Because transformers are hard-coded for images and APIs"
+        },
+        {
+          "id": "C",
+          "text": "Because attention-based architectures can generalize sequence modeling across tokenized modalities and actions"
+        },
+        {
+          "id": "D",
+          "text": "Because transformers never require alignment tuning"
+        }
+      ],
+      "answer": "C",
+      "insight": "The same sequence modeling core can consume text, vision tokens, audio tokens, and structured tool descriptions. That architectural flexibility fueled modern GenAI ecosystems."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

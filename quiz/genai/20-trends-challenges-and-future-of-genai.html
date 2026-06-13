@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 20,
-      total: 20,
-      title: "Trends, Challenges, and Future of GenAI",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 20,
+  "total": 20,
+  "title": "Trends, Challenges, and Future of GenAI",
+  "questions": [
+    {
+      "text": "Your mobile product needs offline assistance with strict latency and privacy constraints. Which trend is most relevant?",
+      "choices": [
         {
-          text: "Your mobile product needs offline assistance with strict latency and privacy constraints. Which trend is most relevant?",
-          choices: [
-            { id: "A", text: "Small language models optimized for edge deployment and task-specific performance" },
-            { id: "B", text: "Always using the largest cloud model available" },
-            { id: "C", text: "Avoiding quantization in every case" },
-            { id: "D", text: "Removing all model evaluations for speed" },
-          ],
-          answer: "A",
-          insight: "Edge-capable SLMs can offer better latency, cost, and data locality for constrained workloads. Bigger is not always better for product fit."
+          "id": "A",
+          "text": "Small language models optimized for edge deployment and task-specific performance"
         },
         {
-          text: "A research lead warns about model collapse in future training pipelines. What does this mean?",
-          choices: [
-            { id: "A", text: "Models physically stop running after too many prompts" },
-            { id: "B", text: "Training excessively on synthetic model-generated data can degrade diversity and factual quality over generations" },
-            { id: "C", text: "GPU memory is unrelated to training data quality" },
-            { id: "D", text: "Context windows shrink automatically over time" },
-          ],
-          answer: "B",
-          insight: "Data quality and provenance remain foundational as synthetic data increases. Healthy training mixtures are critical for long-term model robustness."
+          "id": "B",
+          "text": "Always using the largest cloud model available"
         },
         {
-          text: "Why are durable skills still more strategic than chasing every new model release?",
-          choices: [
-            { id: "A", text: "Prompting is the only skill needed forever" },
-            { id: "B", text: "Infrastructure no longer matters in AI products" },
-            { id: "C", text: "System design, eval discipline, security, and governance transfer across model generations" },
-            { id: "D", text: "New models rarely change anything" },
-          ],
-          answer: "C",
-          insight: "Model capabilities evolve quickly, but engineering fundamentals persist. Teams with strong operational practices adapt faster and safer."
+          "id": "C",
+          "text": "Avoiding quantization in every case"
         },
         {
-          text: "A CIO asks what the next 2-year challenge will be after pilot success. Which answer is most realistic?",
-          choices: [
-            { id: "A", text: "Ignoring integration architecture once MVP ships" },
-            { id: "B", text: "Eliminating all need for human oversight" },
-            { id: "C", text: "Choosing a logo for the chatbot" },
-            { id: "D", text: "Scaling governance, observability, and cost control across many AI-enabled workflows" },
-          ],
-          answer: "D",
-          insight: "Enterprise value comes from sustained operations at scale, not isolated demos. Platform maturity determines long-term ROI."
+          "id": "D",
+          "text": "Removing all model evaluations for speed"
+        }
+      ],
+      "answer": "A",
+      "insight": "Edge-capable SLMs can offer better latency, cost, and data locality for constrained workloads. Bigger is not always better for product fit."
+    },
+    {
+      "text": "A research lead warns about model collapse in future training pipelines. What does this mean?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Models physically stop running after too many prompts"
         },
         {
-          text: "Your team must pick a roadmap principle for uncertain model progress. What is the strongest principle?",
-          choices: [
-            { id: "A", text: "Design model-agnostic architectures with swap-ready interfaces, robust evals, and fallback paths" },
-            { id: "B", text: "Hard-code one model vendor into every subsystem" },
-            { id: "C", text: "Skip baseline metrics to move fast" },
-            { id: "D", text: "Delay all shipping until model progress stabilizes" },
-          ],
-          answer: "A",
-          insight: "Future-proof systems separate business logic from model dependencies. Optionality plus measurement is the best hedge against rapid ecosystem change."
+          "id": "B",
+          "text": "Training excessively on synthetic model-generated data can degrade diversity and factual quality over generations"
         },
-      ];
+        {
+          "id": "C",
+          "text": "GPU memory is unrelated to training data quality"
+        },
+        {
+          "id": "D",
+          "text": "Context windows shrink automatically over time"
+        }
+      ],
+      "answer": "B",
+      "insight": "Data quality and provenance remain foundational as synthetic data increases. Healthy training mixtures are critical for long-term model robustness."
+    },
+    {
+      "text": "Why are durable skills still more strategic than chasing every new model release?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Prompting is the only skill needed forever"
+        },
+        {
+          "id": "B",
+          "text": "Infrastructure no longer matters in AI products"
+        },
+        {
+          "id": "C",
+          "text": "System design, eval discipline, security, and governance transfer across model generations"
+        },
+        {
+          "id": "D",
+          "text": "New models rarely change anything"
+        }
+      ],
+      "answer": "C",
+      "insight": "Model capabilities evolve quickly, but engineering fundamentals persist. Teams with strong operational practices adapt faster and safer."
+    },
+    {
+      "text": "A CIO asks what the next 2-year challenge will be after pilot success. Which answer is most realistic?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Ignoring integration architecture once MVP ships"
+        },
+        {
+          "id": "B",
+          "text": "Eliminating all need for human oversight"
+        },
+        {
+          "id": "C",
+          "text": "Choosing a logo for the chatbot"
+        },
+        {
+          "id": "D",
+          "text": "Scaling governance, observability, and cost control across many AI-enabled workflows"
+        }
+      ],
+      "answer": "D",
+      "insight": "Enterprise value comes from sustained operations at scale, not isolated demos. Platform maturity determines long-term ROI."
+    },
+    {
+      "text": "Your team must pick a roadmap principle for uncertain model progress. What is the strongest principle?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Design model-agnostic architectures with swap-ready interfaces, robust evals, and fallback paths"
+        },
+        {
+          "id": "B",
+          "text": "Hard-code one model vendor into every subsystem"
+        },
+        {
+          "id": "C",
+          "text": "Skip baseline metrics to move fast"
+        },
+        {
+          "id": "D",
+          "text": "Delay all shipping until model progress stabilizes"
+        }
+      ],
+      "answer": "A",
+      "insight": "Future-proof systems separate business logic from model dependencies. Optionality plus measurement is the best hedge against rapid ecosystem change."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

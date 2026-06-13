@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 6,
-      total: 20,
-      title: "LLM APIs and Making Calls",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 6,
+  "total": 20,
+  "title": "LLM APIs and Making Calls",
+  "questions": [
+    {
+      "text": "Your API integration starts returning 429 errors during peak traffic. What is the best first mitigation?",
+      "choices": [
         {
-          text: "Your API integration starts returning 429 errors during peak traffic. What is the best first mitigation?",
-          choices: [
-            { id: "A", text: "Switch all requests to larger prompts" },
-            { id: "B", text: "Disable logging to reduce 429s" },
-            { id: "C", text: "Implement retry with exponential backoff and request shaping to stay within provider limits" },
-            { id: "D", text: "Retry instantly in tight loops until success" },
-          ],
-          answer: "C",
-          insight: "Rate limiting is a platform contract, not an error to brute-force. Backoff, queueing, and adaptive throttling stabilize reliability and cost."
+          "id": "A",
+          "text": "Switch all requests to larger prompts"
         },
         {
-          text: "A chat endpoint occasionally leaks prior user details across sessions. Which root cause is most plausible?",
-          choices: [
-            { id: "A", text: "The model provider changed logo colors" },
-            { id: "B", text: "Prompt had fewer than 100 tokens" },
-            { id: "C", text: "Temperature was set to 0.2" },
-            { id: "D", text: "Message history was reused across tenants without proper session isolation" },
-          ],
-          answer: "D",
-          insight: "Conversation state handling is an application responsibility. Tenant and session isolation is a non-negotiable security boundary."
+          "id": "B",
+          "text": "Disable logging to reduce 429s"
         },
         {
-          text: "Why is streaming useful in user-facing chat products even when total completion time stays similar?",
-          choices: [
-            { id: "A", text: "It lowers time-to-first-token and improves perceived responsiveness" },
-            { id: "B", text: "It eliminates guardrail requirements" },
-            { id: "C", text: "It guarantees better factual accuracy" },
-            { id: "D", text: "It removes model costs" },
-          ],
-          answer: "A",
-          insight: "Users judge latency from first visible progress, not only final token time. Streaming improves UX while backend optimization continues."
+          "id": "C",
+          "text": "Implement retry with exponential backoff and request shaping to stay within provider limits"
         },
         {
-          text: "Your team debates whether to send all prompt instructions as user content. What is best practice?",
-          choices: [
-            { id: "A", text: "Rely on hidden browser variables instead of API roles" },
-            { id: "B", text: "Separate stable policy/behavior instructions from user content using role-aware message structure" },
-            { id: "C", text: "Remove system-level guidance entirely" },
-            { id: "D", text: "Put everything into one long user message only" },
-          ],
-          answer: "B",
-          insight: "Role separation helps preserve instruction hierarchy and reduces accidental policy override. It also makes prompt assembly easier to audit."
+          "id": "D",
+          "text": "Retry instantly in tight loops until success"
+        }
+      ],
+      "answer": "C",
+      "insight": "Rate limiting is a platform contract, not an error to brute-force. Backoff, queueing, and adaptive throttling stabilize reliability and cost."
+    },
+    {
+      "text": "A chat endpoint occasionally leaks prior user details across sessions. Which root cause is most plausible?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The model provider changed logo colors"
         },
         {
-          text: "An incident review shows you cannot trace which prompt version caused a bad output. What should be added?",
-          choices: [
-            { id: "A", text: "More emojis in responses" },
-            { id: "B", text: "Use random prompt templates per request" },
-            { id: "C", text: "Structured observability with request IDs, prompt/version metadata, and model identifiers" },
-            { id: "D", text: "Disable retries permanently" },
-          ],
-          answer: "C",
-          insight: "Without traceability, root-cause analysis is guesswork. Prompt and model provenance should be logged like any production dependency."
+          "id": "B",
+          "text": "Prompt had fewer than 100 tokens"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Temperature was set to 0.2"
+        },
+        {
+          "id": "D",
+          "text": "Message history was reused across tenants without proper session isolation"
+        }
+      ],
+      "answer": "D",
+      "insight": "Conversation state handling is an application responsibility. Tenant and session isolation is a non-negotiable security boundary."
+    },
+    {
+      "text": "Why is streaming useful in user-facing chat products even when total completion time stays similar?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It lowers time-to-first-token and improves perceived responsiveness"
+        },
+        {
+          "id": "B",
+          "text": "It eliminates guardrail requirements"
+        },
+        {
+          "id": "C",
+          "text": "It guarantees better factual accuracy"
+        },
+        {
+          "id": "D",
+          "text": "It removes model costs"
+        }
+      ],
+      "answer": "A",
+      "insight": "Users judge latency from first visible progress, not only final token time. Streaming improves UX while backend optimization continues."
+    },
+    {
+      "text": "Your team debates whether to send all prompt instructions as user content. What is best practice?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Rely on hidden browser variables instead of API roles"
+        },
+        {
+          "id": "B",
+          "text": "Separate stable policy/behavior instructions from user content using role-aware message structure"
+        },
+        {
+          "id": "C",
+          "text": "Remove system-level guidance entirely"
+        },
+        {
+          "id": "D",
+          "text": "Put everything into one long user message only"
+        }
+      ],
+      "answer": "B",
+      "insight": "Role separation helps preserve instruction hierarchy and reduces accidental policy override. It also makes prompt assembly easier to audit."
+    },
+    {
+      "text": "An incident review shows you cannot trace which prompt version caused a bad output. What should be added?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "More emojis in responses"
+        },
+        {
+          "id": "B",
+          "text": "Use random prompt templates per request"
+        },
+        {
+          "id": "C",
+          "text": "Structured observability with request IDs, prompt/version metadata, and model identifiers"
+        },
+        {
+          "id": "D",
+          "text": "Disable retries permanently"
+        }
+      ],
+      "answer": "C",
+      "insight": "Without traceability, root-cause analysis is guesswork. Prompt and model provenance should be logged like any production dependency."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 7,
-      total: 20,
-      title: "Retrieval-Augmented Generation (RAG)",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 7,
+  "total": 20,
+  "title": "Retrieval-Augmented Generation (RAG)",
+  "questions": [
+    {
+      "text": "Your HR assistant answers policy questions incorrectly even though the policy PDF exists in your corpus. Which stage should you inspect first?",
+      "choices": [
         {
-          text: "Your HR assistant answers policy questions incorrectly even though the policy PDF exists in your corpus. Which stage should you inspect first?",
-          choices: [
-            { id: "A", text: "Laptop battery mode" },
-            { id: "B", text: "UI button color contrast" },
-            { id: "C", text: "DNS resolver cache" },
-            { id: "D", text: "Retrieval relevance and chunking quality before generation" },
-          ],
-          answer: "D",
-          insight: "If the right evidence is not retrieved, generation cannot fix it reliably. RAG quality depends heavily on retrieval pipeline health."
+          "id": "A",
+          "text": "Laptop battery mode"
         },
         {
-          text: "When does RAG usually outperform switching to a much larger base model?",
-          choices: [
-            { id: "A", text: "When answers require current, domain-specific facts not fully represented in model pretraining" },
-            { id: "B", text: "When no documents are available at all" },
-            { id: "C", text: "When prompts are empty" },
-            { id: "D", text: "When you need random creative fiction" },
-          ],
-          answer: "A",
-          insight: "Larger models improve reasoning and fluency, but retrieval supplies authoritative, up-to-date ground truth. Enterprise accuracy often depends more on data freshness than model size."
+          "id": "B",
+          "text": "UI button color contrast"
         },
         {
-          text: "A team uses only dense vector search and misses exact product codes. What is a strong fix?",
-          choices: [
-            { id: "A", text: "Disable embeddings to reduce complexity" },
-            { id: "B", text: "Use hybrid retrieval combining lexical and semantic signals" },
-            { id: "C", text: "Remove metadata filters completely" },
-            { id: "D", text: "Increase temperature to 1.2" },
-          ],
-          answer: "B",
-          insight: "Dense search captures semantic similarity, while lexical methods preserve exact token matches. Hybrid strategies often improve recall in enterprise corpora."
+          "id": "C",
+          "text": "DNS resolver cache"
         },
         {
-          text: "What is the key purpose of reranking in a RAG pipeline?",
-          choices: [
-            { id: "A", text: "Generating final answers faster than the LLM" },
-            { id: "B", text: "Compressing PDF files before indexing" },
-            { id: "C", text: "Reordering top retrieved candidates by query-document relevance before context packing" },
-            { id: "D", text: "Replacing access control checks" },
-          ],
-          answer: "C",
-          insight: "Reranking improves the quality of context sent to the model. Better top-k ordering directly affects answer precision and citation quality."
+          "id": "D",
+          "text": "Retrieval relevance and chunking quality before generation"
+        }
+      ],
+      "answer": "D",
+      "insight": "If the right evidence is not retrieved, generation cannot fix it reliably. RAG quality depends heavily on retrieval pipeline health."
+    },
+    {
+      "text": "When does RAG usually outperform switching to a much larger base model?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "When answers require current, domain-specific facts not fully represented in model pretraining"
         },
         {
-          text: "A compliance bot must cite source passages for every answer. Which design is best?",
-          choices: [
-            { id: "A", text: "Ask the model to invent citations if none are found" },
-            { id: "B", text: "Disable retrieval to reduce latency" },
-            { id: "C", text: "Use only training-time model memory" },
-            { id: "D", text: "Force citation fields in output schema and pass document IDs/snippets in prompt context" },
-          ],
-          answer: "D",
-          insight: "Citations require explicit data plumbing and output contracts. Without evidence references, citation behavior becomes unreliable and hard to audit."
+          "id": "B",
+          "text": "When no documents are available at all"
         },
-      ];
+        {
+          "id": "C",
+          "text": "When prompts are empty"
+        },
+        {
+          "id": "D",
+          "text": "When you need random creative fiction"
+        }
+      ],
+      "answer": "A",
+      "insight": "Larger models improve reasoning and fluency, but retrieval supplies authoritative, up-to-date ground truth. Enterprise accuracy often depends more on data freshness than model size."
+    },
+    {
+      "text": "A team uses only dense vector search and misses exact product codes. What is a strong fix?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Disable embeddings to reduce complexity"
+        },
+        {
+          "id": "B",
+          "text": "Use hybrid retrieval combining lexical and semantic signals"
+        },
+        {
+          "id": "C",
+          "text": "Remove metadata filters completely"
+        },
+        {
+          "id": "D",
+          "text": "Increase temperature to 1.2"
+        }
+      ],
+      "answer": "B",
+      "insight": "Dense search captures semantic similarity, while lexical methods preserve exact token matches. Hybrid strategies often improve recall in enterprise corpora."
+    },
+    {
+      "text": "What is the key purpose of reranking in a RAG pipeline?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Generating final answers faster than the LLM"
+        },
+        {
+          "id": "B",
+          "text": "Compressing PDF files before indexing"
+        },
+        {
+          "id": "C",
+          "text": "Reordering top retrieved candidates by query-document relevance before context packing"
+        },
+        {
+          "id": "D",
+          "text": "Replacing access control checks"
+        }
+      ],
+      "answer": "C",
+      "insight": "Reranking improves the quality of context sent to the model. Better top-k ordering directly affects answer precision and citation quality."
+    },
+    {
+      "text": "A compliance bot must cite source passages for every answer. Which design is best?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Ask the model to invent citations if none are found"
+        },
+        {
+          "id": "B",
+          "text": "Disable retrieval to reduce latency"
+        },
+        {
+          "id": "C",
+          "text": "Use only training-time model memory"
+        },
+        {
+          "id": "D",
+          "text": "Force citation fields in output schema and pass document IDs/snippets in prompt context"
+        }
+      ],
+      "answer": "D",
+      "insight": "Citations require explicit data plumbing and output contracts. Without evidence references, citation behavior becomes unreliable and hard to audit."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 4,
-      total: 20,
-      title: "Tokens, Context Windows, and Model Parameters",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 4,
+  "total": 20,
+  "title": "Tokens, Context Windows, and Model Parameters",
+  "questions": [
+    {
+      "text": "Your support copilot starts missing user details after adding longer retrieved passages. What is the most likely cause?",
+      "choices": [
         {
-          text: "Your support copilot starts missing user details after adding longer retrieved passages. What is the most likely cause?",
-          choices: [
-            { id: "A", text: "Context window overflow caused older conversation turns to be truncated" },
-            { id: "B", text: "Temperature is too low to read messages" },
-            { id: "C", text: "The tokenizer deleted punctuation permanently" },
-            { id: "D", text: "Top-p only works with audio models" },
-          ],
-          answer: "A",
-          insight: "Everything in the prompt competes for limited context space. Without budget management, relevant dialogue gets evicted and answer quality degrades."
+          "id": "A",
+          "text": "Context window overflow caused older conversation turns to be truncated"
         },
         {
-          text: "A product owner asks why 1,000 words can consume very different token counts across languages. What should you explain?",
-          choices: [
-            { id: "A", text: "Token count equals character count divided by ten" },
-            { id: "B", text: "Tokenizers split text into subword units, so token count depends on encoding patterns, not word count alone" },
-            { id: "C", text: "Every language always maps one word to one token" },
-            { id: "D", text: "Only whitespace determines token count" },
-          ],
-          answer: "B",
-          insight: "Cost and context usage are token-based, not word-based. Teams need tokenizer-aware budgeting to avoid surprise spend and truncation."
+          "id": "B",
+          "text": "Temperature is too low to read messages"
         },
         {
-          text: "You are tuning a compliance assistant. Which parameter setting is usually safer for consistent policy phrasing?",
-          choices: [
-            { id: "A", text: "Very high temperature and high top-p for maximum creativity" },
-            { id: "B", text: "Randomly switch temperature per request" },
-            { id: "C", text: "Lower temperature with constrained sampling to reduce variance" },
-            { id: "D", text: "Disable system prompts and rely only on top-p" },
-          ],
-          answer: "C",
-          insight: "Lower randomness improves reproducibility for regulated tasks. Sampling controls are quality levers, but they do not replace grounding or policy checks."
+          "id": "C",
+          "text": "The tokenizer deleted punctuation permanently"
         },
         {
-          text: "A team confuses model parameters with inference parameters. Which statement is correct?",
-          choices: [
-            { id: "A", text: "Both are interchangeable names for the same thing" },
-            { id: "B", text: "Parameters only matter for retrieval systems" },
-            { id: "C", text: "Temperature is trained into the model permanently" },
-            { id: "D", text: "Model parameters are learned weights; temperature/top-p are runtime decoding controls" },
-          ],
-          answer: "D",
-          insight: "Conflating learned weights and decoding knobs leads to bad architecture decisions. One changes capability envelope, the other shapes output distribution."
+          "id": "D",
+          "text": "Top-p only works with audio models"
+        }
+      ],
+      "answer": "A",
+      "insight": "Everything in the prompt competes for limited context space. Without budget management, relevant dialogue gets evicted and answer quality degrades."
+    },
+    {
+      "text": "A product owner asks why 1,000 words can consume very different token counts across languages. What should you explain?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Token count equals character count divided by ten"
         },
         {
-          text: "Your app must produce a JSON response under 400 tokens. What is the most robust production tactic?",
-          choices: [
-            { id: "A", text: "Set max output tokens and enforce schema validation with retry/repair logic" },
-            { id: "B", text: "Increase context window and ignore limits" },
-            { id: "C", text: "Ask politely for short answers and trust the first output" },
-            { id: "D", text: "Use only user prompts with no system contract" },
-          ],
-          answer: "A",
-          insight: "Hard limits and validation loops make output behavior reliable under constraints. Prompt wording alone is not enough for machine-critical contracts."
+          "id": "B",
+          "text": "Tokenizers split text into subword units, so token count depends on encoding patterns, not word count alone"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Every language always maps one word to one token"
+        },
+        {
+          "id": "D",
+          "text": "Only whitespace determines token count"
+        }
+      ],
+      "answer": "B",
+      "insight": "Cost and context usage are token-based, not word-based. Teams need tokenizer-aware budgeting to avoid surprise spend and truncation."
+    },
+    {
+      "text": "You are tuning a compliance assistant. Which parameter setting is usually safer for consistent policy phrasing?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Very high temperature and high top-p for maximum creativity"
+        },
+        {
+          "id": "B",
+          "text": "Randomly switch temperature per request"
+        },
+        {
+          "id": "C",
+          "text": "Lower temperature with constrained sampling to reduce variance"
+        },
+        {
+          "id": "D",
+          "text": "Disable system prompts and rely only on top-p"
+        }
+      ],
+      "answer": "C",
+      "insight": "Lower randomness improves reproducibility for regulated tasks. Sampling controls are quality levers, but they do not replace grounding or policy checks."
+    },
+    {
+      "text": "A team confuses model parameters with inference parameters. Which statement is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Both are interchangeable names for the same thing"
+        },
+        {
+          "id": "B",
+          "text": "Parameters only matter for retrieval systems"
+        },
+        {
+          "id": "C",
+          "text": "Temperature is trained into the model permanently"
+        },
+        {
+          "id": "D",
+          "text": "Model parameters are learned weights; temperature/top-p are runtime decoding controls"
+        }
+      ],
+      "answer": "D",
+      "insight": "Conflating learned weights and decoding knobs leads to bad architecture decisions. One changes capability envelope, the other shapes output distribution."
+    },
+    {
+      "text": "Your app must produce a JSON response under 400 tokens. What is the most robust production tactic?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Set max output tokens and enforce schema validation with retry/repair logic"
+        },
+        {
+          "id": "B",
+          "text": "Increase context window and ignore limits"
+        },
+        {
+          "id": "C",
+          "text": "Ask politely for short answers and trust the first output"
+        },
+        {
+          "id": "D",
+          "text": "Use only user prompts with no system contract"
+        }
+      ],
+      "answer": "A",
+      "insight": "Hard limits and validation loops make output behavior reliable under constraints. Prompt wording alone is not enough for machine-critical contracts."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

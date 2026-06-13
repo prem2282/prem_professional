@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 1,
-      total: 20,
-      title: "What is Generative AI?",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 1,
+  "total": 20,
+  "title": "What is Generative AI?",
+  "questions": [
+    {
+      "text": "A customer support bot answers \"What's your refund policy?\" perfectly - but your company has no refund policy. What most likely happened?",
+      "choices": [
         {
-          text: "A customer support bot answers \"What's your refund policy?\" perfectly - but your company has no refund policy. What most likely happened?",
-          choices: [
-            { id: "A", text: "The model called a database you forgot you connected" },
-            { id: "B", text: "The model hallucinated a plausible-sounding policy from patterns in its training data" },
-            { id: "C", text: "The model searched your website and found a hidden page" },
-            { id: "D", text: "The model refused because it detected missing knowledge" },
-          ],
-          answer: "B",
-          insight: "Generative models predict likely text - they do not look up truth unless you wire in retrieval or tools. A confident wrong answer is an architectural behavior, not a random glitch."
+          "id": "A",
+          "text": "The model called a database you forgot you connected"
         },
         {
-          text: "Which task is GenAI worst at out of the box compared to traditional software?",
-          choices: [
-            { id: "A", text: "Summarizing a 10-page document you paste in" },
-            { id: "B", text: "Rewriting technical jargon into plain English" },
-            { id: "C", text: "Returning the exact account balance for user ID 847291 at 3:02 PM" },
-            { id: "D", text: "Drafting three email subject lines for a product launch" },
-          ],
-          answer: "C",
-          insight: "GenAI is strong at language transformation, not authoritative system state. Exact live facts require API/database access or retrieval, not free-form generation."
+          "id": "B",
+          "text": "The model hallucinated a plausible-sounding policy from patterns in its training data"
         },
         {
-          text: "Your manager says: \"Let's replace our rules engine with ChatGPT.\" What's the sharpest counter-argument?",
-          choices: [
-            { id: "A", text: "GenAI only works in English" },
-            { id: "B", text: "GenAI cannot handle more than 100 words of input" },
-            { id: "C", text: "ChatGPT is too expensive for any business use" },
-            { id: "D", text: "A rules engine guarantees deterministic outcomes; GenAI produces probabilistic outputs" },
-          ],
-          answer: "D",
-          insight: "Use GenAI where language flexibility matters, and deterministic systems where compliance and exact branching are mandatory. They are complementary, not interchangeable."
+          "id": "C",
+          "text": "The model searched your website and found a hidden page"
         },
         {
-          text: "\"Generative\" in Generative AI refers to:",
-          choices: [
-            { id: "A", text: "The model creates new outputs (text, images, code) rather than only classifying inputs" },
-            { id: "B", text: "The model generates user profiles for advertising" },
-            { id: "C", text: "The model generates electricity-efficient responses" },
-            { id: "D", text: "The model generates its own training data from scratch" },
-          ],
-          answer: "A",
-          insight: "Discriminative models classify; generative models synthesize novel outputs. That difference drives where each approach is useful in product design."
+          "id": "D",
+          "text": "The model refused because it detected missing knowledge"
+        }
+      ],
+      "answer": "B",
+      "insight": "Generative models predict likely text - they do not look up truth unless you wire in retrieval or tools. A confident wrong answer is an architectural behavior, not a random glitch."
+    },
+    {
+      "text": "Which task is GenAI worst at out of the box compared to traditional software?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Summarizing a 10-page document you paste in"
         },
         {
-          text: "Which pairing best describes GenAI vs. search?",
-          choices: [
-            { id: "A", text: "Search uses AI; GenAI does not use the internet" },
-            { id: "B", text: "Search finds existing documents; GenAI composes new language from learned patterns" },
-            { id: "C", text: "They are the same thing with different branding" },
-            { id: "D", text: "Search is always faster; GenAI is always more accurate" },
-          ],
-          answer: "B",
-          insight: "RAG combines both sides: retrieval fetches evidence and generation synthesizes an answer. Knowing the boundary avoids unrealistic expectations from a bare LLM."
+          "id": "B",
+          "text": "Rewriting technical jargon into plain English"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Returning the exact account balance for user ID 847291 at 3:02 PM"
+        },
+        {
+          "id": "D",
+          "text": "Drafting three email subject lines for a product launch"
+        }
+      ],
+      "answer": "C",
+      "insight": "GenAI is strong at language transformation, not authoritative system state. Exact live facts require API/database access or retrieval, not free-form generation."
+    },
+    {
+      "text": "Your manager says: \"Let's replace our rules engine with ChatGPT.\" What's the sharpest counter-argument?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "GenAI only works in English"
+        },
+        {
+          "id": "B",
+          "text": "GenAI cannot handle more than 100 words of input"
+        },
+        {
+          "id": "C",
+          "text": "ChatGPT is too expensive for any business use"
+        },
+        {
+          "id": "D",
+          "text": "A rules engine guarantees deterministic outcomes; GenAI produces probabilistic outputs"
+        }
+      ],
+      "answer": "D",
+      "insight": "Use GenAI where language flexibility matters, and deterministic systems where compliance and exact branching are mandatory. They are complementary, not interchangeable."
+    },
+    {
+      "text": "\"Generative\" in Generative AI refers to:",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The model creates new outputs (text, images, code) rather than only classifying inputs"
+        },
+        {
+          "id": "B",
+          "text": "The model generates user profiles for advertising"
+        },
+        {
+          "id": "C",
+          "text": "The model generates electricity-efficient responses"
+        },
+        {
+          "id": "D",
+          "text": "The model generates its own training data from scratch"
+        }
+      ],
+      "answer": "A",
+      "insight": "Discriminative models classify; generative models synthesize novel outputs. That difference drives where each approach is useful in product design."
+    },
+    {
+      "text": "Which pairing best describes GenAI vs. search?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Search uses AI; GenAI does not use the internet"
+        },
+        {
+          "id": "B",
+          "text": "Search finds existing documents; GenAI composes new language from learned patterns"
+        },
+        {
+          "id": "C",
+          "text": "They are the same thing with different branding"
+        },
+        {
+          "id": "D",
+          "text": "Search is always faster; GenAI is always more accurate"
+        }
+      ],
+      "answer": "B",
+      "insight": "RAG combines both sides: retrieval fetches evidence and generation synthesizes an answer. Knowing the boundary avoids unrealistic expectations from a bare LLM."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 14,
-      total: 20,
-      title: "Safety, Bias, and Alignment",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 14,
+  "total": 20,
+  "title": "Safety, Bias, and Alignment",
+  "questions": [
+    {
+      "text": "Your hiring assistant gives lower-quality suggestions for candidates from certain regions. What is the priority response?",
+      "choices": [
         {
-          text: "Your hiring assistant gives lower-quality suggestions for candidates from certain regions. What is the priority response?",
-          choices: [
-            { id: "A", text: "Increase model size only" },
-            { id: "B", text: "Hide recommendations from audit logs" },
-            { id: "C", text: "Run bias evaluation slices by demographic proxies and adjust data/policy controls before scaling" },
-            { id: "D", text: "Ignore because average accuracy is high" },
-          ],
-          answer: "C",
-          insight: "Aggregate performance can hide subgroup harms. Safety work requires sliced metrics, transparency, and mitigation plans."
+          "id": "A",
+          "text": "Increase model size only"
         },
         {
-          text: "A tuned model now refuses many harmless requests, hurting user experience. What does this illustrate?",
-          choices: [
-            { id: "A", text: "Retrieval pipelines are always unsafe" },
-            { id: "B", text: "Context windows are irrelevant" },
-            { id: "C", text: "Perfect safety with no downsides" },
-            { id: "D", text: "Over-refusal trade-offs in alignment and safety tuning" },
-          ],
-          answer: "D",
-          insight: "Alignment tuning can shift behavior toward caution, sometimes too far. Teams need policy calibration between harm prevention and utility."
+          "id": "B",
+          "text": "Hide recommendations from audit logs"
         },
         {
-          text: "Why is red-teaming necessary even after internal QA passes?",
-          choices: [
-            { id: "A", text: "Adversarial testing uncovers failure modes normal test prompts miss" },
-            { id: "B", text: "It only matters for image models" },
-            { id: "C", text: "It guarantees legal immunity" },
-            { id: "D", text: "It replaces all production monitoring" },
-          ],
-          answer: "A",
-          insight: "Safety failures often appear under adversarial pressure, not happy-path usage. Red-teaming expands coverage against realistic attacks."
+          "id": "C",
+          "text": "Run bias evaluation slices by demographic proxies and adjust data/policy controls before scaling"
         },
         {
-          text: "Which statement about RLHF is most accurate for enterprise teams?",
-          choices: [
-            { id: "A", text: "RLHF makes retrieval unnecessary" },
-            { id: "B", text: "RLHF can improve helpfulness and policy following, but does not eliminate hallucination or bias alone" },
-            { id: "C", text: "RLHF guarantees perfect truthfulness in all domains" },
-            { id: "D", text: "RLHF removes the need for guardrails" },
-          ],
-          answer: "B",
-          insight: "Alignment methods shape behavior distributions, not absolute guarantees. System-level controls still govern risk."
+          "id": "D",
+          "text": "Ignore because average accuracy is high"
+        }
+      ],
+      "answer": "C",
+      "insight": "Aggregate performance can hide subgroup harms. Safety work requires sliced metrics, transparency, and mitigation plans."
+    },
+    {
+      "text": "A tuned model now refuses many harmless requests, hurting user experience. What does this illustrate?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Retrieval pipelines are always unsafe"
         },
         {
-          text: "A compliance officer asks for proof your safety posture improved over time. What evidence is strongest?",
-          choices: [
-            { id: "A", text: "Internal opinions without metrics" },
-            { id: "B", text: "A one-time demo recording" },
-            { id: "C", text: "Versioned safety benchmarks, incident trend data, and documented mitigation outcomes" },
-            { id: "D", text: "Model parameter count history only" },
-          ],
-          answer: "C",
-          insight: "Responsible deployment requires continuous measurement and traceable change history. Governance depends on evidence, not claims."
+          "id": "B",
+          "text": "Context windows are irrelevant"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Perfect safety with no downsides"
+        },
+        {
+          "id": "D",
+          "text": "Over-refusal trade-offs in alignment and safety tuning"
+        }
+      ],
+      "answer": "D",
+      "insight": "Alignment tuning can shift behavior toward caution, sometimes too far. Teams need policy calibration between harm prevention and utility."
+    },
+    {
+      "text": "Why is red-teaming necessary even after internal QA passes?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Adversarial testing uncovers failure modes normal test prompts miss"
+        },
+        {
+          "id": "B",
+          "text": "It only matters for image models"
+        },
+        {
+          "id": "C",
+          "text": "It guarantees legal immunity"
+        },
+        {
+          "id": "D",
+          "text": "It replaces all production monitoring"
+        }
+      ],
+      "answer": "A",
+      "insight": "Safety failures often appear under adversarial pressure, not happy-path usage. Red-teaming expands coverage against realistic attacks."
+    },
+    {
+      "text": "Which statement about RLHF is most accurate for enterprise teams?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "RLHF makes retrieval unnecessary"
+        },
+        {
+          "id": "B",
+          "text": "RLHF can improve helpfulness and policy following, but does not eliminate hallucination or bias alone"
+        },
+        {
+          "id": "C",
+          "text": "RLHF guarantees perfect truthfulness in all domains"
+        },
+        {
+          "id": "D",
+          "text": "RLHF removes the need for guardrails"
+        }
+      ],
+      "answer": "B",
+      "insight": "Alignment methods shape behavior distributions, not absolute guarantees. System-level controls still govern risk."
+    },
+    {
+      "text": "A compliance officer asks for proof your safety posture improved over time. What evidence is strongest?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Internal opinions without metrics"
+        },
+        {
+          "id": "B",
+          "text": "A one-time demo recording"
+        },
+        {
+          "id": "C",
+          "text": "Versioned safety benchmarks, incident trend data, and documented mitigation outcomes"
+        },
+        {
+          "id": "D",
+          "text": "Model parameter count history only"
+        }
+      ],
+      "answer": "C",
+      "insight": "Responsible deployment requires continuous measurement and traceable change history. Governance depends on evidence, not claims."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

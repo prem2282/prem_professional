@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 16,
-      total: 20,
-      title: "Model Context Protocol (MCP)",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 16,
+  "total": 20,
+  "title": "Model Context Protocol (MCP)",
+  "questions": [
+    {
+      "text": "Your team wants one integration layer for internal docs/tools across multiple LLM clients. Why is MCP relevant?",
+      "choices": [
         {
-          text: "Your team wants one integration layer for internal docs/tools across multiple LLM clients. Why is MCP relevant?",
-          choices: [
-            { id: "A", text: "It defines a standard way for models/clients to access external resources and tools" },
-            { id: "B", text: "It forces use of a single model vendor" },
-            { id: "C", text: "It only supports image generation" },
-            { id: "D", text: "It replaces all authentication systems automatically" },
-          ],
-          answer: "A",
-          insight: "MCP aims to standardize context and tool interoperability. That reduces bespoke glue code and vendor lock-in pressure."
+          "id": "A",
+          "text": "It defines a standard way for models/clients to access external resources and tools"
         },
         {
-          text: "A security architect asks what must still be enforced when exposing tools through MCP servers. What is correct?",
-          choices: [
-            { id: "A", text: "Security shifts entirely to the model provider" },
-            { id: "B", text: "Authentication, authorization, auditing, and least-privilege access remain mandatory" },
-            { id: "C", text: "Only network firewall rules matter" },
-            { id: "D", text: "MCP removes the need for access controls" },
-          ],
-          answer: "B",
-          insight: "Protocol standardization does not remove security accountability. Enterprises still own identity, permissions, and monitoring."
+          "id": "B",
+          "text": "It forces use of a single model vendor"
         },
         {
-          text: "You are designing MCP resources for knowledge retrieval. Which approach is best for maintainability?",
-          choices: [
-            { id: "A", text: "Change response shape silently every sprint" },
-            { id: "B", text: "Use random field names per endpoint" },
-            { id: "C", text: "Expose clear, versioned resource schemas and stable identifiers for downstream clients" },
-            { id: "D", text: "Return unstructured blobs without contracts" },
-          ],
-          answer: "C",
-          insight: "Stable contracts make tool ecosystems reliable and evolvable. Schema discipline is essential for multi-client compatibility."
+          "id": "C",
+          "text": "It only supports image generation"
         },
         {
-          text: "What problem appears when an MCP tool is available but its side effects are not explained to the model/user?",
-          choices: [
-            { id: "A", text: "Higher monitor brightness" },
-            { id: "B", text: "Lossless compression failure" },
-            { id: "C", text: "Automatic elimination of hallucinations" },
-            { id: "D", text: "Unsafe or surprising actions due to unclear tool semantics and missing confirmation flows" },
-          ],
-          answer: "D",
-          insight: "Tool metadata should communicate what actions do, risks, and expected inputs. Clear semantics reduce accidental misuse."
+          "id": "D",
+          "text": "It replaces all authentication systems automatically"
+        }
+      ],
+      "answer": "A",
+      "insight": "MCP aims to standardize context and tool interoperability. That reduces bespoke glue code and vendor lock-in pressure."
+    },
+    {
+      "text": "A security architect asks what must still be enforced when exposing tools through MCP servers. What is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Security shifts entirely to the model provider"
         },
         {
-          text: "A platform team asks how to roll out MCP safely. What sequence is most responsible?",
-          choices: [
-            { id: "A", text: "Start with read-only resources, add observability and access controls, then phase in bounded write tools" },
-            { id: "B", text: "Allow anonymous tool access internally" },
-            { id: "C", text: "Skip logging to reduce latency" },
-            { id: "D", text: "Expose all write actions on day one to speed adoption" },
-          ],
-          answer: "A",
-          insight: "Progressive rollout limits blast radius while teams learn usage patterns. Read-only first is a proven risk management approach."
+          "id": "B",
+          "text": "Authentication, authorization, auditing, and least-privilege access remain mandatory"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Only network firewall rules matter"
+        },
+        {
+          "id": "D",
+          "text": "MCP removes the need for access controls"
+        }
+      ],
+      "answer": "B",
+      "insight": "Protocol standardization does not remove security accountability. Enterprises still own identity, permissions, and monitoring."
+    },
+    {
+      "text": "You are designing MCP resources for knowledge retrieval. Which approach is best for maintainability?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Change response shape silently every sprint"
+        },
+        {
+          "id": "B",
+          "text": "Use random field names per endpoint"
+        },
+        {
+          "id": "C",
+          "text": "Expose clear, versioned resource schemas and stable identifiers for downstream clients"
+        },
+        {
+          "id": "D",
+          "text": "Return unstructured blobs without contracts"
+        }
+      ],
+      "answer": "C",
+      "insight": "Stable contracts make tool ecosystems reliable and evolvable. Schema discipline is essential for multi-client compatibility."
+    },
+    {
+      "text": "What problem appears when an MCP tool is available but its side effects are not explained to the model/user?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Higher monitor brightness"
+        },
+        {
+          "id": "B",
+          "text": "Lossless compression failure"
+        },
+        {
+          "id": "C",
+          "text": "Automatic elimination of hallucinations"
+        },
+        {
+          "id": "D",
+          "text": "Unsafe or surprising actions due to unclear tool semantics and missing confirmation flows"
+        }
+      ],
+      "answer": "D",
+      "insight": "Tool metadata should communicate what actions do, risks, and expected inputs. Clear semantics reduce accidental misuse."
+    },
+    {
+      "text": "A platform team asks how to roll out MCP safely. What sequence is most responsible?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Start with read-only resources, add observability and access controls, then phase in bounded write tools"
+        },
+        {
+          "id": "B",
+          "text": "Allow anonymous tool access internally"
+        },
+        {
+          "id": "C",
+          "text": "Skip logging to reduce latency"
+        },
+        {
+          "id": "D",
+          "text": "Expose all write actions on day one to speed adoption"
+        }
+      ],
+      "answer": "A",
+      "insight": "Progressive rollout limits blast radius while teams learn usage patterns. Read-only first is a proven risk management approach."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

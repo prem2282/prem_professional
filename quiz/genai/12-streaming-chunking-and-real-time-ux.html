@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 12,
-      total: 20,
-      title: "Streaming, Chunking, and Real-Time UX",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 12,
+  "total": 20,
+  "title": "Streaming, Chunking, and Real-Time UX",
+  "questions": [
+    {
+      "text": "Your chat app waits for full completion before rendering text. Users report it feels slow. What change most directly improves perceived speed?",
+      "choices": [
         {
-          text: "Your chat app waits for full completion before rendering text. Users report it feels slow. What change most directly improves perceived speed?",
-          choices: [
-            { id: "A", text: "Enable token streaming to reduce time-to-first-token experience" },
-            { id: "B", text: "Hide loading indicators entirely" },
-            { id: "C", text: "Only optimize CSS bundle size" },
-            { id: "D", text: "Increase output length by default" },
-          ],
-          answer: "A",
-          insight: "Streaming gives immediate feedback and reduces perceived waiting. UX improvements often come from pipeline responsiveness, not only final latency."
+          "id": "A",
+          "text": "Enable token streaming to reduce time-to-first-token experience"
         },
         {
-          text: "A user edits the prompt while streaming is in progress, but stale tokens keep appearing. What system feature is missing?",
-          choices: [
-            { id: "A", text: "Higher model temperature" },
-            { id: "B", text: "Request cancellation and stream invalidation tied to active session/request IDs" },
-            { id: "C", text: "Disabling retries globally" },
-            { id: "D", text: "Bigger avatars in UI" },
-          ],
-          answer: "B",
-          insight: "Real-time interfaces need cancellation semantics, not just token transport. Without cancellation, stale outputs corrupt trust and usability."
+          "id": "B",
+          "text": "Hide loading indicators entirely"
         },
         {
-          text: "In a voice assistant, which metric best captures first impression latency?",
-          choices: [
-            { id: "A", text: "Number of CSS classes on page" },
-            { id: "B", text: "Average prompt length in characters" },
-            { id: "C", text: "Time-to-first-token or time-to-first-audio-chunk" },
-            { id: "D", text: "Total model parameter count" },
-          ],
-          answer: "C",
-          insight: "Users experience systems from first response cue. TTFT is a critical SLO for conversational product quality."
+          "id": "C",
+          "text": "Only optimize CSS bundle size"
         },
         {
-          text: "You stream partial JSON to a client parser and it fails intermittently. Which approach is best?",
-          choices: [
-            { id: "A", text: "Parse each token as full JSON immediately" },
-            { id: "B", text: "Turn off validation checks" },
-            { id: "C", text: "Switch to markdown output for APIs" },
-            { id: "D", text: "Buffer streamed tokens and parse only after complete structured object boundaries" },
-          ],
-          answer: "D",
-          insight: "Streaming text is incremental, but structured parsing needs framing rules. Proper chunk assembly prevents corrupt downstream execution."
+          "id": "D",
+          "text": "Increase output length by default"
+        }
+      ],
+      "answer": "A",
+      "insight": "Streaming gives immediate feedback and reduces perceived waiting. UX improvements often come from pipeline responsiveness, not only final latency."
+    },
+    {
+      "text": "A user edits the prompt while streaming is in progress, but stale tokens keep appearing. What system feature is missing?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Higher model temperature"
         },
         {
-          text: "A PM asks why chunked backend processing matters even with fast models. What is the best explanation?",
-          choices: [
-            { id: "A", text: "Pipeline chunking enables parallel work (retrieval, rerank, moderation) and smoother user feedback under load" },
-            { id: "B", text: "Chunking is unnecessary once model quality is high" },
-            { id: "C", text: "Chunking only changes UI color themes" },
-            { id: "D", text: "Chunking eliminates all network failures" },
-          ],
-          answer: "A",
-          insight: "System-level throughput depends on orchestration, not just model speed. Chunked workflows improve resilience and responsiveness."
+          "id": "B",
+          "text": "Request cancellation and stream invalidation tied to active session/request IDs"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Disabling retries globally"
+        },
+        {
+          "id": "D",
+          "text": "Bigger avatars in UI"
+        }
+      ],
+      "answer": "B",
+      "insight": "Real-time interfaces need cancellation semantics, not just token transport. Without cancellation, stale outputs corrupt trust and usability."
+    },
+    {
+      "text": "In a voice assistant, which metric best captures first impression latency?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Number of CSS classes on page"
+        },
+        {
+          "id": "B",
+          "text": "Average prompt length in characters"
+        },
+        {
+          "id": "C",
+          "text": "Time-to-first-token or time-to-first-audio-chunk"
+        },
+        {
+          "id": "D",
+          "text": "Total model parameter count"
+        }
+      ],
+      "answer": "C",
+      "insight": "Users experience systems from first response cue. TTFT is a critical SLO for conversational product quality."
+    },
+    {
+      "text": "You stream partial JSON to a client parser and it fails intermittently. Which approach is best?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Parse each token as full JSON immediately"
+        },
+        {
+          "id": "B",
+          "text": "Turn off validation checks"
+        },
+        {
+          "id": "C",
+          "text": "Switch to markdown output for APIs"
+        },
+        {
+          "id": "D",
+          "text": "Buffer streamed tokens and parse only after complete structured object boundaries"
+        }
+      ],
+      "answer": "D",
+      "insight": "Streaming text is incremental, but structured parsing needs framing rules. Proper chunk assembly prevents corrupt downstream execution."
+    },
+    {
+      "text": "A PM asks why chunked backend processing matters even with fast models. What is the best explanation?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Pipeline chunking enables parallel work (retrieval, rerank, moderation) and smoother user feedback under load"
+        },
+        {
+          "id": "B",
+          "text": "Chunking is unnecessary once model quality is high"
+        },
+        {
+          "id": "C",
+          "text": "Chunking only changes UI color themes"
+        },
+        {
+          "id": "D",
+          "text": "Chunking eliminates all network failures"
+        }
+      ],
+      "answer": "A",
+      "insight": "System-level throughput depends on orchestration, not just model speed. Chunked workflows improve resilience and responsiveness."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>

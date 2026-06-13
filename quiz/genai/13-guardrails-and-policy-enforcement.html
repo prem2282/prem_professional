@@ -80,71 +80,133 @@
   <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
 
   <script>
-    window.QUIZ_CONFIG =       subject: "genai",
-      subjectTitle: "Generative AI",
-      assetRoot: "../../",
-      profileImage: "../../Prem_2026.webp",
-      subjectIndexUrl: "../../quizzes/genai.html",
-      number: 13,
-      total: 20,
-      title: "Guardrails and Policy Enforcement",
-      questions: [
+    window.QUIZ_CONFIG = {
+  "subject": "genai",
+  "subjectTitle": "Generative AI",
+  "assetRoot": "../../",
+  "profileImage": "../../Prem_2026.webp",
+  "subjectIndexUrl": "../../quizzes/genai.html",
+  "number": 13,
+  "total": 20,
+  "title": "Guardrails and Policy Enforcement",
+  "questions": [
+    {
+      "text": "Your app blocks unsafe outputs, but attackers still exfiltrate secrets via tool calls. What failed?",
+      "choices": [
         {
-          text: "Your app blocks unsafe outputs, but attackers still exfiltrate secrets via tool calls. What failed?",
-          choices: [
-            { id: "A", text: "The context window was too large" },
-            { id: "B", text: "Policy enforcement was output-only and lacked tool-level controls" },
-            { id: "C", text: "You used JSON schemas" },
-            { id: "D", text: "Temperature was too low" },
-          ],
-          answer: "B",
-          insight: "Guardrails must cover input, planning, tool execution, and output. Output moderation alone cannot secure side-effectful workflows."
+          "id": "A",
+          "text": "The context window was too large"
         },
         {
-          text: "A regulated chatbot needs consistent refusal behavior across teams. What architecture helps most?",
-          choices: [
-            { id: "A", text: "Each team writes ad hoc refusal prompts" },
-            { id: "B", text: "Increase randomness to diversify refusals" },
-            { id: "C", text: "Central policy engine with versioned rules applied uniformly before and after model calls" },
-            { id: "D", text: "Rely only on user feedback after incidents" },
-          ],
-          answer: "C",
-          insight: "Centralized, versioned policy logic improves consistency and auditability. It also enables controlled rollout and rollback."
+          "id": "B",
+          "text": "Policy enforcement was output-only and lacked tool-level controls"
         },
         {
-          text: "Why is shadow mode useful when introducing new moderation rules?",
-          choices: [
-            { id: "A", text: "It permanently disables enforcement risk-free" },
-            { id: "B", text: "It guarantees no policy misses" },
-            { id: "C", text: "It removes the need for compliance review" },
-            { id: "D", text: "It measures false positives/negatives on live traffic without blocking users immediately" },
-          ],
-          answer: "D",
-          insight: "Shadow mode lets teams calibrate policy thresholds with real distributions before hard gating. That reduces accidental business disruption."
+          "id": "C",
+          "text": "You used JSON schemas"
         },
         {
-          text: "A policy says \"never provide legal advice.\" A user asks for legal interpretation disguised as a template request. What should happen?",
-          choices: [
-            { id: "A", text: "Classify intent and enforce policy semantics, not just keyword matching" },
-            { id: "B", text: "Ignore policy for premium users" },
-            { id: "C", text: "Allow if the phrase legal advice is absent" },
-            { id: "D", text: "Answer fully, then add a disclaimer" },
-          ],
-          answer: "A",
-          insight: "Policy evasion often uses paraphrase and indirection. Semantic classification and intent-aware gating are more robust than surface keyword checks."
+          "id": "D",
+          "text": "Temperature was too low"
+        }
+      ],
+      "answer": "B",
+      "insight": "Guardrails must cover input, planning, tool execution, and output. Output moderation alone cannot secure side-effectful workflows."
+    },
+    {
+      "text": "A regulated chatbot needs consistent refusal behavior across teams. What architecture helps most?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Each team writes ad hoc refusal prompts"
         },
         {
-          text: "Which telemetry is most important for guardrail operations?",
-          choices: [
-            { id: "A", text: "Only total token count per day" },
-            { id: "B", text: "Per-rule trigger rates, block/allow outcomes, appeal outcomes, and downstream incident links" },
-            { id: "C", text: "Average response font size" },
-            { id: "D", text: "Browser version by itself" },
-          ],
-          answer: "B",
-          insight: "Guardrails need measurable effectiveness, not just existence. Rule-level observability supports tuning and governance evidence."
+          "id": "B",
+          "text": "Increase randomness to diversify refusals"
         },
-      ];
+        {
+          "id": "C",
+          "text": "Central policy engine with versioned rules applied uniformly before and after model calls"
+        },
+        {
+          "id": "D",
+          "text": "Rely only on user feedback after incidents"
+        }
+      ],
+      "answer": "C",
+      "insight": "Centralized, versioned policy logic improves consistency and auditability. It also enables controlled rollout and rollback."
+    },
+    {
+      "text": "Why is shadow mode useful when introducing new moderation rules?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It permanently disables enforcement risk-free"
+        },
+        {
+          "id": "B",
+          "text": "It guarantees no policy misses"
+        },
+        {
+          "id": "C",
+          "text": "It removes the need for compliance review"
+        },
+        {
+          "id": "D",
+          "text": "It measures false positives/negatives on live traffic without blocking users immediately"
+        }
+      ],
+      "answer": "D",
+      "insight": "Shadow mode lets teams calibrate policy thresholds with real distributions before hard gating. That reduces accidental business disruption."
+    },
+    {
+      "text": "A policy says \"never provide legal advice.\" A user asks for legal interpretation disguised as a template request. What should happen?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Classify intent and enforce policy semantics, not just keyword matching"
+        },
+        {
+          "id": "B",
+          "text": "Ignore policy for premium users"
+        },
+        {
+          "id": "C",
+          "text": "Allow if the phrase legal advice is absent"
+        },
+        {
+          "id": "D",
+          "text": "Answer fully, then add a disclaimer"
+        }
+      ],
+      "answer": "A",
+      "insight": "Policy evasion often uses paraphrase and indirection. Semantic classification and intent-aware gating are more robust than surface keyword checks."
+    },
+    {
+      "text": "Which telemetry is most important for guardrail operations?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Only total token count per day"
+        },
+        {
+          "id": "B",
+          "text": "Per-rule trigger rates, block/allow outcomes, appeal outcomes, and downstream incident links"
+        },
+        {
+          "id": "C",
+          "text": "Average response font size"
+        },
+        {
+          "id": "D",
+          "text": "Browser version by itself"
+        }
+      ],
+      "answer": "B",
+      "insight": "Guardrails need measurable effectiveness, not just existence. Rule-level observability supports tuning and governance evidence."
+    }
+  ]
+};
   </script>
   <script src="../../assets/js/page-transitions.js"></script>
   <script src="../../assets/js/main.js"></script>
