@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="GenAI Quiz 04 — Tokens, Context Windows, and Model Parameters. Five scenario questions with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>Tokens, Context Windows, and Model Parameters | Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="../../assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-play-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="../../" data-active="quizzes" data-theme="dark"></div>
+  <script src="../../assets/js/site-nav.js"></script>
+  <div class="quiz-app" id="quiz-root">
+    <div class="quiz-appbar">
+      <a href="../../quizzes/genai.html" class="quiz-back" aria-label="Back to quizzes">←</a>
+      <h1 class="quiz-appbar-title">Tokens, Context Windows, and Model Parameters</h1>
+      <div class="quiz-xp-chip"><span>⚡</span><span id="quiz-xp">0</span></div>
+    </div>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="quiz-play" class="quiz-screen">
+      <div class="quiz-question-stage" id="quiz-question-stage">
+        <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+      </div>
+    </div>
+
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="quiz-results-wrap">
+        <div class="quiz-results-card">
+          <div class="quiz-results-badge" id="quiz-results-badge">🏆</div>
+          <h2 class="quiz-results-rank" id="quiz-results-rank">GenAI Architect</h2>
+          <p class="quiz-results-score" id="quiz-results-score">5 / 5 correct · 500 XP</p>
+          <div class="quiz-results-actions">
+            <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-replay-btn">Play again</button>
+            <a href="../../quizzes/genai.html" class="quiz-btn quiz-btn-secondary">All quizzes</a>
+          </div>
+          <div class="quiz-linkedin-cta" id="quiz-linkedin-cta"></div>
+          <div class="quiz-results-links">
+            <p class="quiz-results-links-title">Keep learning</p>
+            <div class="quiz-results-link-grid">
+              <a href="../../blogs.html" class="quiz-results-link">Blogs</a>
+              <a href="../../mylearnings.html" class="quiz-results-link">Learnings</a>
+              <a href="../../learn.html" class="quiz-results-link">Learn</a>
+              <a href="../../blogs/01-tokens.html" class="quiz-results-link">Tokens post</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-feedback" class="quiz-feedback" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="quiz-feedback-backdrop"></div>
+    <div class="quiz-feedback-card" id="quiz-feedback-card">
+      <div class="quiz-feedback-icon" id="quiz-feedback-icon">✨</div>
+      <h3 class="quiz-feedback-remark" id="quiz-feedback-remark">Great job!</h3>
+      <p class="quiz-feedback-insight" id="quiz-feedback-insight"></p>
+      <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Continue →</button>
+    </div>
+  </div>
+
+  <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
+
+  <script>
+    window.QUIZ_CONFIG =       subject: "genai",
+      subjectTitle: "Generative AI",
+      assetRoot: "../../",
+      profileImage: "../../Prem_2026.webp",
+      subjectIndexUrl: "../../quizzes/genai.html",
+      number: 4,
+      total: 20,
+      title: "Tokens, Context Windows, and Model Parameters",
+      questions: [
+        {
+          text: "Your support copilot starts missing user details after adding longer retrieved passages. What is the most likely cause?",
+          choices: [
+            { id: "A", text: "Context window overflow caused older conversation turns to be truncated" },
+            { id: "B", text: "Temperature is too low to read messages" },
+            { id: "C", text: "The tokenizer deleted punctuation permanently" },
+            { id: "D", text: "Top-p only works with audio models" },
+          ],
+          answer: "A",
+          insight: "Everything in the prompt competes for limited context space. Without budget management, relevant dialogue gets evicted and answer quality degrades."
+        },
+        {
+          text: "A product owner asks why 1,000 words can consume very different token counts across languages. What should you explain?",
+          choices: [
+            { id: "A", text: "Token count equals character count divided by ten" },
+            { id: "B", text: "Tokenizers split text into subword units, so token count depends on encoding patterns, not word count alone" },
+            { id: "C", text: "Every language always maps one word to one token" },
+            { id: "D", text: "Only whitespace determines token count" },
+          ],
+          answer: "B",
+          insight: "Cost and context usage are token-based, not word-based. Teams need tokenizer-aware budgeting to avoid surprise spend and truncation."
+        },
+        {
+          text: "You are tuning a compliance assistant. Which parameter setting is usually safer for consistent policy phrasing?",
+          choices: [
+            { id: "A", text: "Very high temperature and high top-p for maximum creativity" },
+            { id: "B", text: "Randomly switch temperature per request" },
+            { id: "C", text: "Lower temperature with constrained sampling to reduce variance" },
+            { id: "D", text: "Disable system prompts and rely only on top-p" },
+          ],
+          answer: "C",
+          insight: "Lower randomness improves reproducibility for regulated tasks. Sampling controls are quality levers, but they do not replace grounding or policy checks."
+        },
+        {
+          text: "A team confuses model parameters with inference parameters. Which statement is correct?",
+          choices: [
+            { id: "A", text: "Both are interchangeable names for the same thing" },
+            { id: "B", text: "Parameters only matter for retrieval systems" },
+            { id: "C", text: "Temperature is trained into the model permanently" },
+            { id: "D", text: "Model parameters are learned weights; temperature/top-p are runtime decoding controls" },
+          ],
+          answer: "D",
+          insight: "Conflating learned weights and decoding knobs leads to bad architecture decisions. One changes capability envelope, the other shapes output distribution."
+        },
+        {
+          text: "Your app must produce a JSON response under 400 tokens. What is the most robust production tactic?",
+          choices: [
+            { id: "A", text: "Set max output tokens and enforce schema validation with retry/repair logic" },
+            { id: "B", text: "Increase context window and ignore limits" },
+            { id: "C", text: "Ask politely for short answers and trust the first output" },
+            { id: "D", text: "Use only user prompts with no system contract" },
+          ],
+          answer: "A",
+          insight: "Hard limits and validation loops make output behavior reliable under constraints. Prompt wording alone is not enough for machine-critical contracts."
+        },
+      ];
+  </script>
+  <script src="../../assets/js/page-transitions.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/quiz-engine.js"></script>
+</body>
+</html>

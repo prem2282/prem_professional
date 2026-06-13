@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="GenAI Quiz 09 — Multimodal GenAI. Five scenario questions with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>Multimodal GenAI | Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="../../assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-play-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="../../" data-active="quizzes" data-theme="dark"></div>
+  <script src="../../assets/js/site-nav.js"></script>
+  <div class="quiz-app" id="quiz-root">
+    <div class="quiz-appbar">
+      <a href="../../quizzes/genai.html" class="quiz-back" aria-label="Back to quizzes">←</a>
+      <h1 class="quiz-appbar-title">Multimodal GenAI</h1>
+      <div class="quiz-xp-chip"><span>⚡</span><span id="quiz-xp">0</span></div>
+    </div>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="quiz-play" class="quiz-screen">
+      <div class="quiz-question-stage" id="quiz-question-stage">
+        <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+      </div>
+    </div>
+
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="quiz-results-wrap">
+        <div class="quiz-results-card">
+          <div class="quiz-results-badge" id="quiz-results-badge">🏆</div>
+          <h2 class="quiz-results-rank" id="quiz-results-rank">GenAI Architect</h2>
+          <p class="quiz-results-score" id="quiz-results-score">5 / 5 correct · 500 XP</p>
+          <div class="quiz-results-actions">
+            <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-replay-btn">Play again</button>
+            <a href="../../quizzes/genai.html" class="quiz-btn quiz-btn-secondary">All quizzes</a>
+          </div>
+          <div class="quiz-linkedin-cta" id="quiz-linkedin-cta"></div>
+          <div class="quiz-results-links">
+            <p class="quiz-results-links-title">Keep learning</p>
+            <div class="quiz-results-link-grid">
+              <a href="../../blogs.html" class="quiz-results-link">Blogs</a>
+              <a href="../../mylearnings.html" class="quiz-results-link">Learnings</a>
+              <a href="../../learn.html" class="quiz-results-link">Learn</a>
+              <a href="../../blogs/01-tokens.html" class="quiz-results-link">Tokens post</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-feedback" class="quiz-feedback" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="quiz-feedback-backdrop"></div>
+    <div class="quiz-feedback-card" id="quiz-feedback-card">
+      <div class="quiz-feedback-icon" id="quiz-feedback-icon">✨</div>
+      <h3 class="quiz-feedback-remark" id="quiz-feedback-remark">Great job!</h3>
+      <p class="quiz-feedback-insight" id="quiz-feedback-insight"></p>
+      <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Continue →</button>
+    </div>
+  </div>
+
+  <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
+
+  <script>
+    window.QUIZ_CONFIG =       subject: "genai",
+      subjectTitle: "Generative AI",
+      assetRoot: "../../",
+      profileImage: "../../Prem_2026.webp",
+      subjectIndexUrl: "../../quizzes/genai.html",
+      number: 9,
+      total: 20,
+      title: "Multimodal GenAI",
+      questions: [
+        {
+          text: "You build an invoice assistant using image inputs. It misreads tiny footnotes that change payment terms. What is the best mitigation?",
+          choices: [
+            { id: "A", text: "Increase chat temperature" },
+            { id: "B", text: "Add OCR quality checks and confidence thresholds before downstream decisions" },
+            { id: "C", text: "Assume image models are always exact on documents" },
+            { id: "D", text: "Disable text prompts entirely" },
+          ],
+          answer: "B",
+          insight: "Vision models can miss fine-grained text or layout cues. Confidence-aware extraction and fallback flows are essential in financial workflows."
+        },
+        {
+          text: "A field team uploads photos of equipment for diagnosis. Which risk is most specific to multimodal systems?",
+          choices: [
+            { id: "A", text: "Images remove all privacy concerns" },
+            { id: "B", text: "Tokenization does not apply to multimodal models" },
+            { id: "C", text: "Spurious visual correlations can cause incorrect conclusions from background artifacts" },
+            { id: "D", text: "Multimodal models cannot process text" },
+          ],
+          answer: "C",
+          insight: "Vision inputs can carry misleading context unrelated to the target object. Robust prompts and validation should constrain what evidence is considered."
+        },
+        {
+          text: "Your contact-center app transcribes calls and summarizes actions. What should be prioritized first for production reliability?",
+          choices: [
+            { id: "A", text: "Removing timestamps from transcripts" },
+            { id: "B", text: "Only tuning the final text summarizer" },
+            { id: "C", text: "Replacing all domain terms with generic synonyms" },
+            { id: "D", text: "End-to-end evaluation of ASR error impact on downstream summaries and actions" },
+          ],
+          answer: "D",
+          insight: "Audio errors propagate through every later stage. You need pipeline-level quality gates, not isolated model tuning."
+        },
+        {
+          text: "A security review asks why image uploads need stricter controls than plain text. Which answer is strongest?",
+          choices: [
+            { id: "A", text: "Images may contain hidden sensitive data (PII/screenshots/metadata) requiring dedicated scanning and access policy" },
+            { id: "B", text: "Image files are always safer than text files" },
+            { id: "C", text: "No additional controls are needed if SSL is enabled" },
+            { id: "D", text: "Multimodal models automatically redact PII" },
+          ],
+          answer: "A",
+          insight: "Multimodal inputs widen the attack and compliance surface. Intake controls, retention policy, and auditability must cover non-text artifacts too."
+        },
+        {
+          text: "When should you avoid using a multimodal model and keep a deterministic pipeline instead?",
+          choices: [
+            { id: "A", text: "When you want lower cloud egress cost" },
+            { id: "B", text: "When the task requires exact extraction from known templates with strict error tolerance" },
+            { id: "C", text: "When image files are larger than 1 MB" },
+            { id: "D", text: "When users ask for natural language explanations" },
+          ],
+          answer: "B",
+          insight: "Deterministic parsers often outperform generative perception for rigid forms. Choose modality and model class by risk and precision requirements, not trend."
+        },
+      ];
+  </script>
+  <script src="../../assets/js/page-transitions.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/quiz-engine.js"></script>
+</body>
+</html>

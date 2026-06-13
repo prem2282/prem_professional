@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="GenAI Quiz 02 — Pretrained Transformers and the Rise of GenAI. Five scenario questions with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>Pretrained Transformers and the Rise of GenAI | Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="../../assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-play-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="../../" data-active="quizzes" data-theme="dark"></div>
+  <script src="../../assets/js/site-nav.js"></script>
+  <div class="quiz-app" id="quiz-root">
+    <div class="quiz-appbar">
+      <a href="../../quizzes/genai.html" class="quiz-back" aria-label="Back to quizzes">←</a>
+      <h1 class="quiz-appbar-title">Pretrained Transformers and the Rise of GenAI</h1>
+      <div class="quiz-xp-chip"><span>⚡</span><span id="quiz-xp">0</span></div>
+    </div>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="quiz-play" class="quiz-screen">
+      <div class="quiz-question-stage" id="quiz-question-stage">
+        <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+      </div>
+    </div>
+
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="quiz-results-wrap">
+        <div class="quiz-results-card">
+          <div class="quiz-results-badge" id="quiz-results-badge">🏆</div>
+          <h2 class="quiz-results-rank" id="quiz-results-rank">GenAI Architect</h2>
+          <p class="quiz-results-score" id="quiz-results-score">5 / 5 correct · 500 XP</p>
+          <div class="quiz-results-actions">
+            <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-replay-btn">Play again</button>
+            <a href="../../quizzes/genai.html" class="quiz-btn quiz-btn-secondary">All quizzes</a>
+          </div>
+          <div class="quiz-linkedin-cta" id="quiz-linkedin-cta"></div>
+          <div class="quiz-results-links">
+            <p class="quiz-results-links-title">Keep learning</p>
+            <div class="quiz-results-link-grid">
+              <a href="../../blogs.html" class="quiz-results-link">Blogs</a>
+              <a href="../../mylearnings.html" class="quiz-results-link">Learnings</a>
+              <a href="../../learn.html" class="quiz-results-link">Learn</a>
+              <a href="../../blogs/01-tokens.html" class="quiz-results-link">Tokens post</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-feedback" class="quiz-feedback" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="quiz-feedback-backdrop"></div>
+    <div class="quiz-feedback-card" id="quiz-feedback-card">
+      <div class="quiz-feedback-icon" id="quiz-feedback-icon">✨</div>
+      <h3 class="quiz-feedback-remark" id="quiz-feedback-remark">Great job!</h3>
+      <p class="quiz-feedback-insight" id="quiz-feedback-insight"></p>
+      <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Continue →</button>
+    </div>
+  </div>
+
+  <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
+
+  <script>
+    window.QUIZ_CONFIG =       subject: "genai",
+      subjectTitle: "Generative AI",
+      assetRoot: "../../",
+      profileImage: "../../Prem_2026.webp",
+      subjectIndexUrl: "../../quizzes/genai.html",
+      number: 2,
+      total: 20,
+      title: "Pretrained Transformers and the Rise of GenAI",
+      questions: [
+        {
+          text: "Your team compares an old RNN summarizer with a transformer model. The transformer handles long policy documents far better. What architectural reason best explains this?",
+          choices: [
+            { id: "A", text: "RNNs cannot process more than one sentence" },
+            { id: "B", text: "Transformers only train on legal documents" },
+            { id: "C", text: "Self-attention lets tokens directly relate to distant tokens in parallel" },
+            { id: "D", text: "Transformers guarantee factual outputs" },
+          ],
+          answer: "C",
+          insight: "Self-attention reduces the path length between distant dependencies and enables parallel training. That is a key reason transformers scale and preserve context better than sequence-only recurrence."
+        },
+        {
+          text: "A VP asks why \"pretraining\" mattered so much for GenAI adoption. What is the most accurate answer?",
+          choices: [
+            { id: "A", text: "Pretraining creates task-specific labels automatically" },
+            { id: "B", text: "Pretraining prevents prompt injection" },
+            { id: "C", text: "Pretraining removes the need for inference compute" },
+            { id: "D", text: "Pretraining learns broad language patterns that can be adapted with prompting or fine-tuning" },
+          ],
+          answer: "D",
+          insight: "Foundation behavior comes from large-scale next-token learning before any narrow task setup. That transfer ability is why one model can be reused across many enterprise use cases."
+        },
+        {
+          text: "You are debugging slow model training. Why is transformer parallelism strategically important compared to older sequence models?",
+          choices: [
+            { id: "A", text: "It allows all tokens in a sequence to be processed simultaneously during training" },
+            { id: "B", text: "It ensures zero data preprocessing effort" },
+            { id: "C", text: "It makes GPUs unnecessary" },
+            { id: "D", text: "It removes the need for optimizers like Adam" },
+          ],
+          answer: "A",
+          insight: "Parallel token processing is a major throughput unlock that enabled scaling laws in practice. Without that efficiency, training frontier models at modern sizes would be far less feasible."
+        },
+        {
+          text: "A stakeholder claims \"bigger model always means better product.\" Which response is technically correct?",
+          choices: [
+            { id: "A", text: "Only inference latency matters, never quality" },
+            { id: "B", text: "Model quality scales, but product outcomes still depend on data, retrieval, guardrails, and UX" },
+            { id: "C", text: "Size has no impact on model performance" },
+            { id: "D", text: "All transformer models have identical capabilities" },
+          ],
+          answer: "B",
+          insight: "Scaling helps base capability but does not replace system design. Enterprise success depends on the full pipeline, not parameter count alone."
+        },
+        {
+          text: "Why did transformers help unlock multimodal and tool-augmented systems beyond plain chat?",
+          choices: [
+            { id: "A", text: "Because attention works only for English text" },
+            { id: "B", text: "Because transformers are hard-coded for images and APIs" },
+            { id: "C", text: "Because attention-based architectures can generalize sequence modeling across tokenized modalities and actions" },
+            { id: "D", text: "Because transformers never require alignment tuning" },
+          ],
+          answer: "C",
+          insight: "The same sequence modeling core can consume text, vision tokens, audio tokens, and structured tool descriptions. That architectural flexibility fueled modern GenAI ecosystems."
+        },
+      ];
+  </script>
+  <script src="../../assets/js/page-transitions.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/quiz-engine.js"></script>
+</body>
+</html>

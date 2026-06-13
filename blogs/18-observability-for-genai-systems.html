@@ -49,35 +49,9 @@
     .gap-list { margin: 0.5rem 0; padding-left: 1.1rem; font-size: 0.86rem; color: #64748b; }
   </style>
 
-  <header class="fixed top-0 inset-x-0 z-50 blog-post-nav">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
-      <a href="../index.html" class="nav-home" aria-label="Home"><img src="../Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
-      <button type="button" id="nav-toggle" class="lg:hidden" aria-expanded="false" aria-controls="nav-menu">
-        <span class="sr-only">Menu</span>
-        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
-        <span class="block h-0.5 w-6 mb-1 bg-slate-700"></span>
-        <span class="block h-0.5 w-6 bg-slate-700"></span>
-      </button>
-      <ul id="nav-menu" class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
-        <li><a href="../index.html" class="blog-nav-link">Home</a></li>
-        <li><a href="../ascent.html" class="blog-nav-link">The Ascent</a></li>
-        <li><a href="../blogs.html" class="blog-nav-active">Blogs</a></li>
-        <li><a href="../mylearnings.html" class="blog-nav-link">My Learnings</a></li>
-        <li><a href="../learn.html" class="blog-nav-link">Learn</a></li>
-      </ul>
-    </nav>
-    <div id="mobile-menu" class="hidden lg:hidden bg-[#f7f3ea] border-t border-slate-200/80" aria-hidden="true">
-      <ul class="flex flex-col gap-1 px-6 pb-6 pt-3 text-lg text-slate-700">
-        <li><a href="../index.html" class="block py-1">Home</a></li>
-        <li><a href="../ascent.html" class="block py-1">The Ascent</a></li>
-        <li><a href="../blogs.html" class="block py-1 text-amber-700">Blogs</a></li>
-        <li><a href="../mylearnings.html" class="block py-1">My Learnings</a></li>
-        <li><a href="../learn.html" class="block py-1">Learn</a></li>
-      </ul>
-    </div>
-  </header>
-
-  <main class="pt-28 pb-24 px-6">
+  <div id="site-nav-root" data-base="../" data-active="blogs" data-theme="light"></div>
+  <script src="../assets/js/site-nav.js"></script>
+<main class="pt-28 pb-24 px-6">
     <article class="blog-post-shell blog-content">
       <header class="mb-10">
       <figure class="blog-hero" aria-label="Article thumbnail" hidden>

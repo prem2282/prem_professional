@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="GenAI Quiz 08 — Fine-Tuning and Model Adaptation. Five scenario questions with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>Fine-Tuning and Model Adaptation | Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="../../assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-play-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="../../" data-active="quizzes" data-theme="dark"></div>
+  <script src="../../assets/js/site-nav.js"></script>
+  <div class="quiz-app" id="quiz-root">
+    <div class="quiz-appbar">
+      <a href="../../quizzes/genai.html" class="quiz-back" aria-label="Back to quizzes">←</a>
+      <h1 class="quiz-appbar-title">Fine-Tuning and Model Adaptation</h1>
+      <div class="quiz-xp-chip"><span>⚡</span><span id="quiz-xp">0</span></div>
+    </div>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="quiz-play" class="quiz-screen">
+      <div class="quiz-question-stage" id="quiz-question-stage">
+        <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+      </div>
+    </div>
+
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="quiz-results-wrap">
+        <div class="quiz-results-card">
+          <div class="quiz-results-badge" id="quiz-results-badge">🏆</div>
+          <h2 class="quiz-results-rank" id="quiz-results-rank">GenAI Architect</h2>
+          <p class="quiz-results-score" id="quiz-results-score">5 / 5 correct · 500 XP</p>
+          <div class="quiz-results-actions">
+            <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-replay-btn">Play again</button>
+            <a href="../../quizzes/genai.html" class="quiz-btn quiz-btn-secondary">All quizzes</a>
+          </div>
+          <div class="quiz-linkedin-cta" id="quiz-linkedin-cta"></div>
+          <div class="quiz-results-links">
+            <p class="quiz-results-links-title">Keep learning</p>
+            <div class="quiz-results-link-grid">
+              <a href="../../blogs.html" class="quiz-results-link">Blogs</a>
+              <a href="../../mylearnings.html" class="quiz-results-link">Learnings</a>
+              <a href="../../learn.html" class="quiz-results-link">Learn</a>
+              <a href="../../blogs/01-tokens.html" class="quiz-results-link">Tokens post</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-feedback" class="quiz-feedback" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="quiz-feedback-backdrop"></div>
+    <div class="quiz-feedback-card" id="quiz-feedback-card">
+      <div class="quiz-feedback-icon" id="quiz-feedback-icon">✨</div>
+      <h3 class="quiz-feedback-remark" id="quiz-feedback-remark">Great job!</h3>
+      <p class="quiz-feedback-insight" id="quiz-feedback-insight"></p>
+      <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Continue →</button>
+    </div>
+  </div>
+
+  <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
+
+  <script>
+    window.QUIZ_CONFIG =       subject: "genai",
+      subjectTitle: "Generative AI",
+      assetRoot: "../../",
+      profileImage: "../../Prem_2026.webp",
+      subjectIndexUrl: "../../quizzes/genai.html",
+      number: 8,
+      total: 20,
+      title: "Fine-Tuning and Model Adaptation",
+      questions: [
+        {
+          text: "Your internal assistant answers with the wrong legal policy version. Should fine-tuning be your first fix?",
+          choices: [
+            { id: "A", text: "No; first improve retrieval and source freshness because policy truth changes over time" },
+            { id: "B", text: "Yes; fine-tune weekly to memorize all policy updates" },
+            { id: "C", text: "Yes; fine-tuning always replaces RAG" },
+            { id: "D", text: "No; never fine-tune for any use case" },
+          ],
+          answer: "A",
+          insight: "Fine-tuning is weak for rapidly changing factual data. Retrieval and source governance are usually the right first line for dynamic enterprise knowledge."
+        },
+        {
+          text: "When is LoRA-style adaptation typically preferred over full model fine-tuning?",
+          choices: [
+            { id: "A", text: "When you want to increase context window size" },
+            { id: "B", text: "When you need lower compute/storage overhead and task-specific adaptation" },
+            { id: "C", text: "When no labeled data exists" },
+            { id: "D", text: "When you need to retrain the tokenizer from scratch" },
+          ],
+          answer: "B",
+          insight: "Parameter-efficient fine-tuning methods can deliver strong gains with less infrastructure burden. That makes them practical for many enterprise teams."
+        },
+        {
+          text: "A tuned model starts echoing sensitive examples seen during training. What governance lesson applies?",
+          choices: [
+            { id: "A", text: "Sensitive data in training is safe if prompts are short" },
+            { id: "B", text: "Only inference-time moderation can prevent this" },
+            { id: "C", text: "Data curation and privacy filtering are critical before fine-tuning" },
+            { id: "D", text: "This is unrelated to training data quality" },
+          ],
+          answer: "C",
+          insight: "Fine-tuning can amplify patterns from training examples, including harmful leakage risks. Dataset governance is as important as model choice."
+        },
+        {
+          text: "Which signal suggests fine-tuning may be justified?",
+          choices: [
+            { id: "A", text: "You want instant factual updates every hour" },
+            { id: "B", text: "Your team has no evaluation suite" },
+            { id: "C", text: "You have no clear task definition" },
+            { id: "D", text: "Consistent style/format errors remain after strong prompting and retrieval improvements" },
+          ],
+          answer: "D",
+          insight: "Fine-tuning is best for persistent behavior shaping, not replacing operational data pipelines. Run it when you can measure targeted gains."
+        },
+        {
+          text: "After fine-tuning, what is the most important release control?",
+          choices: [
+            { id: "A", text: "Regression evaluation against baseline with safety and task-specific metrics" },
+            { id: "B", text: "Deploy directly to all users" },
+            { id: "C", text: "Skip benchmark comparisons to save time" },
+            { id: "D", text: "Manual spot-check by one engineer only" },
+          ],
+          answer: "A",
+          insight: "Tuned models can improve one behavior while degrading others. Controlled evaluation and staged rollout reduce blast radius."
+        },
+      ];
+  </script>
+  <script src="../../assets/js/page-transitions.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/quiz-engine.js"></script>
+</body>
+</html>

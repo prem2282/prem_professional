@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="GenAI Quiz 19 — AI Governance and Responsible Deployment. Five scenario questions with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>AI Governance and Responsible Deployment | Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="../../assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-play-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="../../" data-active="quizzes" data-theme="dark"></div>
+  <script src="../../assets/js/site-nav.js"></script>
+  <div class="quiz-app" id="quiz-root">
+    <div class="quiz-appbar">
+      <a href="../../quizzes/genai.html" class="quiz-back" aria-label="Back to quizzes">←</a>
+      <h1 class="quiz-appbar-title">AI Governance and Responsible Deployment</h1>
+      <div class="quiz-xp-chip"><span>⚡</span><span id="quiz-xp">0</span></div>
+    </div>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="quiz-play" class="quiz-screen">
+      <div class="quiz-question-stage" id="quiz-question-stage">
+        <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+      </div>
+    </div>
+
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="quiz-results-wrap">
+        <div class="quiz-results-card">
+          <div class="quiz-results-badge" id="quiz-results-badge">🏆</div>
+          <h2 class="quiz-results-rank" id="quiz-results-rank">GenAI Architect</h2>
+          <p class="quiz-results-score" id="quiz-results-score">5 / 5 correct · 500 XP</p>
+          <div class="quiz-results-actions">
+            <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-replay-btn">Play again</button>
+            <a href="../../quizzes/genai.html" class="quiz-btn quiz-btn-secondary">All quizzes</a>
+          </div>
+          <div class="quiz-linkedin-cta" id="quiz-linkedin-cta"></div>
+          <div class="quiz-results-links">
+            <p class="quiz-results-links-title">Keep learning</p>
+            <div class="quiz-results-link-grid">
+              <a href="../../blogs.html" class="quiz-results-link">Blogs</a>
+              <a href="../../mylearnings.html" class="quiz-results-link">Learnings</a>
+              <a href="../../learn.html" class="quiz-results-link">Learn</a>
+              <a href="../../blogs/01-tokens.html" class="quiz-results-link">Tokens post</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-feedback" class="quiz-feedback" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="quiz-feedback-backdrop"></div>
+    <div class="quiz-feedback-card" id="quiz-feedback-card">
+      <div class="quiz-feedback-icon" id="quiz-feedback-icon">✨</div>
+      <h3 class="quiz-feedback-remark" id="quiz-feedback-remark">Great job!</h3>
+      <p class="quiz-feedback-insight" id="quiz-feedback-insight"></p>
+      <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Continue →</button>
+    </div>
+  </div>
+
+  <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
+
+  <script>
+    window.QUIZ_CONFIG =       subject: "genai",
+      subjectTitle: "Generative AI",
+      assetRoot: "../../",
+      profileImage: "../../Prem_2026.webp",
+      subjectIndexUrl: "../../quizzes/genai.html",
+      number: 19,
+      total: 20,
+      title: "AI Governance and Responsible Deployment",
+      questions: [
+        {
+          text: "A team ships a model update Friday evening without notifying risk owners. What governance gap is most obvious?",
+          choices: [
+            { id: "A", text: "Too many eval metrics" },
+            { id: "B", text: "Low top-p value" },
+            { id: "C", text: "Insufficient CSS testing" },
+            { id: "D", text: "Missing change-management ownership and release approval workflow" },
+          ],
+          answer: "D",
+          insight: "Responsible deployment requires clear accountability for model changes. Governance aligns speed with controlled risk."
+        },
+        {
+          text: "Why are model cards useful in enterprise AI programs?",
+          choices: [
+            { id: "A", text: "They document intended use, limitations, evaluation results, and risk considerations for stakeholders" },
+            { id: "B", text: "They automatically improve model accuracy" },
+            { id: "C", text: "They are only marketing assets" },
+            { id: "D", text: "They replace all legal and security reviews" },
+          ],
+          answer: "A",
+          insight: "Model cards create shared understanding across technical and non-technical teams. They support transparent risk communication and audit readiness."
+        },
+        {
+          text: "A regulator asks how decisions from your GenAI system can be audited. What architecture answer is strongest?",
+          choices: [
+            { id: "A", text: "Delete traces immediately after each call regardless of policy" },
+            { id: "B", text: "Maintain immutable logs of prompts, context sources, model/tool versions, and decision outcomes with access controls" },
+            { id: "C", text: "Keep only final user-visible responses" },
+            { id: "D", text: "Rely on memory of the support team" },
+          ],
+          answer: "B",
+          insight: "Auditability depends on end-to-end provenance and retention policy. Without traces, accountability and incident response both fail."
+        },
+        {
+          text: "Which governance pattern best supports multi-team GenAI delivery?",
+          choices: [
+            { id: "A", text: "Only legal team owns all operational decisions" },
+            { id: "B", text: "No policies until first major incident" },
+            { id: "C", text: "Risk-tiered controls: lightweight for low-risk use, stricter gates for high-impact workflows" },
+            { id: "D", text: "One identical approval path for every tiny change" },
+          ],
+          answer: "C",
+          insight: "Tiered governance avoids both over-bureaucracy and under-control. Control intensity should match impact and exposure."
+        },
+        {
+          text: "A business unit wants to skip post-deployment monitoring because pre-launch tests passed. What is the best response?",
+          choices: [
+            { id: "A", text: "Monitoring is optional once approval is granted" },
+            { id: "B", text: "Only monthly manual checks are enough" },
+            { id: "C", text: "Disable feedback collection to reduce noise" },
+            { id: "D", text: "Production monitoring is mandatory because model behavior and user traffic evolve after launch" },
+          ],
+          answer: "D",
+          insight: "Governance is continuous, not a one-time gate. Drift, misuse, and policy changes require ongoing operational visibility."
+        },
+      ];
+  </script>
+  <script src="../../assets/js/page-transitions.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/quiz-engine.js"></script>
+</body>
+</html>

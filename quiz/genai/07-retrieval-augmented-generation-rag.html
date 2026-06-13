@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="GenAI Quiz 07 — Retrieval-Augmented Generation (RAG). Five scenario questions with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>Retrieval-Augmented Generation (RAG) | Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="../../assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-play-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="../../" data-active="quizzes" data-theme="dark"></div>
+  <script src="../../assets/js/site-nav.js"></script>
+  <div class="quiz-app" id="quiz-root">
+    <div class="quiz-appbar">
+      <a href="../../quizzes/genai.html" class="quiz-back" aria-label="Back to quizzes">←</a>
+      <h1 class="quiz-appbar-title">Retrieval-Augmented Generation (RAG)</h1>
+      <div class="quiz-xp-chip"><span>⚡</span><span id="quiz-xp">0</span></div>
+    </div>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="quiz-play" class="quiz-screen">
+      <div class="quiz-question-stage" id="quiz-question-stage">
+        <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+      </div>
+    </div>
+
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="quiz-results-wrap">
+        <div class="quiz-results-card">
+          <div class="quiz-results-badge" id="quiz-results-badge">🏆</div>
+          <h2 class="quiz-results-rank" id="quiz-results-rank">GenAI Architect</h2>
+          <p class="quiz-results-score" id="quiz-results-score">5 / 5 correct · 500 XP</p>
+          <div class="quiz-results-actions">
+            <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-replay-btn">Play again</button>
+            <a href="../../quizzes/genai.html" class="quiz-btn quiz-btn-secondary">All quizzes</a>
+          </div>
+          <div class="quiz-linkedin-cta" id="quiz-linkedin-cta"></div>
+          <div class="quiz-results-links">
+            <p class="quiz-results-links-title">Keep learning</p>
+            <div class="quiz-results-link-grid">
+              <a href="../../blogs.html" class="quiz-results-link">Blogs</a>
+              <a href="../../mylearnings.html" class="quiz-results-link">Learnings</a>
+              <a href="../../learn.html" class="quiz-results-link">Learn</a>
+              <a href="../../blogs/01-tokens.html" class="quiz-results-link">Tokens post</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-feedback" class="quiz-feedback" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="quiz-feedback-backdrop"></div>
+    <div class="quiz-feedback-card" id="quiz-feedback-card">
+      <div class="quiz-feedback-icon" id="quiz-feedback-icon">✨</div>
+      <h3 class="quiz-feedback-remark" id="quiz-feedback-remark">Great job!</h3>
+      <p class="quiz-feedback-insight" id="quiz-feedback-insight"></p>
+      <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Continue →</button>
+    </div>
+  </div>
+
+  <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
+
+  <script>
+    window.QUIZ_CONFIG =       subject: "genai",
+      subjectTitle: "Generative AI",
+      assetRoot: "../../",
+      profileImage: "../../Prem_2026.webp",
+      subjectIndexUrl: "../../quizzes/genai.html",
+      number: 7,
+      total: 20,
+      title: "Retrieval-Augmented Generation (RAG)",
+      questions: [
+        {
+          text: "Your HR assistant answers policy questions incorrectly even though the policy PDF exists in your corpus. Which stage should you inspect first?",
+          choices: [
+            { id: "A", text: "Laptop battery mode" },
+            { id: "B", text: "UI button color contrast" },
+            { id: "C", text: "DNS resolver cache" },
+            { id: "D", text: "Retrieval relevance and chunking quality before generation" },
+          ],
+          answer: "D",
+          insight: "If the right evidence is not retrieved, generation cannot fix it reliably. RAG quality depends heavily on retrieval pipeline health."
+        },
+        {
+          text: "When does RAG usually outperform switching to a much larger base model?",
+          choices: [
+            { id: "A", text: "When answers require current, domain-specific facts not fully represented in model pretraining" },
+            { id: "B", text: "When no documents are available at all" },
+            { id: "C", text: "When prompts are empty" },
+            { id: "D", text: "When you need random creative fiction" },
+          ],
+          answer: "A",
+          insight: "Larger models improve reasoning and fluency, but retrieval supplies authoritative, up-to-date ground truth. Enterprise accuracy often depends more on data freshness than model size."
+        },
+        {
+          text: "A team uses only dense vector search and misses exact product codes. What is a strong fix?",
+          choices: [
+            { id: "A", text: "Disable embeddings to reduce complexity" },
+            { id: "B", text: "Use hybrid retrieval combining lexical and semantic signals" },
+            { id: "C", text: "Remove metadata filters completely" },
+            { id: "D", text: "Increase temperature to 1.2" },
+          ],
+          answer: "B",
+          insight: "Dense search captures semantic similarity, while lexical methods preserve exact token matches. Hybrid strategies often improve recall in enterprise corpora."
+        },
+        {
+          text: "What is the key purpose of reranking in a RAG pipeline?",
+          choices: [
+            { id: "A", text: "Generating final answers faster than the LLM" },
+            { id: "B", text: "Compressing PDF files before indexing" },
+            { id: "C", text: "Reordering top retrieved candidates by query-document relevance before context packing" },
+            { id: "D", text: "Replacing access control checks" },
+          ],
+          answer: "C",
+          insight: "Reranking improves the quality of context sent to the model. Better top-k ordering directly affects answer precision and citation quality."
+        },
+        {
+          text: "A compliance bot must cite source passages for every answer. Which design is best?",
+          choices: [
+            { id: "A", text: "Ask the model to invent citations if none are found" },
+            { id: "B", text: "Disable retrieval to reduce latency" },
+            { id: "C", text: "Use only training-time model memory" },
+            { id: "D", text: "Force citation fields in output schema and pass document IDs/snippets in prompt context" },
+          ],
+          answer: "D",
+          insight: "Citations require explicit data plumbing and output contracts. Without evidence references, citation behavior becomes unreliable and hard to audit."
+        },
+      ];
+  </script>
+  <script src="../../assets/js/page-transitions.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/quiz-engine.js"></script>
+</body>
+</html>

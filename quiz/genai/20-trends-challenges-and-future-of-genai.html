@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="GenAI Quiz 20 — Trends, Challenges, and Future of GenAI. Five scenario questions with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>Trends, Challenges, and Future of GenAI | Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="../../assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-play-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="../../" data-active="quizzes" data-theme="dark"></div>
+  <script src="../../assets/js/site-nav.js"></script>
+  <div class="quiz-app" id="quiz-root">
+    <div class="quiz-appbar">
+      <a href="../../quizzes/genai.html" class="quiz-back" aria-label="Back to quizzes">←</a>
+      <h1 class="quiz-appbar-title">Trends, Challenges, and Future of GenAI</h1>
+      <div class="quiz-xp-chip"><span>⚡</span><span id="quiz-xp">0</span></div>
+    </div>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="quiz-play" class="quiz-screen">
+      <div class="quiz-question-stage" id="quiz-question-stage">
+        <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+      </div>
+    </div>
+
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="quiz-results-wrap">
+        <div class="quiz-results-card">
+          <div class="quiz-results-badge" id="quiz-results-badge">🏆</div>
+          <h2 class="quiz-results-rank" id="quiz-results-rank">GenAI Architect</h2>
+          <p class="quiz-results-score" id="quiz-results-score">5 / 5 correct · 500 XP</p>
+          <div class="quiz-results-actions">
+            <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-replay-btn">Play again</button>
+            <a href="../../quizzes/genai.html" class="quiz-btn quiz-btn-secondary">All quizzes</a>
+          </div>
+          <div class="quiz-linkedin-cta" id="quiz-linkedin-cta"></div>
+          <div class="quiz-results-links">
+            <p class="quiz-results-links-title">Keep learning</p>
+            <div class="quiz-results-link-grid">
+              <a href="../../blogs.html" class="quiz-results-link">Blogs</a>
+              <a href="../../mylearnings.html" class="quiz-results-link">Learnings</a>
+              <a href="../../learn.html" class="quiz-results-link">Learn</a>
+              <a href="../../blogs/01-tokens.html" class="quiz-results-link">Tokens post</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-feedback" class="quiz-feedback" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="quiz-feedback-backdrop"></div>
+    <div class="quiz-feedback-card" id="quiz-feedback-card">
+      <div class="quiz-feedback-icon" id="quiz-feedback-icon">✨</div>
+      <h3 class="quiz-feedback-remark" id="quiz-feedback-remark">Great job!</h3>
+      <p class="quiz-feedback-insight" id="quiz-feedback-insight"></p>
+      <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Continue →</button>
+    </div>
+  </div>
+
+  <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
+
+  <script>
+    window.QUIZ_CONFIG =       subject: "genai",
+      subjectTitle: "Generative AI",
+      assetRoot: "../../",
+      profileImage: "../../Prem_2026.webp",
+      subjectIndexUrl: "../../quizzes/genai.html",
+      number: 20,
+      total: 20,
+      title: "Trends, Challenges, and Future of GenAI",
+      questions: [
+        {
+          text: "Your mobile product needs offline assistance with strict latency and privacy constraints. Which trend is most relevant?",
+          choices: [
+            { id: "A", text: "Small language models optimized for edge deployment and task-specific performance" },
+            { id: "B", text: "Always using the largest cloud model available" },
+            { id: "C", text: "Avoiding quantization in every case" },
+            { id: "D", text: "Removing all model evaluations for speed" },
+          ],
+          answer: "A",
+          insight: "Edge-capable SLMs can offer better latency, cost, and data locality for constrained workloads. Bigger is not always better for product fit."
+        },
+        {
+          text: "A research lead warns about model collapse in future training pipelines. What does this mean?",
+          choices: [
+            { id: "A", text: "Models physically stop running after too many prompts" },
+            { id: "B", text: "Training excessively on synthetic model-generated data can degrade diversity and factual quality over generations" },
+            { id: "C", text: "GPU memory is unrelated to training data quality" },
+            { id: "D", text: "Context windows shrink automatically over time" },
+          ],
+          answer: "B",
+          insight: "Data quality and provenance remain foundational as synthetic data increases. Healthy training mixtures are critical for long-term model robustness."
+        },
+        {
+          text: "Why are durable skills still more strategic than chasing every new model release?",
+          choices: [
+            { id: "A", text: "Prompting is the only skill needed forever" },
+            { id: "B", text: "Infrastructure no longer matters in AI products" },
+            { id: "C", text: "System design, eval discipline, security, and governance transfer across model generations" },
+            { id: "D", text: "New models rarely change anything" },
+          ],
+          answer: "C",
+          insight: "Model capabilities evolve quickly, but engineering fundamentals persist. Teams with strong operational practices adapt faster and safer."
+        },
+        {
+          text: "A CIO asks what the next 2-year challenge will be after pilot success. Which answer is most realistic?",
+          choices: [
+            { id: "A", text: "Ignoring integration architecture once MVP ships" },
+            { id: "B", text: "Eliminating all need for human oversight" },
+            { id: "C", text: "Choosing a logo for the chatbot" },
+            { id: "D", text: "Scaling governance, observability, and cost control across many AI-enabled workflows" },
+          ],
+          answer: "D",
+          insight: "Enterprise value comes from sustained operations at scale, not isolated demos. Platform maturity determines long-term ROI."
+        },
+        {
+          text: "Your team must pick a roadmap principle for uncertain model progress. What is the strongest principle?",
+          choices: [
+            { id: "A", text: "Design model-agnostic architectures with swap-ready interfaces, robust evals, and fallback paths" },
+            { id: "B", text: "Hard-code one model vendor into every subsystem" },
+            { id: "C", text: "Skip baseline metrics to move fast" },
+            { id: "D", text: "Delay all shipping until model progress stabilizes" },
+          ],
+          answer: "A",
+          insight: "Future-proof systems separate business logic from model dependencies. Optionality plus measurement is the best hedge against rapid ecosystem change."
+        },
+      ];
+  </script>
+  <script src="../../assets/js/page-transitions.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/quiz-engine.js"></script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="GenAI Quiz 11 — Memory and Context Management. Five scenario questions with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>Memory and Context Management | Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="../../assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-play-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="../../" data-active="quizzes" data-theme="dark"></div>
+  <script src="../../assets/js/site-nav.js"></script>
+  <div class="quiz-app" id="quiz-root">
+    <div class="quiz-appbar">
+      <a href="../../quizzes/genai.html" class="quiz-back" aria-label="Back to quizzes">←</a>
+      <h1 class="quiz-appbar-title">Memory and Context Management</h1>
+      <div class="quiz-xp-chip"><span>⚡</span><span id="quiz-xp">0</span></div>
+    </div>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="quiz-play" class="quiz-screen">
+      <div class="quiz-question-stage" id="quiz-question-stage">
+        <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+      </div>
+    </div>
+
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="quiz-results-wrap">
+        <div class="quiz-results-card">
+          <div class="quiz-results-badge" id="quiz-results-badge">🏆</div>
+          <h2 class="quiz-results-rank" id="quiz-results-rank">GenAI Architect</h2>
+          <p class="quiz-results-score" id="quiz-results-score">5 / 5 correct · 500 XP</p>
+          <div class="quiz-results-actions">
+            <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-replay-btn">Play again</button>
+            <a href="../../quizzes/genai.html" class="quiz-btn quiz-btn-secondary">All quizzes</a>
+          </div>
+          <div class="quiz-linkedin-cta" id="quiz-linkedin-cta"></div>
+          <div class="quiz-results-links">
+            <p class="quiz-results-links-title">Keep learning</p>
+            <div class="quiz-results-link-grid">
+              <a href="../../blogs.html" class="quiz-results-link">Blogs</a>
+              <a href="../../mylearnings.html" class="quiz-results-link">Learnings</a>
+              <a href="../../learn.html" class="quiz-results-link">Learn</a>
+              <a href="../../blogs/01-tokens.html" class="quiz-results-link">Tokens post</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-feedback" class="quiz-feedback" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="quiz-feedback-backdrop"></div>
+    <div class="quiz-feedback-card" id="quiz-feedback-card">
+      <div class="quiz-feedback-icon" id="quiz-feedback-icon">✨</div>
+      <h3 class="quiz-feedback-remark" id="quiz-feedback-remark">Great job!</h3>
+      <p class="quiz-feedback-insight" id="quiz-feedback-insight"></p>
+      <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Continue →</button>
+    </div>
+  </div>
+
+  <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
+
+  <script>
+    window.QUIZ_CONFIG =       subject: "genai",
+      subjectTitle: "Generative AI",
+      assetRoot: "../../",
+      profileImage: "../../Prem_2026.webp",
+      subjectIndexUrl: "../../quizzes/genai.html",
+      number: 11,
+      total: 20,
+      title: "Memory and Context Management",
+      questions: [
+        {
+          text: "A user says your assistant keeps forgetting preferences within one chat session. Which layer is most likely broken?",
+          choices: [
+            { id: "A", text: "HTTP status code mapping" },
+            { id: "B", text: "Cloud region selection" },
+            { id: "C", text: "Embedding dimensionality only" },
+            { id: "D", text: "Short-term conversation state assembly into each model call" },
+          ],
+          answer: "D",
+          insight: "If turn history is not passed correctly, the model cannot maintain continuity. Session memory is mostly an application orchestration problem."
+        },
+        {
+          text: "When should user profile preferences be stored as long-term memory instead of prompt-only context?",
+          choices: [
+            { id: "A", text: "When preferences should persist across sessions and are consented, scoped, and governable" },
+            { id: "B", text: "For every transient conversation detail" },
+            { id: "C", text: "Only when model context window is full" },
+            { id: "D", text: "Never; persistent memory is always prohibited" },
+          ],
+          answer: "A",
+          insight: "Persistent memory is a product decision tied to privacy and lifecycle controls. Not all context deserves retention."
+        },
+        {
+          text: "Your summarization layer compresses chat history too aggressively, causing wrong follow-up answers. What trade-off is being mismanaged?",
+          choices: [
+            { id: "A", text: "Color theme versus readability" },
+            { id: "B", text: "Context efficiency versus fidelity of critical details" },
+            { id: "C", text: "Language locale versus tokenization" },
+            { id: "D", text: "GPU utilization versus browser paint time" },
+          ],
+          answer: "B",
+          insight: "Summaries save tokens but can erase constraints and commitments. Compression strategies need domain-aware salience rules."
+        },
+        {
+          text: "A healthcare assistant stores all raw patient chats indefinitely as memory. What is the primary governance risk?",
+          choices: [
+            { id: "A", text: "Fewer available emojis" },
+            { id: "B", text: "Reduced creativity in model outputs" },
+            { id: "C", text: "Unbounded retention of sensitive data without purpose limitation and deletion controls" },
+            { id: "D", text: "Slight increase in token cost only" },
+          ],
+          answer: "C",
+          insight: "Memory policies must align with privacy laws and enterprise data governance. Retain only what is necessary and auditable."
+        },
+        {
+          text: "What is a robust strategy when context exceeds model limits during long conversations?",
+          choices: [
+            { id: "A", text: "Disable context entirely and answer statelessly" },
+            { id: "B", text: "Drop all system instructions first" },
+            { id: "C", text: "Send the earliest messages only" },
+            { id: "D", text: "Use layered memory: keep recent turns verbatim, summarize older turns, and retrieve relevant long-term facts selectively" },
+          ],
+          answer: "D",
+          insight: "Layered context management balances fidelity, relevance, and token budget. It scales better than naive truncation for production assistants."
+        },
+      ];
+  </script>
+  <script src="../../assets/js/page-transitions.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/quiz-engine.js"></script>
+</body>
+</html>

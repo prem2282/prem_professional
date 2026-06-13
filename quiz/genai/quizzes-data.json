@@ -1,0 +1,2482 @@
+[
+  {
+    "number": 1,
+    "slug": "what-is-generative-ai",
+    "title": "What is Generative AI?",
+    "description": "Generation vs. retrieval, rules engines, and why fluent wrong answers happen.",
+    "hook": "If your AI sounds confident but wrong, this quiz will show you exactly why.",
+    "questions": [
+      {
+        "text": "A customer support bot answers \"What's your refund policy?\" perfectly - but your company has no refund policy. What most likely happened?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The model called a database you forgot you connected"
+          },
+          {
+            "id": "B",
+            "text": "The model hallucinated a plausible-sounding policy from patterns in its training data"
+          },
+          {
+            "id": "C",
+            "text": "The model searched your website and found a hidden page"
+          },
+          {
+            "id": "D",
+            "text": "The model refused because it detected missing knowledge"
+          }
+        ],
+        "answer": "B",
+        "insight": "Generative models predict likely text - they do not look up truth unless you wire in retrieval or tools. A confident wrong answer is an architectural behavior, not a random glitch."
+      },
+      {
+        "text": "Which task is GenAI worst at out of the box compared to traditional software?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Summarizing a 10-page document you paste in"
+          },
+          {
+            "id": "B",
+            "text": "Rewriting technical jargon into plain English"
+          },
+          {
+            "id": "C",
+            "text": "Returning the exact account balance for user ID 847291 at 3:02 PM"
+          },
+          {
+            "id": "D",
+            "text": "Drafting three email subject lines for a product launch"
+          }
+        ],
+        "answer": "C",
+        "insight": "GenAI is strong at language transformation, not authoritative system state. Exact live facts require API/database access or retrieval, not free-form generation."
+      },
+      {
+        "text": "Your manager says: \"Let's replace our rules engine with ChatGPT.\" What's the sharpest counter-argument?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "GenAI only works in English"
+          },
+          {
+            "id": "B",
+            "text": "GenAI cannot handle more than 100 words of input"
+          },
+          {
+            "id": "C",
+            "text": "ChatGPT is too expensive for any business use"
+          },
+          {
+            "id": "D",
+            "text": "A rules engine guarantees deterministic outcomes; GenAI produces probabilistic outputs"
+          }
+        ],
+        "answer": "D",
+        "insight": "Use GenAI where language flexibility matters, and deterministic systems where compliance and exact branching are mandatory. They are complementary, not interchangeable."
+      },
+      {
+        "text": "\"Generative\" in Generative AI refers to:",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The model creates new outputs (text, images, code) rather than only classifying inputs"
+          },
+          {
+            "id": "B",
+            "text": "The model generates user profiles for advertising"
+          },
+          {
+            "id": "C",
+            "text": "The model generates electricity-efficient responses"
+          },
+          {
+            "id": "D",
+            "text": "The model generates its own training data from scratch"
+          }
+        ],
+        "answer": "A",
+        "insight": "Discriminative models classify; generative models synthesize novel outputs. That difference drives where each approach is useful in product design."
+      },
+      {
+        "text": "Which pairing best describes GenAI vs. search?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Search uses AI; GenAI does not use the internet"
+          },
+          {
+            "id": "B",
+            "text": "Search finds existing documents; GenAI composes new language from learned patterns"
+          },
+          {
+            "id": "C",
+            "text": "They are the same thing with different branding"
+          },
+          {
+            "id": "D",
+            "text": "Search is always faster; GenAI is always more accurate"
+          }
+        ],
+        "answer": "B",
+        "insight": "RAG combines both sides: retrieval fetches evidence and generation synthesizes an answer. Knowing the boundary avoids unrealistic expectations from a bare LLM."
+      }
+    ]
+  },
+  {
+    "number": 2,
+    "slug": "pretrained-transformers-and-the-rise-of-genai",
+    "title": "Pretrained Transformers and the Rise of GenAI",
+    "description": "Attention, scaling, and the architecture shift behind modern LLMs.",
+    "hook": "Transformers did not just improve NLP - they changed how software gets built.",
+    "questions": [
+      {
+        "text": "Your team compares an old RNN summarizer with a transformer model. The transformer handles long policy documents far better. What architectural reason best explains this?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "RNNs cannot process more than one sentence"
+          },
+          {
+            "id": "B",
+            "text": "Transformers only train on legal documents"
+          },
+          {
+            "id": "C",
+            "text": "Self-attention lets tokens directly relate to distant tokens in parallel"
+          },
+          {
+            "id": "D",
+            "text": "Transformers guarantee factual outputs"
+          }
+        ],
+        "answer": "C",
+        "insight": "Self-attention reduces the path length between distant dependencies and enables parallel training. That is a key reason transformers scale and preserve context better than sequence-only recurrence."
+      },
+      {
+        "text": "A VP asks why \"pretraining\" mattered so much for GenAI adoption. What is the most accurate answer?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Pretraining creates task-specific labels automatically"
+          },
+          {
+            "id": "B",
+            "text": "Pretraining prevents prompt injection"
+          },
+          {
+            "id": "C",
+            "text": "Pretraining removes the need for inference compute"
+          },
+          {
+            "id": "D",
+            "text": "Pretraining learns broad language patterns that can be adapted with prompting or fine-tuning"
+          }
+        ],
+        "answer": "D",
+        "insight": "Foundation behavior comes from large-scale next-token learning before any narrow task setup. That transfer ability is why one model can be reused across many enterprise use cases."
+      },
+      {
+        "text": "You are debugging slow model training. Why is transformer parallelism strategically important compared to older sequence models?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "It allows all tokens in a sequence to be processed simultaneously during training"
+          },
+          {
+            "id": "B",
+            "text": "It ensures zero data preprocessing effort"
+          },
+          {
+            "id": "C",
+            "text": "It makes GPUs unnecessary"
+          },
+          {
+            "id": "D",
+            "text": "It removes the need for optimizers like Adam"
+          }
+        ],
+        "answer": "A",
+        "insight": "Parallel token processing is a major throughput unlock that enabled scaling laws in practice. Without that efficiency, training frontier models at modern sizes would be far less feasible."
+      },
+      {
+        "text": "A stakeholder claims \"bigger model always means better product.\" Which response is technically correct?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only inference latency matters, never quality"
+          },
+          {
+            "id": "B",
+            "text": "Model quality scales, but product outcomes still depend on data, retrieval, guardrails, and UX"
+          },
+          {
+            "id": "C",
+            "text": "Size has no impact on model performance"
+          },
+          {
+            "id": "D",
+            "text": "All transformer models have identical capabilities"
+          }
+        ],
+        "answer": "B",
+        "insight": "Scaling helps base capability but does not replace system design. Enterprise success depends on the full pipeline, not parameter count alone."
+      },
+      {
+        "text": "Why did transformers help unlock multimodal and tool-augmented systems beyond plain chat?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Because attention works only for English text"
+          },
+          {
+            "id": "B",
+            "text": "Because transformers are hard-coded for images and APIs"
+          },
+          {
+            "id": "C",
+            "text": "Because attention-based architectures can generalize sequence modeling across tokenized modalities and actions"
+          },
+          {
+            "id": "D",
+            "text": "Because transformers never require alignment tuning"
+          }
+        ],
+        "answer": "C",
+        "insight": "The same sequence modeling core can consume text, vision tokens, audio tokens, and structured tool descriptions. That architectural flexibility fueled modern GenAI ecosystems."
+      }
+    ]
+  },
+  {
+    "number": 3,
+    "slug": "large-language-models-fundamentals",
+    "title": "Large Language Models — Fundamentals",
+    "description": "Autoregressive decoding, instruction tuning, and knowledge cutoffs.",
+    "hook": "Before building copilots, make sure your team understands how an LLM actually predicts.",
+    "questions": [
+      {
+        "text": "A product manager asks what an LLM does at inference time. Which explanation is most accurate?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "It runs deterministic rules for every domain"
+          },
+          {
+            "id": "B",
+            "text": "It retrieves exact answers from a hidden SQL table"
+          },
+          {
+            "id": "C",
+            "text": "It checks the internet by default for every sentence"
+          },
+          {
+            "id": "D",
+            "text": "It predicts the next token repeatedly based on prior context"
+          }
+        ],
+        "answer": "D",
+        "insight": "Autoregressive decoding is the core mechanism behind LLM outputs. Understanding that helps teams reason about variability, latency, and hallucination behavior."
+      },
+      {
+        "text": "Your legal chatbot answers with outdated regulation details from two years ago. Which limitation is most likely in play?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Knowledge cutoff in pretrained weights without current grounding"
+          },
+          {
+            "id": "B",
+            "text": "Missing CSS minification"
+          },
+          {
+            "id": "C",
+            "text": "Too many API retries"
+          },
+          {
+            "id": "D",
+            "text": "Low monitor refresh rate"
+          }
+        ],
+        "answer": "A",
+        "insight": "An LLM's internal knowledge is bounded by its training horizon. Fresh enterprise facts require retrieval, tools, or model updates."
+      },
+      {
+        "text": "Why does instruction tuning improve enterprise usability compared to a raw base model?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "It guarantees no harmful outputs in any setting"
+          },
+          {
+            "id": "B",
+            "text": "It aligns model behavior with human-followable instruction formats and task intents"
+          },
+          {
+            "id": "C",
+            "text": "It eliminates the need for prompts"
+          },
+          {
+            "id": "D",
+            "text": "It removes token limits"
+          }
+        ],
+        "answer": "B",
+        "insight": "Instruction tuning teaches the model to respond in useful assistant-like patterns. It improves compliance with task framing but still requires guardrails and evaluation."
+      },
+      {
+        "text": "An engineer says: \"If temperature is 0, the model is always factual.\" What is the best correction?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Temperature 0 disables all hallucinations by design"
+          },
+          {
+            "id": "B",
+            "text": "Temperature only matters for image models"
+          },
+          {
+            "id": "C",
+            "text": "Temperature controls randomness, not truthfulness"
+          },
+          {
+            "id": "D",
+            "text": "Temperature 0 makes retrieval mandatory"
+          }
+        ],
+        "answer": "C",
+        "insight": "Lower temperature reduces sampling variance but does not create external verification. Grounding and validation are separate controls."
+      },
+      {
+        "text": "A team notices the model follows user instructions that conflict with system policy. What concept should they revisit first?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Webhook retry intervals"
+          },
+          {
+            "id": "B",
+            "text": "GPU batch size scheduling"
+          },
+          {
+            "id": "C",
+            "text": "DNS TTL values"
+          },
+          {
+            "id": "D",
+            "text": "Prompt hierarchy and instruction precedence across system, developer, and user messages"
+          }
+        ],
+        "answer": "D",
+        "insight": "LLM behavior depends on message hierarchy and prompt assembly quality. Policy robustness requires explicit precedence plus downstream enforcement layers."
+      }
+    ]
+  },
+  {
+    "number": 4,
+    "slug": "tokens-context-windows-and-model-parameters",
+    "title": "Tokens, Context Windows, and Model Parameters",
+    "description": "Tokenization, context limits, temperature, and top-p in production.",
+    "hook": "Most GenAI incidents start as token budget mistakes, not model bugs.",
+    "questions": [
+      {
+        "text": "Your support copilot starts missing user details after adding longer retrieved passages. What is the most likely cause?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Context window overflow caused older conversation turns to be truncated"
+          },
+          {
+            "id": "B",
+            "text": "Temperature is too low to read messages"
+          },
+          {
+            "id": "C",
+            "text": "The tokenizer deleted punctuation permanently"
+          },
+          {
+            "id": "D",
+            "text": "Top-p only works with audio models"
+          }
+        ],
+        "answer": "A",
+        "insight": "Everything in the prompt competes for limited context space. Without budget management, relevant dialogue gets evicted and answer quality degrades."
+      },
+      {
+        "text": "A product owner asks why 1,000 words can consume very different token counts across languages. What should you explain?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Token count equals character count divided by ten"
+          },
+          {
+            "id": "B",
+            "text": "Tokenizers split text into subword units, so token count depends on encoding patterns, not word count alone"
+          },
+          {
+            "id": "C",
+            "text": "Every language always maps one word to one token"
+          },
+          {
+            "id": "D",
+            "text": "Only whitespace determines token count"
+          }
+        ],
+        "answer": "B",
+        "insight": "Cost and context usage are token-based, not word-based. Teams need tokenizer-aware budgeting to avoid surprise spend and truncation."
+      },
+      {
+        "text": "You are tuning a compliance assistant. Which parameter setting is usually safer for consistent policy phrasing?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Very high temperature and high top-p for maximum creativity"
+          },
+          {
+            "id": "B",
+            "text": "Randomly switch temperature per request"
+          },
+          {
+            "id": "C",
+            "text": "Lower temperature with constrained sampling to reduce variance"
+          },
+          {
+            "id": "D",
+            "text": "Disable system prompts and rely only on top-p"
+          }
+        ],
+        "answer": "C",
+        "insight": "Lower randomness improves reproducibility for regulated tasks. Sampling controls are quality levers, but they do not replace grounding or policy checks."
+      },
+      {
+        "text": "A team confuses model parameters with inference parameters. Which statement is correct?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Both are interchangeable names for the same thing"
+          },
+          {
+            "id": "B",
+            "text": "Parameters only matter for retrieval systems"
+          },
+          {
+            "id": "C",
+            "text": "Temperature is trained into the model permanently"
+          },
+          {
+            "id": "D",
+            "text": "Model parameters are learned weights; temperature/top-p are runtime decoding controls"
+          }
+        ],
+        "answer": "D",
+        "insight": "Conflating learned weights and decoding knobs leads to bad architecture decisions. One changes capability envelope, the other shapes output distribution."
+      },
+      {
+        "text": "Your app must produce a JSON response under 400 tokens. What is the most robust production tactic?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Set max output tokens and enforce schema validation with retry/repair logic"
+          },
+          {
+            "id": "B",
+            "text": "Increase context window and ignore limits"
+          },
+          {
+            "id": "C",
+            "text": "Ask politely for short answers and trust the first output"
+          },
+          {
+            "id": "D",
+            "text": "Use only user prompts with no system contract"
+          }
+        ],
+        "answer": "A",
+        "insight": "Hard limits and validation loops make output behavior reliable under constraints. Prompt wording alone is not enough for machine-critical contracts."
+      }
+    ]
+  },
+  {
+    "number": 5,
+    "slug": "prompt-engineering-for-genai",
+    "title": "Prompt Engineering for GenAI",
+    "description": "Few-shot pitfalls, chain-of-thought, and output contracts.",
+    "hook": "Prompt quality is product quality when your app depends on language behavior.",
+    "questions": [
+      {
+        "text": "Your team gets inconsistent summaries from the same model. Which prompt improvement usually helps most first?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Hide task goals from the model"
+          },
+          {
+            "id": "B",
+            "text": "Add a clear output schema and acceptance criteria in the system prompt"
+          },
+          {
+            "id": "C",
+            "text": "Remove all examples to keep prompt short"
+          },
+          {
+            "id": "D",
+            "text": "Only increase temperature"
+          }
+        ],
+        "answer": "B",
+        "insight": "Explicit contracts reduce ambiguity and make outputs more testable. Prompt engineering is strongest when it translates requirements into constraints."
+      },
+      {
+        "text": "A teammate pastes 12 few-shot examples and quality drops. What is the most likely issue?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The model cannot use examples"
+          },
+          {
+            "id": "B",
+            "text": "Examples automatically disable system prompts"
+          },
+          {
+            "id": "C",
+            "text": "Examples may be noisy, conflicting, or consume context needed for the actual input"
+          },
+          {
+            "id": "D",
+            "text": "Few-shot prompting only works in code generation"
+          }
+        ],
+        "answer": "C",
+        "insight": "Few-shot helps only when examples are representative and concise. Poor examples can anchor the model to wrong style or evict critical context."
+      },
+      {
+        "text": "For regulated use cases, what is the best stance on chain-of-thought prompting?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Replace all prompts with embeddings"
+          },
+          {
+            "id": "B",
+            "text": "Never ask the model to think before answering"
+          },
+          {
+            "id": "C",
+            "text": "Always force full hidden reasoning in final output"
+          },
+          {
+            "id": "D",
+            "text": "Ask for concise, verifiable rationale or structured evidence instead of exposing unrestricted reasoning text"
+          }
+        ],
+        "answer": "D",
+        "insight": "Enterprise workflows benefit from auditable explanations tied to evidence, not verbose speculative reasoning. Design for traceability and safety, not prompt folklore."
+      },
+      {
+        "text": "A support bot should answer only from provided policy excerpts. Which instruction pattern is strongest?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "If evidence is insufficient, abstain and state missing information"
+          },
+          {
+            "id": "B",
+            "text": "Use the shortest possible prompt without constraints"
+          },
+          {
+            "id": "C",
+            "text": "Ignore citations to improve speed"
+          },
+          {
+            "id": "D",
+            "text": "Always answer confidently, even without evidence"
+          }
+        ],
+        "answer": "A",
+        "insight": "Abstention rules reduce fabricated outputs in high-risk flows. Good prompts define both what to do and what to do when evidence is missing."
+      },
+      {
+        "text": "Your extractor returns markdown instead of JSON every few calls. What should be added to the prompt/system design?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Higher temperature to increase diversity"
+          },
+          {
+            "id": "B",
+            "text": "A strict output contract with schema examples and parser-aware error handling"
+          },
+          {
+            "id": "C",
+            "text": "Fewer required fields in the schema and no validation"
+          },
+          {
+            "id": "D",
+            "text": "No delimiters in instructions"
+          }
+        ],
+        "answer": "B",
+        "insight": "Prompt contracts and schema validation work together for reliability. Production systems assume occasional format drift and recover automatically."
+      }
+    ]
+  },
+  {
+    "number": 6,
+    "slug": "llm-apis-and-making-calls",
+    "title": "LLM APIs and Making Calls",
+    "description": "Rate limits, streaming, roles, and production API hygiene.",
+    "hook": "Shipping GenAI means treating model calls like any other critical production API.",
+    "questions": [
+      {
+        "text": "Your API integration starts returning 429 errors during peak traffic. What is the best first mitigation?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Switch all requests to larger prompts"
+          },
+          {
+            "id": "B",
+            "text": "Disable logging to reduce 429s"
+          },
+          {
+            "id": "C",
+            "text": "Implement retry with exponential backoff and request shaping to stay within provider limits"
+          },
+          {
+            "id": "D",
+            "text": "Retry instantly in tight loops until success"
+          }
+        ],
+        "answer": "C",
+        "insight": "Rate limiting is a platform contract, not an error to brute-force. Backoff, queueing, and adaptive throttling stabilize reliability and cost."
+      },
+      {
+        "text": "A chat endpoint occasionally leaks prior user details across sessions. Which root cause is most plausible?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The model provider changed logo colors"
+          },
+          {
+            "id": "B",
+            "text": "Prompt had fewer than 100 tokens"
+          },
+          {
+            "id": "C",
+            "text": "Temperature was set to 0.2"
+          },
+          {
+            "id": "D",
+            "text": "Message history was reused across tenants without proper session isolation"
+          }
+        ],
+        "answer": "D",
+        "insight": "Conversation state handling is an application responsibility. Tenant and session isolation is a non-negotiable security boundary."
+      },
+      {
+        "text": "Why is streaming useful in user-facing chat products even when total completion time stays similar?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "It lowers time-to-first-token and improves perceived responsiveness"
+          },
+          {
+            "id": "B",
+            "text": "It eliminates guardrail requirements"
+          },
+          {
+            "id": "C",
+            "text": "It guarantees better factual accuracy"
+          },
+          {
+            "id": "D",
+            "text": "It removes model costs"
+          }
+        ],
+        "answer": "A",
+        "insight": "Users judge latency from first visible progress, not only final token time. Streaming improves UX while backend optimization continues."
+      },
+      {
+        "text": "Your team debates whether to send all prompt instructions as user content. What is best practice?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Rely on hidden browser variables instead of API roles"
+          },
+          {
+            "id": "B",
+            "text": "Separate stable policy/behavior instructions from user content using role-aware message structure"
+          },
+          {
+            "id": "C",
+            "text": "Remove system-level guidance entirely"
+          },
+          {
+            "id": "D",
+            "text": "Put everything into one long user message only"
+          }
+        ],
+        "answer": "B",
+        "insight": "Role separation helps preserve instruction hierarchy and reduces accidental policy override. It also makes prompt assembly easier to audit."
+      },
+      {
+        "text": "An incident review shows you cannot trace which prompt version caused a bad output. What should be added?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "More emojis in responses"
+          },
+          {
+            "id": "B",
+            "text": "Use random prompt templates per request"
+          },
+          {
+            "id": "C",
+            "text": "Structured observability with request IDs, prompt/version metadata, and model identifiers"
+          },
+          {
+            "id": "D",
+            "text": "Disable retries permanently"
+          }
+        ],
+        "answer": "C",
+        "insight": "Without traceability, root-cause analysis is guesswork. Prompt and model provenance should be logged like any production dependency."
+      }
+    ]
+  },
+  {
+    "number": 7,
+    "slug": "retrieval-augmented-generation-rag",
+    "title": "Retrieval-Augmented Generation (RAG)",
+    "description": "Chunking, hybrid search, and when retrieval beats bigger models.",
+    "hook": "Most hallucinations blamed on LLMs are really retrieval pipeline bugs.",
+    "questions": [
+      {
+        "text": "Your HR assistant answers policy questions incorrectly even though the policy PDF exists in your corpus. Which stage should you inspect first?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Laptop battery mode"
+          },
+          {
+            "id": "B",
+            "text": "UI button color contrast"
+          },
+          {
+            "id": "C",
+            "text": "DNS resolver cache"
+          },
+          {
+            "id": "D",
+            "text": "Retrieval relevance and chunking quality before generation"
+          }
+        ],
+        "answer": "D",
+        "insight": "If the right evidence is not retrieved, generation cannot fix it reliably. RAG quality depends heavily on retrieval pipeline health."
+      },
+      {
+        "text": "When does RAG usually outperform switching to a much larger base model?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "When answers require current, domain-specific facts not fully represented in model pretraining"
+          },
+          {
+            "id": "B",
+            "text": "When no documents are available at all"
+          },
+          {
+            "id": "C",
+            "text": "When prompts are empty"
+          },
+          {
+            "id": "D",
+            "text": "When you need random creative fiction"
+          }
+        ],
+        "answer": "A",
+        "insight": "Larger models improve reasoning and fluency, but retrieval supplies authoritative, up-to-date ground truth. Enterprise accuracy often depends more on data freshness than model size."
+      },
+      {
+        "text": "A team uses only dense vector search and misses exact product codes. What is a strong fix?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Disable embeddings to reduce complexity"
+          },
+          {
+            "id": "B",
+            "text": "Use hybrid retrieval combining lexical and semantic signals"
+          },
+          {
+            "id": "C",
+            "text": "Remove metadata filters completely"
+          },
+          {
+            "id": "D",
+            "text": "Increase temperature to 1.2"
+          }
+        ],
+        "answer": "B",
+        "insight": "Dense search captures semantic similarity, while lexical methods preserve exact token matches. Hybrid strategies often improve recall in enterprise corpora."
+      },
+      {
+        "text": "What is the key purpose of reranking in a RAG pipeline?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Generating final answers faster than the LLM"
+          },
+          {
+            "id": "B",
+            "text": "Compressing PDF files before indexing"
+          },
+          {
+            "id": "C",
+            "text": "Reordering top retrieved candidates by query-document relevance before context packing"
+          },
+          {
+            "id": "D",
+            "text": "Replacing access control checks"
+          }
+        ],
+        "answer": "C",
+        "insight": "Reranking improves the quality of context sent to the model. Better top-k ordering directly affects answer precision and citation quality."
+      },
+      {
+        "text": "A compliance bot must cite source passages for every answer. Which design is best?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Ask the model to invent citations if none are found"
+          },
+          {
+            "id": "B",
+            "text": "Disable retrieval to reduce latency"
+          },
+          {
+            "id": "C",
+            "text": "Use only training-time model memory"
+          },
+          {
+            "id": "D",
+            "text": "Force citation fields in output schema and pass document IDs/snippets in prompt context"
+          }
+        ],
+        "answer": "D",
+        "insight": "Citations require explicit data plumbing and output contracts. Without evidence references, citation behavior becomes unreliable and hard to audit."
+      }
+    ]
+  },
+  {
+    "number": 8,
+    "slug": "fine-tuning-and-model-adaptation",
+    "title": "Fine-Tuning and Model Adaptation",
+    "description": "LoRA, data curation, and when not to fine-tune.",
+    "hook": "Fine-tuning is powerful, but the wrong dataset can hard-code expensive mistakes.",
+    "questions": [
+      {
+        "text": "Your internal assistant answers with the wrong legal policy version. Should fine-tuning be your first fix?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "No; first improve retrieval and source freshness because policy truth changes over time"
+          },
+          {
+            "id": "B",
+            "text": "Yes; fine-tune weekly to memorize all policy updates"
+          },
+          {
+            "id": "C",
+            "text": "Yes; fine-tuning always replaces RAG"
+          },
+          {
+            "id": "D",
+            "text": "No; never fine-tune for any use case"
+          }
+        ],
+        "answer": "A",
+        "insight": "Fine-tuning is weak for rapidly changing factual data. Retrieval and source governance are usually the right first line for dynamic enterprise knowledge."
+      },
+      {
+        "text": "When is LoRA-style adaptation typically preferred over full model fine-tuning?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "When you want to increase context window size"
+          },
+          {
+            "id": "B",
+            "text": "When you need lower compute/storage overhead and task-specific adaptation"
+          },
+          {
+            "id": "C",
+            "text": "When no labeled data exists"
+          },
+          {
+            "id": "D",
+            "text": "When you need to retrain the tokenizer from scratch"
+          }
+        ],
+        "answer": "B",
+        "insight": "Parameter-efficient fine-tuning methods can deliver strong gains with less infrastructure burden. That makes them practical for many enterprise teams."
+      },
+      {
+        "text": "A tuned model starts echoing sensitive examples seen during training. What governance lesson applies?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Sensitive data in training is safe if prompts are short"
+          },
+          {
+            "id": "B",
+            "text": "Only inference-time moderation can prevent this"
+          },
+          {
+            "id": "C",
+            "text": "Data curation and privacy filtering are critical before fine-tuning"
+          },
+          {
+            "id": "D",
+            "text": "This is unrelated to training data quality"
+          }
+        ],
+        "answer": "C",
+        "insight": "Fine-tuning can amplify patterns from training examples, including harmful leakage risks. Dataset governance is as important as model choice."
+      },
+      {
+        "text": "Which signal suggests fine-tuning may be justified?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "You want instant factual updates every hour"
+          },
+          {
+            "id": "B",
+            "text": "Your team has no evaluation suite"
+          },
+          {
+            "id": "C",
+            "text": "You have no clear task definition"
+          },
+          {
+            "id": "D",
+            "text": "Consistent style/format errors remain after strong prompting and retrieval improvements"
+          }
+        ],
+        "answer": "D",
+        "insight": "Fine-tuning is best for persistent behavior shaping, not replacing operational data pipelines. Run it when you can measure targeted gains."
+      },
+      {
+        "text": "After fine-tuning, what is the most important release control?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Regression evaluation against baseline with safety and task-specific metrics"
+          },
+          {
+            "id": "B",
+            "text": "Deploy directly to all users"
+          },
+          {
+            "id": "C",
+            "text": "Skip benchmark comparisons to save time"
+          },
+          {
+            "id": "D",
+            "text": "Manual spot-check by one engineer only"
+          }
+        ],
+        "answer": "A",
+        "insight": "Tuned models can improve one behavior while degrading others. Controlled evaluation and staged rollout reduce blast radius."
+      }
+    ]
+  },
+  {
+    "number": 9,
+    "slug": "multimodal-genai",
+    "title": "Multimodal GenAI",
+    "description": "Vision, audio, and the limits of multimodal perception.",
+    "hook": "Multimodal demos look magical until you test edge cases in real enterprise data.",
+    "questions": [
+      {
+        "text": "You build an invoice assistant using image inputs. It misreads tiny footnotes that change payment terms. What is the best mitigation?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Increase chat temperature"
+          },
+          {
+            "id": "B",
+            "text": "Add OCR quality checks and confidence thresholds before downstream decisions"
+          },
+          {
+            "id": "C",
+            "text": "Assume image models are always exact on documents"
+          },
+          {
+            "id": "D",
+            "text": "Disable text prompts entirely"
+          }
+        ],
+        "answer": "B",
+        "insight": "Vision models can miss fine-grained text or layout cues. Confidence-aware extraction and fallback flows are essential in financial workflows."
+      },
+      {
+        "text": "A field team uploads photos of equipment for diagnosis. Which risk is most specific to multimodal systems?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Images remove all privacy concerns"
+          },
+          {
+            "id": "B",
+            "text": "Tokenization does not apply to multimodal models"
+          },
+          {
+            "id": "C",
+            "text": "Spurious visual correlations can cause incorrect conclusions from background artifacts"
+          },
+          {
+            "id": "D",
+            "text": "Multimodal models cannot process text"
+          }
+        ],
+        "answer": "C",
+        "insight": "Vision inputs can carry misleading context unrelated to the target object. Robust prompts and validation should constrain what evidence is considered."
+      },
+      {
+        "text": "Your contact-center app transcribes calls and summarizes actions. What should be prioritized first for production reliability?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Removing timestamps from transcripts"
+          },
+          {
+            "id": "B",
+            "text": "Only tuning the final text summarizer"
+          },
+          {
+            "id": "C",
+            "text": "Replacing all domain terms with generic synonyms"
+          },
+          {
+            "id": "D",
+            "text": "End-to-end evaluation of ASR error impact on downstream summaries and actions"
+          }
+        ],
+        "answer": "D",
+        "insight": "Audio errors propagate through every later stage. You need pipeline-level quality gates, not isolated model tuning."
+      },
+      {
+        "text": "A security review asks why image uploads need stricter controls than plain text. Which answer is strongest?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Images may contain hidden sensitive data (PII/screenshots/metadata) requiring dedicated scanning and access policy"
+          },
+          {
+            "id": "B",
+            "text": "Image files are always safer than text files"
+          },
+          {
+            "id": "C",
+            "text": "No additional controls are needed if SSL is enabled"
+          },
+          {
+            "id": "D",
+            "text": "Multimodal models automatically redact PII"
+          }
+        ],
+        "answer": "A",
+        "insight": "Multimodal inputs widen the attack and compliance surface. Intake controls, retention policy, and auditability must cover non-text artifacts too."
+      },
+      {
+        "text": "When should you avoid using a multimodal model and keep a deterministic pipeline instead?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "When you want lower cloud egress cost"
+          },
+          {
+            "id": "B",
+            "text": "When the task requires exact extraction from known templates with strict error tolerance"
+          },
+          {
+            "id": "C",
+            "text": "When image files are larger than 1 MB"
+          },
+          {
+            "id": "D",
+            "text": "When users ask for natural language explanations"
+          }
+        ],
+        "answer": "B",
+        "insight": "Deterministic parsers often outperform generative perception for rigid forms. Choose modality and model class by risk and precision requirements, not trend."
+      }
+    ]
+  },
+  {
+    "number": 10,
+    "slug": "tool-use-and-function-calling",
+    "title": "Tool Use and Function Calling",
+    "description": "Trust boundaries, tool loops, and blast radius.",
+    "hook": "The moment an LLM can call tools, you are running a distributed system with real risk.",
+    "questions": [
+      {
+        "text": "An agent can call `issue_refund(amount)` directly. What is the safest architecture?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Trust any tool call generated by the model"
+          },
+          {
+            "id": "B",
+            "text": "Allow tool execution only when temperature is 0"
+          },
+          {
+            "id": "C",
+            "text": "Require server-side authorization and policy checks before executing tool actions"
+          },
+          {
+            "id": "D",
+            "text": "Move refunds to client-side JavaScript only"
+          }
+        ],
+        "answer": "C",
+        "insight": "Tool outputs are suggestions until validated by trusted business logic. Never let model intent bypass application authorization controls."
+      },
+      {
+        "text": "Your logs show repeated tool-call loops with no progress. What control should you add first?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Randomly reorder tool schemas"
+          },
+          {
+            "id": "B",
+            "text": "Disable all observability for speed"
+          },
+          {
+            "id": "C",
+            "text": "More verbose model responses"
+          },
+          {
+            "id": "D",
+            "text": "Step limits, loop detection, and explicit termination conditions in the orchestration layer"
+          }
+        ],
+        "answer": "D",
+        "insight": "Agent loops can silently burn tokens and trigger repeated side effects. Runtime governors prevent runaway behavior."
+      },
+      {
+        "text": "A prompt injection tries to force the model to call `export_all_customers()`. What is your strongest defensive layer?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Server-side tool allowlists scoped by user role and task context"
+          },
+          {
+            "id": "B",
+            "text": "Higher top-p"
+          },
+          {
+            "id": "C",
+            "text": "Longer system prompts alone"
+          },
+          {
+            "id": "D",
+            "text": "Hiding the tool name in UI labels"
+          }
+        ],
+        "answer": "A",
+        "insight": "Prompt defenses are necessary but insufficient. Hard permission boundaries around tool execution are what contain blast radius."
+      },
+      {
+        "text": "Why should tool calls use strict JSON schemas?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "To bypass rate limits"
+          },
+          {
+            "id": "B",
+            "text": "To make arguments machine-validated and reduce malformed or unsafe execution inputs"
+          },
+          {
+            "id": "C",
+            "text": "To increase creative writing quality"
+          },
+          {
+            "id": "D",
+            "text": "To prevent all hallucinations in final text"
+          }
+        ],
+        "answer": "B",
+        "insight": "Structured contracts reduce ambiguity at the model-tool boundary. Validation catches bad arguments before they hit critical systems."
+      },
+      {
+        "text": "Your team sees duplicate external API side effects after retries. Which design principle addresses this?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Increasing temperature to diversify retries"
+          },
+          {
+            "id": "B",
+            "text": "Disabling retry logic entirely for all failures"
+          },
+          {
+            "id": "C",
+            "text": "Idempotency keys and replay-safe tool execution"
+          },
+          {
+            "id": "D",
+            "text": "Using longer natural-language tool names"
+          }
+        ],
+        "answer": "C",
+        "insight": "Retries are common in distributed systems and can duplicate side effects. Idempotent design prevents costly double actions."
+      }
+    ]
+  },
+  {
+    "number": 11,
+    "slug": "memory-and-context-management",
+    "title": "Memory and Context Management",
+    "description": "Session vs. long-term memory, summarization trade-offs.",
+    "hook": "Bad memory design makes assistants feel helpful in demos and harmful in production.",
+    "questions": [
+      {
+        "text": "A user says your assistant keeps forgetting preferences within one chat session. Which layer is most likely broken?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "HTTP status code mapping"
+          },
+          {
+            "id": "B",
+            "text": "Cloud region selection"
+          },
+          {
+            "id": "C",
+            "text": "Embedding dimensionality only"
+          },
+          {
+            "id": "D",
+            "text": "Short-term conversation state assembly into each model call"
+          }
+        ],
+        "answer": "D",
+        "insight": "If turn history is not passed correctly, the model cannot maintain continuity. Session memory is mostly an application orchestration problem."
+      },
+      {
+        "text": "When should user profile preferences be stored as long-term memory instead of prompt-only context?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "When preferences should persist across sessions and are consented, scoped, and governable"
+          },
+          {
+            "id": "B",
+            "text": "For every transient conversation detail"
+          },
+          {
+            "id": "C",
+            "text": "Only when model context window is full"
+          },
+          {
+            "id": "D",
+            "text": "Never; persistent memory is always prohibited"
+          }
+        ],
+        "answer": "A",
+        "insight": "Persistent memory is a product decision tied to privacy and lifecycle controls. Not all context deserves retention."
+      },
+      {
+        "text": "Your summarization layer compresses chat history too aggressively, causing wrong follow-up answers. What trade-off is being mismanaged?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Color theme versus readability"
+          },
+          {
+            "id": "B",
+            "text": "Context efficiency versus fidelity of critical details"
+          },
+          {
+            "id": "C",
+            "text": "Language locale versus tokenization"
+          },
+          {
+            "id": "D",
+            "text": "GPU utilization versus browser paint time"
+          }
+        ],
+        "answer": "B",
+        "insight": "Summaries save tokens but can erase constraints and commitments. Compression strategies need domain-aware salience rules."
+      },
+      {
+        "text": "A healthcare assistant stores all raw patient chats indefinitely as memory. What is the primary governance risk?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Fewer available emojis"
+          },
+          {
+            "id": "B",
+            "text": "Reduced creativity in model outputs"
+          },
+          {
+            "id": "C",
+            "text": "Unbounded retention of sensitive data without purpose limitation and deletion controls"
+          },
+          {
+            "id": "D",
+            "text": "Slight increase in token cost only"
+          }
+        ],
+        "answer": "C",
+        "insight": "Memory policies must align with privacy laws and enterprise data governance. Retain only what is necessary and auditable."
+      },
+      {
+        "text": "What is a robust strategy when context exceeds model limits during long conversations?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Disable context entirely and answer statelessly"
+          },
+          {
+            "id": "B",
+            "text": "Drop all system instructions first"
+          },
+          {
+            "id": "C",
+            "text": "Send the earliest messages only"
+          },
+          {
+            "id": "D",
+            "text": "Use layered memory: keep recent turns verbatim, summarize older turns, and retrieve relevant long-term facts selectively"
+          }
+        ],
+        "answer": "D",
+        "insight": "Layered context management balances fidelity, relevance, and token budget. It scales better than naive truncation for production assistants."
+      }
+    ]
+  },
+  {
+    "number": 12,
+    "slug": "streaming-chunking-and-real-time-ux",
+    "title": "Streaming, Chunking, and Real-Time UX",
+    "description": "SSE, cancellation, and time-to-first-token.",
+    "hook": "Great GenAI UX is not just quality - it is how quickly users feel progress.",
+    "questions": [
+      {
+        "text": "Your chat app waits for full completion before rendering text. Users report it feels slow. What change most directly improves perceived speed?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Enable token streaming to reduce time-to-first-token experience"
+          },
+          {
+            "id": "B",
+            "text": "Hide loading indicators entirely"
+          },
+          {
+            "id": "C",
+            "text": "Only optimize CSS bundle size"
+          },
+          {
+            "id": "D",
+            "text": "Increase output length by default"
+          }
+        ],
+        "answer": "A",
+        "insight": "Streaming gives immediate feedback and reduces perceived waiting. UX improvements often come from pipeline responsiveness, not only final latency."
+      },
+      {
+        "text": "A user edits the prompt while streaming is in progress, but stale tokens keep appearing. What system feature is missing?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Higher model temperature"
+          },
+          {
+            "id": "B",
+            "text": "Request cancellation and stream invalidation tied to active session/request IDs"
+          },
+          {
+            "id": "C",
+            "text": "Disabling retries globally"
+          },
+          {
+            "id": "D",
+            "text": "Bigger avatars in UI"
+          }
+        ],
+        "answer": "B",
+        "insight": "Real-time interfaces need cancellation semantics, not just token transport. Without cancellation, stale outputs corrupt trust and usability."
+      },
+      {
+        "text": "In a voice assistant, which metric best captures first impression latency?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Number of CSS classes on page"
+          },
+          {
+            "id": "B",
+            "text": "Average prompt length in characters"
+          },
+          {
+            "id": "C",
+            "text": "Time-to-first-token or time-to-first-audio-chunk"
+          },
+          {
+            "id": "D",
+            "text": "Total model parameter count"
+          }
+        ],
+        "answer": "C",
+        "insight": "Users experience systems from first response cue. TTFT is a critical SLO for conversational product quality."
+      },
+      {
+        "text": "You stream partial JSON to a client parser and it fails intermittently. Which approach is best?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Parse each token as full JSON immediately"
+          },
+          {
+            "id": "B",
+            "text": "Turn off validation checks"
+          },
+          {
+            "id": "C",
+            "text": "Switch to markdown output for APIs"
+          },
+          {
+            "id": "D",
+            "text": "Buffer streamed tokens and parse only after complete structured object boundaries"
+          }
+        ],
+        "answer": "D",
+        "insight": "Streaming text is incremental, but structured parsing needs framing rules. Proper chunk assembly prevents corrupt downstream execution."
+      },
+      {
+        "text": "A PM asks why chunked backend processing matters even with fast models. What is the best explanation?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Pipeline chunking enables parallel work (retrieval, rerank, moderation) and smoother user feedback under load"
+          },
+          {
+            "id": "B",
+            "text": "Chunking is unnecessary once model quality is high"
+          },
+          {
+            "id": "C",
+            "text": "Chunking only changes UI color themes"
+          },
+          {
+            "id": "D",
+            "text": "Chunking eliminates all network failures"
+          }
+        ],
+        "answer": "A",
+        "insight": "System-level throughput depends on orchestration, not just model speed. Chunked workflows improve resilience and responsiveness."
+      }
+    ]
+  },
+  {
+    "number": 13,
+    "slug": "guardrails-and-policy-enforcement",
+    "title": "Guardrails and Policy Enforcement",
+    "description": "Input/output rails and layered moderation.",
+    "hook": "Guardrails are a pipeline architecture problem, not a single filter toggle.",
+    "questions": [
+      {
+        "text": "Your app blocks unsafe outputs, but attackers still exfiltrate secrets via tool calls. What failed?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "The context window was too large"
+          },
+          {
+            "id": "B",
+            "text": "Policy enforcement was output-only and lacked tool-level controls"
+          },
+          {
+            "id": "C",
+            "text": "You used JSON schemas"
+          },
+          {
+            "id": "D",
+            "text": "Temperature was too low"
+          }
+        ],
+        "answer": "B",
+        "insight": "Guardrails must cover input, planning, tool execution, and output. Output moderation alone cannot secure side-effectful workflows."
+      },
+      {
+        "text": "A regulated chatbot needs consistent refusal behavior across teams. What architecture helps most?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Each team writes ad hoc refusal prompts"
+          },
+          {
+            "id": "B",
+            "text": "Increase randomness to diversify refusals"
+          },
+          {
+            "id": "C",
+            "text": "Central policy engine with versioned rules applied uniformly before and after model calls"
+          },
+          {
+            "id": "D",
+            "text": "Rely only on user feedback after incidents"
+          }
+        ],
+        "answer": "C",
+        "insight": "Centralized, versioned policy logic improves consistency and auditability. It also enables controlled rollout and rollback."
+      },
+      {
+        "text": "Why is shadow mode useful when introducing new moderation rules?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "It permanently disables enforcement risk-free"
+          },
+          {
+            "id": "B",
+            "text": "It guarantees no policy misses"
+          },
+          {
+            "id": "C",
+            "text": "It removes the need for compliance review"
+          },
+          {
+            "id": "D",
+            "text": "It measures false positives/negatives on live traffic without blocking users immediately"
+          }
+        ],
+        "answer": "D",
+        "insight": "Shadow mode lets teams calibrate policy thresholds with real distributions before hard gating. That reduces accidental business disruption."
+      },
+      {
+        "text": "A policy says \"never provide legal advice.\" A user asks for legal interpretation disguised as a template request. What should happen?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Classify intent and enforce policy semantics, not just keyword matching"
+          },
+          {
+            "id": "B",
+            "text": "Ignore policy for premium users"
+          },
+          {
+            "id": "C",
+            "text": "Allow if the phrase legal advice is absent"
+          },
+          {
+            "id": "D",
+            "text": "Answer fully, then add a disclaimer"
+          }
+        ],
+        "answer": "A",
+        "insight": "Policy evasion often uses paraphrase and indirection. Semantic classification and intent-aware gating are more robust than surface keyword checks."
+      },
+      {
+        "text": "Which telemetry is most important for guardrail operations?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only total token count per day"
+          },
+          {
+            "id": "B",
+            "text": "Per-rule trigger rates, block/allow outcomes, appeal outcomes, and downstream incident links"
+          },
+          {
+            "id": "C",
+            "text": "Average response font size"
+          },
+          {
+            "id": "D",
+            "text": "Browser version by itself"
+          }
+        ],
+        "answer": "B",
+        "insight": "Guardrails need measurable effectiveness, not just existence. Rule-level observability supports tuning and governance evidence."
+      }
+    ]
+  },
+  {
+    "number": 14,
+    "slug": "safety-bias-and-alignment",
+    "title": "Safety, Bias, and Alignment",
+    "description": "RLHF, over-refusal, and red-teaming.",
+    "hook": "A model that is polite but biased still fails real users and real compliance checks.",
+    "questions": [
+      {
+        "text": "Your hiring assistant gives lower-quality suggestions for candidates from certain regions. What is the priority response?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Increase model size only"
+          },
+          {
+            "id": "B",
+            "text": "Hide recommendations from audit logs"
+          },
+          {
+            "id": "C",
+            "text": "Run bias evaluation slices by demographic proxies and adjust data/policy controls before scaling"
+          },
+          {
+            "id": "D",
+            "text": "Ignore because average accuracy is high"
+          }
+        ],
+        "answer": "C",
+        "insight": "Aggregate performance can hide subgroup harms. Safety work requires sliced metrics, transparency, and mitigation plans."
+      },
+      {
+        "text": "A tuned model now refuses many harmless requests, hurting user experience. What does this illustrate?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Retrieval pipelines are always unsafe"
+          },
+          {
+            "id": "B",
+            "text": "Context windows are irrelevant"
+          },
+          {
+            "id": "C",
+            "text": "Perfect safety with no downsides"
+          },
+          {
+            "id": "D",
+            "text": "Over-refusal trade-offs in alignment and safety tuning"
+          }
+        ],
+        "answer": "D",
+        "insight": "Alignment tuning can shift behavior toward caution, sometimes too far. Teams need policy calibration between harm prevention and utility."
+      },
+      {
+        "text": "Why is red-teaming necessary even after internal QA passes?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Adversarial testing uncovers failure modes normal test prompts miss"
+          },
+          {
+            "id": "B",
+            "text": "It only matters for image models"
+          },
+          {
+            "id": "C",
+            "text": "It guarantees legal immunity"
+          },
+          {
+            "id": "D",
+            "text": "It replaces all production monitoring"
+          }
+        ],
+        "answer": "A",
+        "insight": "Safety failures often appear under adversarial pressure, not happy-path usage. Red-teaming expands coverage against realistic attacks."
+      },
+      {
+        "text": "Which statement about RLHF is most accurate for enterprise teams?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "RLHF makes retrieval unnecessary"
+          },
+          {
+            "id": "B",
+            "text": "RLHF can improve helpfulness and policy following, but does not eliminate hallucination or bias alone"
+          },
+          {
+            "id": "C",
+            "text": "RLHF guarantees perfect truthfulness in all domains"
+          },
+          {
+            "id": "D",
+            "text": "RLHF removes the need for guardrails"
+          }
+        ],
+        "answer": "B",
+        "insight": "Alignment methods shape behavior distributions, not absolute guarantees. System-level controls still govern risk."
+      },
+      {
+        "text": "A compliance officer asks for proof your safety posture improved over time. What evidence is strongest?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Internal opinions without metrics"
+          },
+          {
+            "id": "B",
+            "text": "A one-time demo recording"
+          },
+          {
+            "id": "C",
+            "text": "Versioned safety benchmarks, incident trend data, and documented mitigation outcomes"
+          },
+          {
+            "id": "D",
+            "text": "Model parameter count history only"
+          }
+        ],
+        "answer": "C",
+        "insight": "Responsible deployment requires continuous measurement and traceable change history. Governance depends on evidence, not claims."
+      }
+    ]
+  },
+  {
+    "number": 15,
+    "slug": "hallucination-mitigation",
+    "title": "Hallucination Mitigation",
+    "description": "Grounded generation, citations, and abstention.",
+    "hook": "You do not need zero hallucinations - you need controlled risk and truthful abstention.",
+    "questions": [
+      {
+        "text": "Your assistant answers confidently without evidence when retrieval returns low-confidence matches. What policy is most effective?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Always answer anyway to maintain UX flow"
+          },
+          {
+            "id": "B",
+            "text": "Increase top-p for more options"
+          },
+          {
+            "id": "C",
+            "text": "Remove retrieval to avoid conflicts"
+          },
+          {
+            "id": "D",
+            "text": "Require confidence thresholds and abstain when grounding is insufficient"
+          }
+        ],
+        "answer": "D",
+        "insight": "Abstention is a core safety behavior when evidence is weak. It is better to admit uncertainty than fabricate authority."
+      },
+      {
+        "text": "A CFO asks why citations matter if answers sound correct. What is the strongest response?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Citations allow verification and auditability, reducing hidden factual risk"
+          },
+          {
+            "id": "B",
+            "text": "Citations guarantee legal compliance automatically"
+          },
+          {
+            "id": "C",
+            "text": "Citations only improve visual formatting"
+          },
+          {
+            "id": "D",
+            "text": "Citations are optional in enterprise settings"
+          }
+        ],
+        "answer": "A",
+        "insight": "Enterprise trust depends on verifiable provenance. Citation-enabled workflows let humans and systems check claims before action."
+      },
+      {
+        "text": "Which intervention typically reduces hallucinations more than prompt wording tweaks alone?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Adding more adjectives to the prompt"
+          },
+          {
+            "id": "B",
+            "text": "Improving retrieval relevance and context quality in the generation pipeline"
+          },
+          {
+            "id": "C",
+            "text": "Increasing UI animation smoothness"
+          },
+          {
+            "id": "D",
+            "text": "Switching from JSON to YAML output only"
+          }
+        ],
+        "answer": "B",
+        "insight": "Better evidence in means better grounded answers out. Prompt polish cannot compensate for missing or irrelevant context."
+      },
+      {
+        "text": "A model invents policy IDs in final responses. What guard is best before showing output to users?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Disable all output filters for speed"
+          },
+          {
+            "id": "B",
+            "text": "Let users correct policy IDs manually"
+          },
+          {
+            "id": "C",
+            "text": "Post-generation verification against authoritative sources with fail-closed behavior"
+          },
+          {
+            "id": "D",
+            "text": "Use only longer prompts"
+          }
+        ],
+        "answer": "C",
+        "insight": "Verification layers catch fabricated entities before they propagate. Fail-closed design is critical for high-impact domains."
+      },
+      {
+        "text": "Which metric is most useful for tracking hallucination risk over time?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Model name popularity on social media"
+          },
+          {
+            "id": "B",
+            "text": "Number of UI clicks per session only"
+          },
+          {
+            "id": "C",
+            "text": "Average response length only"
+          },
+          {
+            "id": "D",
+            "text": "Rate of unsupported claims on labeled eval sets and sampled production audits"
+          }
+        ],
+        "answer": "D",
+        "insight": "Hallucination is a quality and safety signal that needs direct measurement. Pair offline labeling with production sampling for durable control."
+      }
+    ]
+  },
+  {
+    "number": 16,
+    "slug": "model-context-protocol-mcp",
+    "title": "Model Context Protocol (MCP)",
+    "description": "Servers, resources, tools, and open integrations.",
+    "hook": "MCP matters because context and tools should be portable across models and clients.",
+    "questions": [
+      {
+        "text": "Your team wants one integration layer for internal docs/tools across multiple LLM clients. Why is MCP relevant?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "It defines a standard way for models/clients to access external resources and tools"
+          },
+          {
+            "id": "B",
+            "text": "It forces use of a single model vendor"
+          },
+          {
+            "id": "C",
+            "text": "It only supports image generation"
+          },
+          {
+            "id": "D",
+            "text": "It replaces all authentication systems automatically"
+          }
+        ],
+        "answer": "A",
+        "insight": "MCP aims to standardize context and tool interoperability. That reduces bespoke glue code and vendor lock-in pressure."
+      },
+      {
+        "text": "A security architect asks what must still be enforced when exposing tools through MCP servers. What is correct?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Security shifts entirely to the model provider"
+          },
+          {
+            "id": "B",
+            "text": "Authentication, authorization, auditing, and least-privilege access remain mandatory"
+          },
+          {
+            "id": "C",
+            "text": "Only network firewall rules matter"
+          },
+          {
+            "id": "D",
+            "text": "MCP removes the need for access controls"
+          }
+        ],
+        "answer": "B",
+        "insight": "Protocol standardization does not remove security accountability. Enterprises still own identity, permissions, and monitoring."
+      },
+      {
+        "text": "You are designing MCP resources for knowledge retrieval. Which approach is best for maintainability?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Change response shape silently every sprint"
+          },
+          {
+            "id": "B",
+            "text": "Use random field names per endpoint"
+          },
+          {
+            "id": "C",
+            "text": "Expose clear, versioned resource schemas and stable identifiers for downstream clients"
+          },
+          {
+            "id": "D",
+            "text": "Return unstructured blobs without contracts"
+          }
+        ],
+        "answer": "C",
+        "insight": "Stable contracts make tool ecosystems reliable and evolvable. Schema discipline is essential for multi-client compatibility."
+      },
+      {
+        "text": "What problem appears when an MCP tool is available but its side effects are not explained to the model/user?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Higher monitor brightness"
+          },
+          {
+            "id": "B",
+            "text": "Lossless compression failure"
+          },
+          {
+            "id": "C",
+            "text": "Automatic elimination of hallucinations"
+          },
+          {
+            "id": "D",
+            "text": "Unsafe or surprising actions due to unclear tool semantics and missing confirmation flows"
+          }
+        ],
+        "answer": "D",
+        "insight": "Tool metadata should communicate what actions do, risks, and expected inputs. Clear semantics reduce accidental misuse."
+      },
+      {
+        "text": "A platform team asks how to roll out MCP safely. What sequence is most responsible?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Start with read-only resources, add observability and access controls, then phase in bounded write tools"
+          },
+          {
+            "id": "B",
+            "text": "Allow anonymous tool access internally"
+          },
+          {
+            "id": "C",
+            "text": "Skip logging to reduce latency"
+          },
+          {
+            "id": "D",
+            "text": "Expose all write actions on day one to speed adoption"
+          }
+        ],
+        "answer": "A",
+        "insight": "Progressive rollout limits blast radius while teams learn usage patterns. Read-only first is a proven risk management approach."
+      }
+    ]
+  },
+  {
+    "number": 17,
+    "slug": "evaluation-and-measurement",
+    "title": "Evaluation and Measurement",
+    "description": "Offline evals, LLM-as-judge, and regression suites.",
+    "hook": "If you cannot measure GenAI quality continuously, you are deploying blind.",
+    "questions": [
+      {
+        "text": "A prompt update scores better on your static test set but user complaints rise in production. What likely happened?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Model became too large to evaluate"
+          },
+          {
+            "id": "B",
+            "text": "Offline set lacked coverage of real traffic distribution and edge cases"
+          },
+          {
+            "id": "C",
+            "text": "Production feedback is irrelevant noise"
+          },
+          {
+            "id": "D",
+            "text": "Evaluations should never use ground truth"
+          }
+        ],
+        "answer": "B",
+        "insight": "Offline evals are necessary but incomplete. Continuous online signals are needed to detect distribution shift and real-world regressions."
+      },
+      {
+        "text": "Which metric set is best for a customer-support assistant?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only average token count"
+          },
+          {
+            "id": "B",
+            "text": "Only BLEU score"
+          },
+          {
+            "id": "C",
+            "text": "Task success, groundedness/citation accuracy, refusal quality, latency, and cost per resolved case"
+          },
+          {
+            "id": "D",
+            "text": "Only thumbs-up rate without audits"
+          }
+        ],
+        "answer": "C",
+        "insight": "No single metric captures production quality. Balanced scorecards align model behavior with business and safety outcomes."
+      },
+      {
+        "text": "Your team uses LLM-as-judge for answer quality. What safeguard is most important?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Ignore disagreement rates"
+          },
+          {
+            "id": "B",
+            "text": "Assume judge output is always objective truth"
+          },
+          {
+            "id": "C",
+            "text": "Use no rubric for judging"
+          },
+          {
+            "id": "D",
+            "text": "Calibrate judge prompts and periodically compare with human-labeled samples"
+          }
+        ],
+        "answer": "D",
+        "insight": "LLM judges can be useful but are themselves model outputs. Calibration and human checkpoints keep evaluation trustworthy."
+      },
+      {
+        "text": "What is the primary purpose of a regression suite in GenAI releases?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Detect performance and safety drift before promotion to production"
+          },
+          {
+            "id": "B",
+            "text": "Increase prompt creativity only"
+          },
+          {
+            "id": "C",
+            "text": "Replace all runtime monitoring"
+          },
+          {
+            "id": "D",
+            "text": "Guarantee no future incidents"
+          }
+        ],
+        "answer": "A",
+        "insight": "Regression testing catches known failure modes introduced by model or prompt changes. It is a deployment gate, not a one-time artifact."
+      },
+      {
+        "text": "A director asks for one eval policy rule. Which is most practical?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Use manual QA only for all updates"
+          },
+          {
+            "id": "B",
+            "text": "Block release when key safety/quality metrics regress beyond agreed thresholds"
+          },
+          {
+            "id": "C",
+            "text": "Ship every change if average score improves slightly"
+          },
+          {
+            "id": "D",
+            "text": "Disable canary rollout for faster launches"
+          }
+        ],
+        "answer": "B",
+        "insight": "Objective gate thresholds convert evaluation into operational discipline. This reduces subjective release risk in fast-moving teams."
+      }
+    ]
+  },
+  {
+    "number": 18,
+    "slug": "agentic-workflows-and-planning",
+    "title": "Agentic Workflows and Planning",
+    "description": "Agent loops, ReAct, and human-in-the-loop gates.",
+    "hook": "Agents are not magic autonomy - they are controlled loops with explicit stop conditions.",
+    "questions": [
+      {
+        "text": "Your procurement agent keeps querying vendors repeatedly without deciding. What is the first orchestration fix?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Set temperature to maximum"
+          },
+          {
+            "id": "B",
+            "text": "Increase context window only"
+          },
+          {
+            "id": "C",
+            "text": "Add explicit planning/execution step limits and success criteria for termination"
+          },
+          {
+            "id": "D",
+            "text": "Remove tool logs to reduce overhead"
+          }
+        ],
+        "answer": "C",
+        "insight": "Agent loops need deterministic control rails from the host system. Termination criteria prevent infinite tool cycling."
+      },
+      {
+        "text": "A finance workflow agent can trigger payments. Which control is essential before action execution?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "No approval if confidence text sounds strong"
+          },
+          {
+            "id": "B",
+            "text": "Only a longer system prompt"
+          },
+          {
+            "id": "C",
+            "text": "Allow autonomous retries without limits"
+          },
+          {
+            "id": "D",
+            "text": "Human approval gate for high-risk actions with full trace context"
+          }
+        ],
+        "answer": "D",
+        "insight": "Human-in-the-loop is a governance mechanism for irreversible or high-impact actions. Confidence language is not authorization."
+      },
+      {
+        "text": "Why is ReAct-style reasoning/action separation useful in operations?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "It structures decision traces so teams can audit why each tool call happened"
+          },
+          {
+            "id": "B",
+            "text": "It prevents malformed tool outputs by itself"
+          },
+          {
+            "id": "C",
+            "text": "It always reduces total token cost"
+          },
+          {
+            "id": "D",
+            "text": "It eliminates all need for monitoring"
+          }
+        ],
+        "answer": "A",
+        "insight": "Traceable step-by-step execution helps debugging and governance. Explainable action paths are crucial for enterprise trust."
+      },
+      {
+        "text": "An agent fails midway after calling two external services. What makes recovery robust?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Hiding intermediate steps from observability systems"
+          },
+          {
+            "id": "B",
+            "text": "Checkpointing state and designing tools/idempotent operations for replay-safe continuation"
+          },
+          {
+            "id": "C",
+            "text": "Restarting from scratch without logs"
+          },
+          {
+            "id": "D",
+            "text": "Disabling error handling"
+          }
+        ],
+        "answer": "B",
+        "insight": "Agent workflows are distributed transactions in practice. State checkpoints and idempotency enable reliable recovery."
+      },
+      {
+        "text": "A PM asks when to avoid agentic design and use a fixed pipeline. Which answer is best?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Agents are required whenever prompts exceed 200 tokens"
+          },
+          {
+            "id": "B",
+            "text": "Never use tools with fixed workflows"
+          },
+          {
+            "id": "C",
+            "text": "Use fixed pipelines for narrow, deterministic tasks with stable steps and strict compliance needs"
+          },
+          {
+            "id": "D",
+            "text": "Always use agents because they are more advanced"
+          }
+        ],
+        "answer": "C",
+        "insight": "Agent flexibility adds complexity and risk. Deterministic orchestration is often better when task flow is known and auditable."
+      }
+    ]
+  },
+  {
+    "number": 19,
+    "slug": "ai-governance-and-responsible-deployment",
+    "title": "AI Governance and Responsible Deployment",
+    "description": "Ownership, model cards, and compliance as architecture.",
+    "hook": "Governance is not a blocker - it is the operating system for scaling AI safely.",
+    "questions": [
+      {
+        "text": "A team ships a model update Friday evening without notifying risk owners. What governance gap is most obvious?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Too many eval metrics"
+          },
+          {
+            "id": "B",
+            "text": "Low top-p value"
+          },
+          {
+            "id": "C",
+            "text": "Insufficient CSS testing"
+          },
+          {
+            "id": "D",
+            "text": "Missing change-management ownership and release approval workflow"
+          }
+        ],
+        "answer": "D",
+        "insight": "Responsible deployment requires clear accountability for model changes. Governance aligns speed with controlled risk."
+      },
+      {
+        "text": "Why are model cards useful in enterprise AI programs?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "They document intended use, limitations, evaluation results, and risk considerations for stakeholders"
+          },
+          {
+            "id": "B",
+            "text": "They automatically improve model accuracy"
+          },
+          {
+            "id": "C",
+            "text": "They are only marketing assets"
+          },
+          {
+            "id": "D",
+            "text": "They replace all legal and security reviews"
+          }
+        ],
+        "answer": "A",
+        "insight": "Model cards create shared understanding across technical and non-technical teams. They support transparent risk communication and audit readiness."
+      },
+      {
+        "text": "A regulator asks how decisions from your GenAI system can be audited. What architecture answer is strongest?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Delete traces immediately after each call regardless of policy"
+          },
+          {
+            "id": "B",
+            "text": "Maintain immutable logs of prompts, context sources, model/tool versions, and decision outcomes with access controls"
+          },
+          {
+            "id": "C",
+            "text": "Keep only final user-visible responses"
+          },
+          {
+            "id": "D",
+            "text": "Rely on memory of the support team"
+          }
+        ],
+        "answer": "B",
+        "insight": "Auditability depends on end-to-end provenance and retention policy. Without traces, accountability and incident response both fail."
+      },
+      {
+        "text": "Which governance pattern best supports multi-team GenAI delivery?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Only legal team owns all operational decisions"
+          },
+          {
+            "id": "B",
+            "text": "No policies until first major incident"
+          },
+          {
+            "id": "C",
+            "text": "Risk-tiered controls: lightweight for low-risk use, stricter gates for high-impact workflows"
+          },
+          {
+            "id": "D",
+            "text": "One identical approval path for every tiny change"
+          }
+        ],
+        "answer": "C",
+        "insight": "Tiered governance avoids both over-bureaucracy and under-control. Control intensity should match impact and exposure."
+      },
+      {
+        "text": "A business unit wants to skip post-deployment monitoring because pre-launch tests passed. What is the best response?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Monitoring is optional once approval is granted"
+          },
+          {
+            "id": "B",
+            "text": "Only monthly manual checks are enough"
+          },
+          {
+            "id": "C",
+            "text": "Disable feedback collection to reduce noise"
+          },
+          {
+            "id": "D",
+            "text": "Production monitoring is mandatory because model behavior and user traffic evolve after launch"
+          }
+        ],
+        "answer": "D",
+        "insight": "Governance is continuous, not a one-time gate. Drift, misuse, and policy changes require ongoing operational visibility."
+      }
+    ]
+  },
+  {
+    "number": 20,
+    "slug": "trends-challenges-and-future-of-genai",
+    "title": "Trends, Challenges, and Future of GenAI",
+    "description": "SLMs, edge AI, model collapse, and durable skills.",
+    "hook": "The future of GenAI belongs to teams that balance capability, cost, and governance - not hype cycles.",
+    "questions": [
+      {
+        "text": "Your mobile product needs offline assistance with strict latency and privacy constraints. Which trend is most relevant?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Small language models optimized for edge deployment and task-specific performance"
+          },
+          {
+            "id": "B",
+            "text": "Always using the largest cloud model available"
+          },
+          {
+            "id": "C",
+            "text": "Avoiding quantization in every case"
+          },
+          {
+            "id": "D",
+            "text": "Removing all model evaluations for speed"
+          }
+        ],
+        "answer": "A",
+        "insight": "Edge-capable SLMs can offer better latency, cost, and data locality for constrained workloads. Bigger is not always better for product fit."
+      },
+      {
+        "text": "A research lead warns about model collapse in future training pipelines. What does this mean?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Models physically stop running after too many prompts"
+          },
+          {
+            "id": "B",
+            "text": "Training excessively on synthetic model-generated data can degrade diversity and factual quality over generations"
+          },
+          {
+            "id": "C",
+            "text": "GPU memory is unrelated to training data quality"
+          },
+          {
+            "id": "D",
+            "text": "Context windows shrink automatically over time"
+          }
+        ],
+        "answer": "B",
+        "insight": "Data quality and provenance remain foundational as synthetic data increases. Healthy training mixtures are critical for long-term model robustness."
+      },
+      {
+        "text": "Why are durable skills still more strategic than chasing every new model release?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Prompting is the only skill needed forever"
+          },
+          {
+            "id": "B",
+            "text": "Infrastructure no longer matters in AI products"
+          },
+          {
+            "id": "C",
+            "text": "System design, eval discipline, security, and governance transfer across model generations"
+          },
+          {
+            "id": "D",
+            "text": "New models rarely change anything"
+          }
+        ],
+        "answer": "C",
+        "insight": "Model capabilities evolve quickly, but engineering fundamentals persist. Teams with strong operational practices adapt faster and safer."
+      },
+      {
+        "text": "A CIO asks what the next 2-year challenge will be after pilot success. Which answer is most realistic?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Ignoring integration architecture once MVP ships"
+          },
+          {
+            "id": "B",
+            "text": "Eliminating all need for human oversight"
+          },
+          {
+            "id": "C",
+            "text": "Choosing a logo for the chatbot"
+          },
+          {
+            "id": "D",
+            "text": "Scaling governance, observability, and cost control across many AI-enabled workflows"
+          }
+        ],
+        "answer": "D",
+        "insight": "Enterprise value comes from sustained operations at scale, not isolated demos. Platform maturity determines long-term ROI."
+      },
+      {
+        "text": "Your team must pick a roadmap principle for uncertain model progress. What is the strongest principle?",
+        "choices": [
+          {
+            "id": "A",
+            "text": "Design model-agnostic architectures with swap-ready interfaces, robust evals, and fallback paths"
+          },
+          {
+            "id": "B",
+            "text": "Hard-code one model vendor into every subsystem"
+          },
+          {
+            "id": "C",
+            "text": "Skip baseline metrics to move fast"
+          },
+          {
+            "id": "D",
+            "text": "Delay all shipping until model progress stabilizes"
+          }
+        ],
+        "answer": "A",
+        "insight": "Future-proof systems separate business logic from model dependencies. Optionality plus measurement is the best hedge against rapid ecosystem change."
+      }
+    ]
+  }
+]

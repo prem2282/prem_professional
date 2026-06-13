@@ -12,7 +12,7 @@
     HTMLMetaElement.supports('view-transition');
 
   var ROUTE_RE =
-    /\/(?:blogs\/(?:\d{2}-[^/]+\.html|[^/]+\.html)|blogs\.html|mylearnings\/[^/]+\.html|mylearnings\.html)$/;
+    /\/(?:index\.html|ascent\.html|learn\.html|quizzes\.html|story-[^/]+\.html|blogs\/(?:\d{2}-[^/]+\.html|[^/]+\.html)|blogs\.html|mylearnings\/[^/]+\.html|mylearnings\.html|quizzes\/[^/]+\.html)?$/;
 
   function navigateWithTransition(url) {
     if (reduced || useNativeVT) {

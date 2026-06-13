@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
   <meta name="description" content="PremAnand Sukumaran — Technology executive. Built in the trenches, leading from the front. Enterprise AI, SaaS, and cloud transformation." />
   <title>PremAnand Sukumaran | Technology Leader</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,39 +30,15 @@
     };
   </script>
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/page-transitions.css" />
+
 </head>
 <body class="bg-ink text-cream font-sans antialiased">
   <div class="grain" aria-hidden="true"></div>
 
-  <header class="site-header fixed top-0 inset-x-0 z-50">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
-      <a href="index.html" class="nav-home" aria-label="Home"><img src="Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
-      <button type="button" id="nav-toggle" class="nav-toggle lg:hidden" aria-expanded="false" aria-controls="nav-menu">
-        <span class="sr-only">Menu</span>
-        <span class="nav-bar"></span>
-        <span class="nav-bar"></span>
-        <span class="nav-bar"></span>
-      </button>
-      <ul id="nav-menu" class="nav-menu hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-cream/80">
-        <li><a href="index.html" class="nav-link active">Home</a></li>
-        <li><a href="ascent.html" class="nav-link">The Ascent</a></li>
-        <li><a href="blogs.html" class="nav-link">Blogs</a></li>
-        <li><a href="mylearnings.html" class="nav-link">My Learnings</a></li>
-        <li><a href="learn.html" class="nav-link">Learn</a></li>
-      </ul>
-    </nav>
-    <div id="mobile-menu" class="mobile-menu hidden lg:hidden" aria-hidden="true">
-      <ul class="flex flex-col gap-1 px-6 pb-6 text-lg">
-        <li><a href="index.html" class="mobile-link active">Home</a></li>
-        <li><a href="ascent.html" class="mobile-link">The Ascent</a></li>
-        <li><a href="blogs.html" class="mobile-link">Blogs</a></li>
-        <li><a href="mylearnings.html" class="mobile-link">My Learnings</a></li>
-        <li><a href="learn.html" class="mobile-link">Learn</a></li>
-      </ul>
-    </div>
-  </header>
-
-  <main>
+  <div id="site-nav-root" data-base="" data-active="home" data-theme="dark"></div>
+  <script src="assets/js/site-nav.js"></script>
+<main>
     <section class="hero min-h-screen flex items-center pt-28 pb-20 lg:pt-32">
       <div class="mx-auto max-w-6xl px-6 lg:px-8 w-full">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -88,6 +67,7 @@
               <a href="ascent.html" class="btn-primary">View experience</a>
               <a href="blogs.html" class="btn-ghost">Blogs</a>
               <a href="mylearnings.html" class="btn-ghost">My Learnings</a>
+              <a href="quizzes.html" class="btn-ghost">Quizzes</a>
               <a href="learn.html" class="btn-ghost">Learn</a>
             </div>
           </div>
@@ -200,6 +180,7 @@
     </div>
   </footer>
 
+  <script src="assets/js/page-transitions.js"></script>
   <script src="assets/js/main.js"></script>
   <script src="assets/js/home-blog-marquee.js"></script>
 </body>

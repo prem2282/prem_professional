@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="GenAI Quiz 03 — Large Language Models — Fundamentals. Five scenario questions with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>Large Language Models — Fundamentals | Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="../../assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-play-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="../../" data-active="quizzes" data-theme="dark"></div>
+  <script src="../../assets/js/site-nav.js"></script>
+  <div class="quiz-app" id="quiz-root">
+    <div class="quiz-appbar">
+      <a href="../../quizzes/genai.html" class="quiz-back" aria-label="Back to quizzes">←</a>
+      <h1 class="quiz-appbar-title">Large Language Models — Fundamentals</h1>
+      <div class="quiz-xp-chip"><span>⚡</span><span id="quiz-xp">0</span></div>
+    </div>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="quiz-play" class="quiz-screen">
+      <div class="quiz-question-stage" id="quiz-question-stage">
+        <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+      </div>
+    </div>
+
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="quiz-results-wrap">
+        <div class="quiz-results-card">
+          <div class="quiz-results-badge" id="quiz-results-badge">🏆</div>
+          <h2 class="quiz-results-rank" id="quiz-results-rank">GenAI Architect</h2>
+          <p class="quiz-results-score" id="quiz-results-score">5 / 5 correct · 500 XP</p>
+          <div class="quiz-results-actions">
+            <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-replay-btn">Play again</button>
+            <a href="../../quizzes/genai.html" class="quiz-btn quiz-btn-secondary">All quizzes</a>
+          </div>
+          <div class="quiz-linkedin-cta" id="quiz-linkedin-cta"></div>
+          <div class="quiz-results-links">
+            <p class="quiz-results-links-title">Keep learning</p>
+            <div class="quiz-results-link-grid">
+              <a href="../../blogs.html" class="quiz-results-link">Blogs</a>
+              <a href="../../mylearnings.html" class="quiz-results-link">Learnings</a>
+              <a href="../../learn.html" class="quiz-results-link">Learn</a>
+              <a href="../../blogs/01-tokens.html" class="quiz-results-link">Tokens post</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-feedback" class="quiz-feedback" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="quiz-feedback-backdrop"></div>
+    <div class="quiz-feedback-card" id="quiz-feedback-card">
+      <div class="quiz-feedback-icon" id="quiz-feedback-icon">✨</div>
+      <h3 class="quiz-feedback-remark" id="quiz-feedback-remark">Great job!</h3>
+      <p class="quiz-feedback-insight" id="quiz-feedback-insight"></p>
+      <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Continue →</button>
+    </div>
+  </div>
+
+  <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
+
+  <script>
+    window.QUIZ_CONFIG =       subject: "genai",
+      subjectTitle: "Generative AI",
+      assetRoot: "../../",
+      profileImage: "../../Prem_2026.webp",
+      subjectIndexUrl: "../../quizzes/genai.html",
+      number: 3,
+      total: 20,
+      title: "Large Language Models — Fundamentals",
+      questions: [
+        {
+          text: "A product manager asks what an LLM does at inference time. Which explanation is most accurate?",
+          choices: [
+            { id: "A", text: "It runs deterministic rules for every domain" },
+            { id: "B", text: "It retrieves exact answers from a hidden SQL table" },
+            { id: "C", text: "It checks the internet by default for every sentence" },
+            { id: "D", text: "It predicts the next token repeatedly based on prior context" },
+          ],
+          answer: "D",
+          insight: "Autoregressive decoding is the core mechanism behind LLM outputs. Understanding that helps teams reason about variability, latency, and hallucination behavior."
+        },
+        {
+          text: "Your legal chatbot answers with outdated regulation details from two years ago. Which limitation is most likely in play?",
+          choices: [
+            { id: "A", text: "Knowledge cutoff in pretrained weights without current grounding" },
+            { id: "B", text: "Missing CSS minification" },
+            { id: "C", text: "Too many API retries" },
+            { id: "D", text: "Low monitor refresh rate" },
+          ],
+          answer: "A",
+          insight: "An LLM's internal knowledge is bounded by its training horizon. Fresh enterprise facts require retrieval, tools, or model updates."
+        },
+        {
+          text: "Why does instruction tuning improve enterprise usability compared to a raw base model?",
+          choices: [
+            { id: "A", text: "It guarantees no harmful outputs in any setting" },
+            { id: "B", text: "It aligns model behavior with human-followable instruction formats and task intents" },
+            { id: "C", text: "It eliminates the need for prompts" },
+            { id: "D", text: "It removes token limits" },
+          ],
+          answer: "B",
+          insight: "Instruction tuning teaches the model to respond in useful assistant-like patterns. It improves compliance with task framing but still requires guardrails and evaluation."
+        },
+        {
+          text: "An engineer says: \"If temperature is 0, the model is always factual.\" What is the best correction?",
+          choices: [
+            { id: "A", text: "Temperature 0 disables all hallucinations by design" },
+            { id: "B", text: "Temperature only matters for image models" },
+            { id: "C", text: "Temperature controls randomness, not truthfulness" },
+            { id: "D", text: "Temperature 0 makes retrieval mandatory" },
+          ],
+          answer: "C",
+          insight: "Lower temperature reduces sampling variance but does not create external verification. Grounding and validation are separate controls."
+        },
+        {
+          text: "A team notices the model follows user instructions that conflict with system policy. What concept should they revisit first?",
+          choices: [
+            { id: "A", text: "Webhook retry intervals" },
+            { id: "B", text: "GPU batch size scheduling" },
+            { id: "C", text: "DNS TTL values" },
+            { id: "D", text: "Prompt hierarchy and instruction precedence across system, developer, and user messages" },
+          ],
+          answer: "D",
+          insight: "LLM behavior depends on message hierarchy and prompt assembly quality. Policy robustness requires explicit precedence plus downstream enforcement layers."
+        },
+      ];
+  </script>
+  <script src="../../assets/js/page-transitions.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/quiz-engine.js"></script>
+</body>
+</html>

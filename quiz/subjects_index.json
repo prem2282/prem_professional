@@ -1,0 +1,26 @@
+{
+  "subjects": [
+    {
+      "id": "genai",
+      "title": "Generative AI",
+      "shortTitle": "GenAI",
+      "description": "From tokens to agents \u2014 production GenAI instincts in 5 questions each.",
+      "quizCount": 20,
+      "liveCount": 20,
+      "indexPath": "quizzes/genai.html",
+      "quizPathPrefix": "quiz/genai/",
+      "status": "active"
+    },
+    {
+      "id": "aws",
+      "title": "AWS",
+      "shortTitle": "AWS",
+      "description": "Cloud architecture, core services, and the trade-offs that show up in production.",
+      "quizCount": 0,
+      "liveCount": 0,
+      "indexPath": "quizzes/aws.html",
+      "quizPathPrefix": "quiz/aws/",
+      "status": "coming-soon"
+    }
+  ]
+}

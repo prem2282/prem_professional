@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="GenAI Quiz 12 — Streaming, Chunking, and Real-Time UX. Five scenario questions with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>Streaming, Chunking, and Real-Time UX | Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="../../assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-play-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="../../" data-active="quizzes" data-theme="dark"></div>
+  <script src="../../assets/js/site-nav.js"></script>
+  <div class="quiz-app" id="quiz-root">
+    <div class="quiz-appbar">
+      <a href="../../quizzes/genai.html" class="quiz-back" aria-label="Back to quizzes">←</a>
+      <h1 class="quiz-appbar-title">Streaming, Chunking, and Real-Time UX</h1>
+      <div class="quiz-xp-chip"><span>⚡</span><span id="quiz-xp">0</span></div>
+    </div>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="quiz-play" class="quiz-screen">
+      <div class="quiz-question-stage" id="quiz-question-stage">
+        <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+      </div>
+    </div>
+
+    <div id="quiz-results" class="quiz-screen hidden">
+      <div class="quiz-results-wrap">
+        <div class="quiz-results-card">
+          <div class="quiz-results-badge" id="quiz-results-badge">🏆</div>
+          <h2 class="quiz-results-rank" id="quiz-results-rank">GenAI Architect</h2>
+          <p class="quiz-results-score" id="quiz-results-score">5 / 5 correct · 500 XP</p>
+          <div class="quiz-results-actions">
+            <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-replay-btn">Play again</button>
+            <a href="../../quizzes/genai.html" class="quiz-btn quiz-btn-secondary">All quizzes</a>
+          </div>
+          <div class="quiz-linkedin-cta" id="quiz-linkedin-cta"></div>
+          <div class="quiz-results-links">
+            <p class="quiz-results-links-title">Keep learning</p>
+            <div class="quiz-results-link-grid">
+              <a href="../../blogs.html" class="quiz-results-link">Blogs</a>
+              <a href="../../mylearnings.html" class="quiz-results-link">Learnings</a>
+              <a href="../../learn.html" class="quiz-results-link">Learn</a>
+              <a href="../../blogs/01-tokens.html" class="quiz-results-link">Tokens post</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-feedback" class="quiz-feedback" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="quiz-feedback-backdrop"></div>
+    <div class="quiz-feedback-card" id="quiz-feedback-card">
+      <div class="quiz-feedback-icon" id="quiz-feedback-icon">✨</div>
+      <h3 class="quiz-feedback-remark" id="quiz-feedback-remark">Great job!</h3>
+      <p class="quiz-feedback-insight" id="quiz-feedback-insight"></p>
+      <button type="button" class="quiz-btn quiz-btn-primary" id="quiz-next-btn">Continue →</button>
+    </div>
+  </div>
+
+  <div id="quiz-confetti" class="quiz-confetti" aria-hidden="true"></div>
+
+  <script>
+    window.QUIZ_CONFIG =       subject: "genai",
+      subjectTitle: "Generative AI",
+      assetRoot: "../../",
+      profileImage: "../../Prem_2026.webp",
+      subjectIndexUrl: "../../quizzes/genai.html",
+      number: 12,
+      total: 20,
+      title: "Streaming, Chunking, and Real-Time UX",
+      questions: [
+        {
+          text: "Your chat app waits for full completion before rendering text. Users report it feels slow. What change most directly improves perceived speed?",
+          choices: [
+            { id: "A", text: "Enable token streaming to reduce time-to-first-token experience" },
+            { id: "B", text: "Hide loading indicators entirely" },
+            { id: "C", text: "Only optimize CSS bundle size" },
+            { id: "D", text: "Increase output length by default" },
+          ],
+          answer: "A",
+          insight: "Streaming gives immediate feedback and reduces perceived waiting. UX improvements often come from pipeline responsiveness, not only final latency."
+        },
+        {
+          text: "A user edits the prompt while streaming is in progress, but stale tokens keep appearing. What system feature is missing?",
+          choices: [
+            { id: "A", text: "Higher model temperature" },
+            { id: "B", text: "Request cancellation and stream invalidation tied to active session/request IDs" },
+            { id: "C", text: "Disabling retries globally" },
+            { id: "D", text: "Bigger avatars in UI" },
+          ],
+          answer: "B",
+          insight: "Real-time interfaces need cancellation semantics, not just token transport. Without cancellation, stale outputs corrupt trust and usability."
+        },
+        {
+          text: "In a voice assistant, which metric best captures first impression latency?",
+          choices: [
+            { id: "A", text: "Number of CSS classes on page" },
+            { id: "B", text: "Average prompt length in characters" },
+            { id: "C", text: "Time-to-first-token or time-to-first-audio-chunk" },
+            { id: "D", text: "Total model parameter count" },
+          ],
+          answer: "C",
+          insight: "Users experience systems from first response cue. TTFT is a critical SLO for conversational product quality."
+        },
+        {
+          text: "You stream partial JSON to a client parser and it fails intermittently. Which approach is best?",
+          choices: [
+            { id: "A", text: "Parse each token as full JSON immediately" },
+            { id: "B", text: "Turn off validation checks" },
+            { id: "C", text: "Switch to markdown output for APIs" },
+            { id: "D", text: "Buffer streamed tokens and parse only after complete structured object boundaries" },
+          ],
+          answer: "D",
+          insight: "Streaming text is incremental, but structured parsing needs framing rules. Proper chunk assembly prevents corrupt downstream execution."
+        },
+        {
+          text: "A PM asks why chunked backend processing matters even with fast models. What is the best explanation?",
+          choices: [
+            { id: "A", text: "Pipeline chunking enables parallel work (retrieval, rerank, moderation) and smoother user feedback under load" },
+            { id: "B", text: "Chunking is unnecessary once model quality is high" },
+            { id: "C", text: "Chunking only changes UI color themes" },
+            { id: "D", text: "Chunking eliminates all network failures" },
+          ],
+          answer: "A",
+          insight: "System-level throughput depends on orchestration, not just model speed. Chunked workflows improve resilience and responsiveness."
+        },
+      ];
+  </script>
+  <script src="../../assets/js/page-transitions.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/quiz-engine.js"></script>
+</body>
+</html>

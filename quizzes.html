@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>(function(){var vt=HTMLMetaElement.supports&&HTMLMetaElement.supports("view-transition");if(!vt)document.documentElement.classList.add("page-transition-pending");})();</script>
+  <meta name="view-transition" content="same-origin" />
+
+  <meta name="description" content="Quiz subjects by Prem — Generative AI, AWS, and more. Scenario-based challenges with instant feedback." />
+  <meta name="theme-color" content="#07050f" />
+  <title>Quizzes | Prem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/page-transitions.css" />
+
+  <link rel="stylesheet" href="assets/css/quiz.css" />
+</head>
+<body class="font-sans antialiased quiz-index-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="site-nav-root" data-base="" data-active="quizzes" data-theme="dark"></div>
+  <script src="assets/js/site-nav.js"></script>
+<main class="quiz-index-main">
+    <header class="quiz-index-hero">
+      <h1>Quizzes</h1>
+      <p>Pick a subject. Five scenarios per topic — instant feedback, earn XP.</p>
+    </header>
+
+    <div class="quiz-subject-grid">
+      <article class="quiz-subject-card quiz-subject-card--live">
+        <a href="quizzes/genai.html">
+          <div class="quiz-subject-card-inner">
+            <div class="quiz-subject-top">
+              <span class="quiz-subject-icon" aria-hidden="true">✦</span>
+              <span class="quiz-index-badge quiz-index-badge--live">20 live</span>
+            </div>
+            <h2 class="quiz-subject-title">Generative AI</h2>
+            <p class="quiz-subject-desc">Tokens, RAG, agents, governance — production GenAI from first principles to advanced architecture.</p>
+            <div class="quiz-subject-meta">
+              <span>20 quizzes</span>
+              <span class="quiz-subject-cta">Browse →</span>
+            </div>
+          </div>
+        </a>
+      </article>
+
+      <article class="quiz-subject-card quiz-subject-card--soon">
+        <a href="quizzes/aws.html">
+          <div class="quiz-subject-card-inner">
+            <div class="quiz-subject-top">
+              <span class="quiz-subject-icon quiz-subject-icon--aws" aria-hidden="true">☁</span>
+              <span class="quiz-index-badge quiz-index-badge--soon">Soon</span>
+            </div>
+            <h2 class="quiz-subject-title">AWS</h2>
+            <p class="quiz-subject-desc">IAM, VPC, compute, storage — cloud decisions that show up in real deployments and interviews.</p>
+            <div class="quiz-subject-meta">
+              <span>Coming soon</span>
+              <span class="quiz-subject-cta">Preview →</span>
+            </div>
+          </div>
+        </a>
+      </article>
+    </div>
+  </main>
+
+  <script src="assets/js/page-transitions.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

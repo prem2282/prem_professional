@@ -34,35 +34,9 @@
 <body class="bg-ink text-cream font-sans antialiased">
   <div class="grain" aria-hidden="true"></div>
 
-  <header class="site-header fixed top-0 inset-x-0 z-50">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8" aria-label="Main">
-      <a href="index.html" class="nav-home" aria-label="Home"><img src="Prem_2026.webp" alt="" class="nav-home-avatar" width="40" height="40" decoding="async" /></a>
-      <button type="button" id="nav-toggle" class="nav-toggle lg:hidden" aria-expanded="false" aria-controls="nav-menu">
-        <span class="sr-only">Menu</span>
-        <span class="nav-bar"></span>
-        <span class="nav-bar"></span>
-        <span class="nav-bar"></span>
-      </button>
-      <ul id="nav-menu" class="nav-menu hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-cream/80">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="ascent.html" class="nav-link">The Ascent</a></li>
-        <li><a href="blogs.html" class="nav-link">Blogs</a></li>
-        <li><a href="mylearnings.html" class="nav-link active">My Learnings</a></li>
-        <li><a href="learn.html" class="nav-link">Learn</a></li>
-      </ul>
-    </nav>
-    <div id="mobile-menu" class="mobile-menu hidden lg:hidden" aria-hidden="true">
-      <ul class="flex flex-col gap-1 px-6 pb-6 text-lg">
-        <li><a href="index.html" class="mobile-link">Home</a></li>
-        <li><a href="ascent.html" class="mobile-link">The Ascent</a></li>
-        <li><a href="blogs.html" class="mobile-link">Blogs</a></li>
-        <li><a href="mylearnings.html" class="mobile-link active">My Learnings</a></li>
-        <li><a href="learn.html" class="mobile-link">Learn</a></li>
-      </ul>
-    </div>
-  </header>
-
-  <main class="pt-28 pb-24">
+  <div id="site-nav-root" data-base="" data-active="mylearnings" data-theme="dark"></div>
+  <script src="assets/js/site-nav.js"></script>
+<main class="pt-28 pb-24">
     <section class="blogs-page mx-auto w-full max-w-[90rem] px-6 lg:px-10 xl:px-12">
       <header class="blogs-page-header reveal text-center max-w-3xl mx-auto mb-10 lg:mb-14">
         <p class="text-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4">Field stories</p>
